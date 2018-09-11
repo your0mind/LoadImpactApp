@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LoadImpact BaseUrl="https://api.loadimpact.com/v2">
+  <User Token="">
+    <FavoritesTests />
+  </User>
+  <TimelessMetrics>
+    <StandartMetricsInfo>
+      <TimelessMetricInfo Name="Requests/second" Unit="r/sec" MetricId="__li_requests_per_second" />
+      <TimelessMetricInfo Name="VU active" Unit="count" MetricId="__li_clients_active" />
+      <TimelessMetricInfo Name="VU load time" Unit="msec" MetricId="__li_user_load_time" />
+    </StandartMetricsInfo>
+    <ServerAgentMetricsInfo>
+      <TimelessMetricInfo Name="CPU" Unit="percent" MetricId="" />
+      <TimelessMetricInfo Name="Memusage" Unit="percent" MetricId="" />
+      <TimelessMetricInfo Name="Disk" Unit="percent" MetricId="" />
+      <TimelessMetricInfo Name="Network" Unit="bps" MetricId="" />
+    </ServerAgentMetricsInfo>
+  </TimelessMetrics>
+</LoadImpact>
