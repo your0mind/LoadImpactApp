@@ -28,15 +28,32 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle15 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle17 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle18 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle16 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle19 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle20 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle21 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             this.disconnectButton = new System.Windows.Forms.Button();
             this.refreshButton = new System.Windows.Forms.Button();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.favoritesTestsListBox = new System.Windows.Forms.ListBox();
+            this.removeFromFavButton = new System.Windows.Forms.Button();
+            this.allTestsPage = new System.Windows.Forms.TabPage();
+            this.allTestsListBox = new System.Windows.Forms.ListBox();
+            this.addToFavButton = new System.Windows.Forms.Button();
+            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.checkBox4 = new System.Windows.Forms.CheckBox();
+            this.checkBox5 = new System.Windows.Forms.CheckBox();
+            this.checkBox6 = new System.Windows.Forms.CheckBox();
             this.resultsPage = new System.Windows.Forms.TabPage();
             this.tabControl3 = new System.Windows.Forms.TabControl();
             this.tabPage3 = new System.Windows.Forms.TabPage();
@@ -57,13 +74,17 @@
             this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.testsPage = new System.Windows.Forms.TabPage();
             this.tabControl2 = new System.Windows.Forms.TabControl();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.favoritesTestsListBox = new System.Windows.Forms.ListBox();
-            this.removeFromFavButton = new System.Windows.Forms.Button();
-            this.allTestsPage = new System.Windows.Forms.TabPage();
-            this.allTestsListBox = new System.Windows.Forms.ListBox();
-            this.addToFavButton = new System.Windows.Forms.Button();
             this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.metricSettingsTableWithLabels1 = new LoadImpactApp.MetricSettingsTableWithLabels();
+            this.label13 = new System.Windows.Forms.Label();
+            this.button3 = new System.Windows.Forms.Button();
+            this.label14 = new System.Windows.Forms.Label();
+            this.label15 = new System.Windows.Forms.Label();
+            this.label16 = new System.Windows.Forms.Label();
+            this.label17 = new System.Windows.Forms.Label();
+            this.label18 = new System.Windows.Forms.Label();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.resultsPage.SuspendLayout();
             this.tabControl3.SuspendLayout();
             this.tabPage3.SuspendLayout();
@@ -71,10 +92,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.testResultsDataGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.testInfoDataGridView)).BeginInit();
             this.testsPage.SuspendLayout();
-            this.tabControl2.SuspendLayout();
-            this.tabPage2.SuspendLayout();
-            this.allTestsPage.SuspendLayout();
             this.tabControl1.SuspendLayout();
+            this.tabPage4.SuspendLayout();
+            this.metricSettingsTableWithLabels1.SuspendLayout();
             this.SuspendLayout();
             // 
             // disconnectButton
@@ -100,6 +120,195 @@
             this.refreshButton.TabIndex = 2;
             this.refreshButton.UseVisualStyleBackColor = false;
             this.refreshButton.Click += new System.EventHandler(this.refreshButton_Click);
+            // 
+            // tabPage2
+            // 
+            this.tabPage2.Location = new System.Drawing.Point(4, 25);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage2.Size = new System.Drawing.Size(272, 437);
+            this.tabPage2.TabIndex = 1;
+            this.tabPage2.Text = "Favorites";
+            this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // favoritesTestsListBox
+            // 
+            this.favoritesTestsListBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
+            this.favoritesTestsListBox.FormattingEnabled = true;
+            this.favoritesTestsListBox.HorizontalScrollbar = true;
+            this.favoritesTestsListBox.IntegralHeight = false;
+            this.favoritesTestsListBox.Location = new System.Drawing.Point(1, 3);
+            this.favoritesTestsListBox.Name = "favoritesTestsListBox";
+            this.favoritesTestsListBox.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
+            this.favoritesTestsListBox.Size = new System.Drawing.Size(268, 404);
+            this.favoritesTestsListBox.TabIndex = 3;
+            // 
+            // removeFromFavButton
+            // 
+            this.removeFromFavButton.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.removeFromFavButton.Location = new System.Drawing.Point(140, 411);
+            this.removeFromFavButton.Name = "removeFromFavButton";
+            this.removeFromFavButton.Size = new System.Drawing.Size(130, 24);
+            this.removeFromFavButton.TabIndex = 4;
+            this.removeFromFavButton.Text = "Remove";
+            this.removeFromFavButton.UseVisualStyleBackColor = true;
+            this.removeFromFavButton.Click += new System.EventHandler(this.removeFromFavButton_Click);
+            // 
+            // allTestsPage
+            // 
+            this.allTestsPage.Location = new System.Drawing.Point(4, 25);
+            this.allTestsPage.Name = "allTestsPage";
+            this.allTestsPage.Padding = new System.Windows.Forms.Padding(3);
+            this.allTestsPage.Size = new System.Drawing.Size(272, 437);
+            this.allTestsPage.TabIndex = 0;
+            this.allTestsPage.Text = "All";
+            this.allTestsPage.UseVisualStyleBackColor = true;
+            // 
+            // allTestsListBox
+            // 
+            this.allTestsListBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
+            this.allTestsListBox.FormattingEnabled = true;
+            this.allTestsListBox.HorizontalScrollbar = true;
+            this.allTestsListBox.IntegralHeight = false;
+            this.allTestsListBox.Location = new System.Drawing.Point(1, 3);
+            this.allTestsListBox.Name = "allTestsListBox";
+            this.allTestsListBox.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
+            this.allTestsListBox.Size = new System.Drawing.Size(268, 404);
+            this.allTestsListBox.TabIndex = 0;
+            // 
+            // addToFavButton
+            // 
+            this.addToFavButton.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.addToFavButton.Location = new System.Drawing.Point(0, 411);
+            this.addToFavButton.Name = "addToFavButton";
+            this.addToFavButton.Size = new System.Drawing.Size(130, 24);
+            this.addToFavButton.TabIndex = 1;
+            this.addToFavButton.Text = "Add to favorites";
+            this.addToFavButton.UseVisualStyleBackColor = true;
+            this.addToFavButton.Click += new System.EventHandler(this.addToFavButton_Click);
+            // 
+            // numericUpDown1
+            // 
+            this.numericUpDown1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.numericUpDown1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown1.Location = new System.Drawing.Point(355, 47);
+            this.numericUpDown1.Maximum = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+            this.numericUpDown1.Name = "numericUpDown1";
+            this.numericUpDown1.Size = new System.Drawing.Size(64, 22);
+            this.numericUpDown1.TabIndex = 12;
+            this.numericUpDown1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.CheckAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.checkBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.checkBox1.Location = new System.Drawing.Point(199, 47);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(44, 24);
+            this.checkBox1.TabIndex = 4;
+            this.checkBox1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.checkBox1.UseVisualStyleBackColor = true;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label1.Location = new System.Drawing.Point(5, 2);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(144, 40);
+            this.label1.TabIndex = 0;
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label2.Location = new System.Drawing.Point(157, 2);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(34, 40);
+            this.label2.TabIndex = 1;
+            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label3.Location = new System.Drawing.Point(199, 2);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(44, 40);
+            this.label3.TabIndex = 2;
+            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label4.Location = new System.Drawing.Point(251, 2);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(34, 40);
+            this.label4.TabIndex = 3;
+            this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label5.Location = new System.Drawing.Point(293, 2);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(54, 40);
+            this.label5.TabIndex = 5;
+            this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label6.Location = new System.Drawing.Point(355, 2);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(64, 40);
+            this.label6.TabIndex = 6;
+            this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // checkBox4
+            // 
+            this.checkBox4.AutoSize = true;
+            this.checkBox4.CheckAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.checkBox4.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.checkBox4.Location = new System.Drawing.Point(157, 47);
+            this.checkBox4.Name = "checkBox4";
+            this.checkBox4.Size = new System.Drawing.Size(34, 24);
+            this.checkBox4.TabIndex = 9;
+            this.checkBox4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.checkBox4.UseVisualStyleBackColor = true;
+            // 
+            // checkBox5
+            // 
+            this.checkBox5.AutoSize = true;
+            this.checkBox5.CheckAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.checkBox5.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.checkBox5.Location = new System.Drawing.Point(251, 47);
+            this.checkBox5.Name = "checkBox5";
+            this.checkBox5.Size = new System.Drawing.Size(34, 24);
+            this.checkBox5.TabIndex = 10;
+            this.checkBox5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.checkBox5.UseVisualStyleBackColor = true;
+            // 
+            // checkBox6
+            // 
+            this.checkBox6.AutoSize = true;
+            this.checkBox6.CheckAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.checkBox6.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.checkBox6.Location = new System.Drawing.Point(293, 47);
+            this.checkBox6.Name = "checkBox6";
+            this.checkBox6.Size = new System.Drawing.Size(54, 24);
+            this.checkBox6.TabIndex = 11;
+            this.checkBox6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.checkBox6.UseVisualStyleBackColor = true;
             // 
             // resultsPage
             // 
@@ -198,8 +407,8 @@
             // 
             this.testResultsDataGridView.AllowUserToAddRows = false;
             this.testResultsDataGridView.AllowUserToDeleteRows = false;
-            dataGridViewCellStyle15.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.testResultsDataGridView.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle15;
+            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.testResultsDataGridView.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle4;
             this.testResultsDataGridView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
@@ -217,18 +426,18 @@
             this.testResultsDataGridView.Name = "testResultsDataGridView";
             this.testResultsDataGridView.ReadOnly = true;
             this.testResultsDataGridView.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle17.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle17.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle17.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle17.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle17.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle17.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle17.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.testResultsDataGridView.RowHeadersDefaultCellStyle = dataGridViewCellStyle17;
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.testResultsDataGridView.RowHeadersDefaultCellStyle = dataGridViewCellStyle6;
             this.testResultsDataGridView.RowHeadersVisible = false;
             this.testResultsDataGridView.RowHeadersWidth = 150;
-            dataGridViewCellStyle18.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.testResultsDataGridView.RowsDefaultCellStyle = dataGridViewCellStyle18;
+            dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.testResultsDataGridView.RowsDefaultCellStyle = dataGridViewCellStyle7;
             this.testResultsDataGridView.RowTemplate.DefaultCellStyle.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.testResultsDataGridView.RowTemplate.Height = 30;
             this.testResultsDataGridView.RowTemplate.ReadOnly = true;
@@ -275,8 +484,8 @@
             // Column1
             // 
             this.Column1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            dataGridViewCellStyle16.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.Column1.DefaultCellStyle = dataGridViewCellStyle16;
+            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.Column1.DefaultCellStyle = dataGridViewCellStyle5;
             this.Column1.FillWeight = 45F;
             this.Column1.HeaderText = "Metric name";
             this.Column1.Name = "Column1";
@@ -287,8 +496,8 @@
             // 
             this.testInfoDataGridView.AllowUserToAddRows = false;
             this.testInfoDataGridView.AllowUserToDeleteRows = false;
-            dataGridViewCellStyle19.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.testInfoDataGridView.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle19;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.testInfoDataGridView.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             this.testInfoDataGridView.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.testInfoDataGridView.BorderStyle = System.Windows.Forms.BorderStyle.None;
@@ -298,14 +507,14 @@
             this.dataGridViewTextBoxColumn5,
             this.dataGridViewTextBoxColumn4});
             this.testInfoDataGridView.Cursor = System.Windows.Forms.Cursors.Default;
-            dataGridViewCellStyle20.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle20.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle20.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle20.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle20.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle20.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle20.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.testInfoDataGridView.DefaultCellStyle = dataGridViewCellStyle20;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.testInfoDataGridView.DefaultCellStyle = dataGridViewCellStyle2;
             this.testInfoDataGridView.EnableHeadersVisualStyles = false;
             this.testInfoDataGridView.Location = new System.Drawing.Point(265, 15);
             this.testInfoDataGridView.Name = "testInfoDataGridView";
@@ -313,8 +522,8 @@
             this.testInfoDataGridView.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
             this.testInfoDataGridView.RowHeadersVisible = false;
             this.testInfoDataGridView.RowHeadersWidth = 150;
-            dataGridViewCellStyle21.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.testInfoDataGridView.RowsDefaultCellStyle = dataGridViewCellStyle21;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.testInfoDataGridView.RowsDefaultCellStyle = dataGridViewCellStyle3;
             this.testInfoDataGridView.RowTemplate.DefaultCellStyle.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.testInfoDataGridView.RowTemplate.Height = 30;
             this.testInfoDataGridView.RowTemplate.ReadOnly = true;
@@ -365,86 +574,12 @@
             // 
             this.tabControl2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
-            this.tabControl2.Controls.Add(this.allTestsPage);
-            this.tabControl2.Controls.Add(this.tabPage2);
             this.tabControl2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tabControl2.Location = new System.Drawing.Point(15, 15);
             this.tabControl2.Name = "tabControl2";
             this.tabControl2.SelectedIndex = 0;
             this.tabControl2.Size = new System.Drawing.Size(280, 466);
             this.tabControl2.TabIndex = 0;
-            // 
-            // tabPage2
-            // 
-            this.tabPage2.Controls.Add(this.removeFromFavButton);
-            this.tabPage2.Controls.Add(this.favoritesTestsListBox);
-            this.tabPage2.Location = new System.Drawing.Point(4, 25);
-            this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(272, 437);
-            this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "Favorites";
-            this.tabPage2.UseVisualStyleBackColor = true;
-            // 
-            // favoritesTestsListBox
-            // 
-            this.favoritesTestsListBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
-            this.favoritesTestsListBox.FormattingEnabled = true;
-            this.favoritesTestsListBox.HorizontalScrollbar = true;
-            this.favoritesTestsListBox.IntegralHeight = false;
-            this.favoritesTestsListBox.ItemHeight = 16;
-            this.favoritesTestsListBox.Location = new System.Drawing.Point(1, 3);
-            this.favoritesTestsListBox.Name = "favoritesTestsListBox";
-            this.favoritesTestsListBox.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-            this.favoritesTestsListBox.Size = new System.Drawing.Size(268, 404);
-            this.favoritesTestsListBox.TabIndex = 3;
-            // 
-            // removeFromFavButton
-            // 
-            this.removeFromFavButton.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.removeFromFavButton.Location = new System.Drawing.Point(140, 411);
-            this.removeFromFavButton.Name = "removeFromFavButton";
-            this.removeFromFavButton.Size = new System.Drawing.Size(130, 24);
-            this.removeFromFavButton.TabIndex = 4;
-            this.removeFromFavButton.Text = "Remove";
-            this.removeFromFavButton.UseVisualStyleBackColor = true;
-            this.removeFromFavButton.Click += new System.EventHandler(this.removeFromFavButton_Click);
-            // 
-            // allTestsPage
-            // 
-            this.allTestsPage.Controls.Add(this.addToFavButton);
-            this.allTestsPage.Controls.Add(this.allTestsListBox);
-            this.allTestsPage.Location = new System.Drawing.Point(4, 25);
-            this.allTestsPage.Name = "allTestsPage";
-            this.allTestsPage.Padding = new System.Windows.Forms.Padding(3);
-            this.allTestsPage.Size = new System.Drawing.Size(272, 437);
-            this.allTestsPage.TabIndex = 0;
-            this.allTestsPage.Text = "All";
-            this.allTestsPage.UseVisualStyleBackColor = true;
-            // 
-            // allTestsListBox
-            // 
-            this.allTestsListBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
-            this.allTestsListBox.FormattingEnabled = true;
-            this.allTestsListBox.HorizontalScrollbar = true;
-            this.allTestsListBox.IntegralHeight = false;
-            this.allTestsListBox.ItemHeight = 16;
-            this.allTestsListBox.Location = new System.Drawing.Point(1, 3);
-            this.allTestsListBox.Name = "allTestsListBox";
-            this.allTestsListBox.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-            this.allTestsListBox.Size = new System.Drawing.Size(268, 404);
-            this.allTestsListBox.TabIndex = 0;
-            // 
-            // addToFavButton
-            // 
-            this.addToFavButton.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.addToFavButton.Location = new System.Drawing.Point(0, 411);
-            this.addToFavButton.Name = "addToFavButton";
-            this.addToFavButton.Size = new System.Drawing.Size(130, 24);
-            this.addToFavButton.TabIndex = 1;
-            this.addToFavButton.Text = "Add to favorites";
-            this.addToFavButton.UseVisualStyleBackColor = true;
-            this.addToFavButton.Click += new System.EventHandler(this.addToFavButton_Click);
             // 
             // tabControl1
             // 
@@ -453,6 +588,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControl1.Controls.Add(this.testsPage);
             this.tabControl1.Controls.Add(this.resultsPage);
+            this.tabControl1.Controls.Add(this.tabPage4);
             this.tabControl1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tabControl1.ItemSize = new System.Drawing.Size(48, 18);
             this.tabControl1.Location = new System.Drawing.Point(10, 30);
@@ -460,6 +596,130 @@
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(766, 522);
             this.tabControl1.TabIndex = 0;
+            // 
+            // tabPage4
+            // 
+            this.tabPage4.Controls.Add(this.metricSettingsTableWithLabels1);
+            this.tabPage4.Location = new System.Drawing.Point(4, 22);
+            this.tabPage4.Name = "tabPage4";
+            this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage4.Size = new System.Drawing.Size(758, 496);
+            this.tabPage4.TabIndex = 2;
+            this.tabPage4.Text = "tabPage4";
+            this.tabPage4.UseVisualStyleBackColor = true;
+            // 
+            // metricSettingsTableWithLabels1
+            // 
+            this.metricSettingsTableWithLabels1.AutoSize = true;
+            this.metricSettingsTableWithLabels1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.metricSettingsTableWithLabels1.BackColor = System.Drawing.Color.PaleGreen;
+            this.metricSettingsTableWithLabels1.CellBorderStyle = System.Windows.Forms.TableLayoutPanelCellBorderStyle.Inset;
+            this.metricSettingsTableWithLabels1.ColumnCount = 7;
+            this.metricSettingsTableWithLabels1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 150F));
+            this.metricSettingsTableWithLabels1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.metricSettingsTableWithLabels1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            this.metricSettingsTableWithLabels1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.metricSettingsTableWithLabels1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 60F));
+            this.metricSettingsTableWithLabels1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 70F));
+            this.metricSettingsTableWithLabels1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.metricSettingsTableWithLabels1.Controls.Add(this.label18, 5, 0);
+            this.metricSettingsTableWithLabels1.Controls.Add(this.label17, 4, 0);
+            this.metricSettingsTableWithLabels1.Controls.Add(this.label16, 3, 0);
+            this.metricSettingsTableWithLabels1.Controls.Add(this.label15, 2, 0);
+            this.metricSettingsTableWithLabels1.Controls.Add(this.button3, 0, 1);
+            this.metricSettingsTableWithLabels1.Controls.Add(this.label13, 0, 0);
+            this.metricSettingsTableWithLabels1.Controls.Add(this.label14, 1, 0);
+            this.metricSettingsTableWithLabels1.Location = new System.Drawing.Point(148, 234);
+            this.metricSettingsTableWithLabels1.Metrics = null;
+            this.metricSettingsTableWithLabels1.Name = "metricSettingsTableWithLabels1";
+            this.metricSettingsTableWithLabels1.RowCount = 2;
+            this.metricSettingsTableWithLabels1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.metricSettingsTableWithLabels1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.metricSettingsTableWithLabels1.Size = new System.Drawing.Size(456, 76);
+            this.metricSettingsTableWithLabels1.TabIndex = 3;
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label13.Location = new System.Drawing.Point(5, 2);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(144, 40);
+            this.label13.TabIndex = 1;
+            this.label13.Text = "Metric name";
+            this.label13.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // button3
+            // 
+            this.button3.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.button3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.button3.Location = new System.Drawing.Point(5, 47);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(144, 24);
+            this.button3.TabIndex = 7;
+            this.button3.Text = "Add metric";
+            this.button3.UseVisualStyleBackColor = false;
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label14.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label14.Location = new System.Drawing.Point(157, 2);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(34, 40);
+            this.label14.TabIndex = 8;
+            this.label14.Text = "Min";
+            this.label14.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label15.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label15.Location = new System.Drawing.Point(199, 2);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(44, 40);
+            this.label15.TabIndex = 9;
+            this.label15.Text = "Median";
+            this.label15.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label16.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label16.Location = new System.Drawing.Point(251, 2);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(34, 40);
+            this.label16.TabIndex = 10;
+            this.label16.Text = "Max";
+            this.label16.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label17.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label17.Location = new System.Drawing.Point(293, 2);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(54, 40);
+            this.label17.TabIndex = 11;
+            this.label17.Text = "Look for stability";
+            this.label17.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label18.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label18.Location = new System.Drawing.Point(355, 2);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(64, 40);
+            this.label18.TabIndex = 12;
+            this.label18.Text = "Arithmetic precision";
+            this.label18.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // MainForm
             // 
@@ -476,6 +736,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "LoadImpactApp";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainForm_FormClosed);
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             this.resultsPage.ResumeLayout(false);
             this.tabControl3.ResumeLayout(false);
             this.tabPage3.ResumeLayout(false);
@@ -483,10 +744,11 @@
             ((System.ComponentModel.ISupportInitialize)(this.testResultsDataGridView)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.testInfoDataGridView)).EndInit();
             this.testsPage.ResumeLayout(false);
-            this.tabControl2.ResumeLayout(false);
-            this.tabPage2.ResumeLayout(false);
-            this.allTestsPage.ResumeLayout(false);
             this.tabControl1.ResumeLayout(false);
+            this.tabPage4.ResumeLayout(false);
+            this.tabPage4.PerformLayout();
+            this.metricSettingsTableWithLabels1.ResumeLayout(false);
+            this.metricSettingsTableWithLabels1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -495,6 +757,23 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button disconnectButton;
         private System.Windows.Forms.Button refreshButton;
+        private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.ListBox favoritesTestsListBox;
+        private System.Windows.Forms.Button removeFromFavButton;
+        private System.Windows.Forms.TabPage allTestsPage;
+        private System.Windows.Forms.ListBox allTestsListBox;
+        private System.Windows.Forms.Button addToFavButton;
+        private System.Windows.Forms.NumericUpDown numericUpDown1;
+        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.CheckBox checkBox4;
+        private System.Windows.Forms.CheckBox checkBox5;
+        private System.Windows.Forms.CheckBox checkBox6;
         private System.Windows.Forms.TabPage resultsPage;
         private System.Windows.Forms.DataGridView testInfoDataGridView;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
@@ -515,12 +794,15 @@
         private System.Windows.Forms.ComboBox favoritesTestsComboBox;
         private System.Windows.Forms.TabPage testsPage;
         private System.Windows.Forms.TabControl tabControl2;
-        private System.Windows.Forms.TabPage allTestsPage;
-        private System.Windows.Forms.Button addToFavButton;
-        private System.Windows.Forms.ListBox allTestsListBox;
-        private System.Windows.Forms.TabPage tabPage2;
-        private System.Windows.Forms.Button removeFromFavButton;
-        private System.Windows.Forms.ListBox favoritesTestsListBox;
         private System.Windows.Forms.TabControl tabControl1;
+        private System.Windows.Forms.TabPage tabPage4;
+        private MetricSettingsTableWithLabels metricSettingsTableWithLabels1;
+        private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.Label label14;
     }
 }

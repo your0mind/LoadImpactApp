@@ -84,7 +84,7 @@ namespace LoadImpactApp
         private void finalGetResultsButton_Click(object sender, EventArgs e)
         {
             TestSettings = GetTestSettings();
-            this.Close();
+            Close();
         }
 
         private TestSettings GetTestSettings()

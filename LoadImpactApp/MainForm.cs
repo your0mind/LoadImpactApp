@@ -16,6 +16,7 @@ namespace LoadImpactApp
         private BindingSource m_BindingFavTitlesListBox;
         private BindingSource m_BindingAllTitlesComboBox;
         private BindingSource m_BindingFavTitlesComboBox;
+        private List<string> m_MetricsList = new List<string>() { "CPU", "Memusage" };
 
         public MainForm(ConnectionForm form)
         {
@@ -39,7 +40,7 @@ namespace LoadImpactApp
             CurrentContextData.FavoritesTitles.AddRange(Settings.LoadImpactService.User.FavoritesTests.
                 Select(test => test.Name).ToList());
 
-            RefreshContainersAsync();
+            //RefreshContainersAsync();
         }
 
         private async void refreshButton_Click(object sender, EventArgs e)

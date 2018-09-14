@@ -51,6 +51,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddMetricForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AddMetricForm.Designer.cs">
+      <DependentUpon>AddMetricForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Api\ApiLoadImpact.cs" />
     <Compile Include="DeserializableClasses\Json\TestConfig.cs" />
     <Compile Include="DeserializableClasses\Json\TestRun.cs" />
@@ -75,6 +81,9 @@
     </Compile>
     <Compile Include="MathLogic\MetricCalculator.cs" />
     <Compile Include="MathLogic\MetricPoints.cs" />
+    <Compile Include="MetricSettingsTableWithLabels.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="ResultsSettingsForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -88,6 +97,9 @@
     </Compile>
     <Compile Include="Settings.cs" />
     <Compile Include="TabPadding.cs" />
+    <EmbeddedResource Include="AddMetricForm.resx">
+      <DependentUpon>AddMetricForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ConnectionForm.resx">
       <DependentUpon>ConnectionForm.cs</DependentUpon>
     </EmbeddedResource>
