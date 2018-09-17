@@ -9,9 +9,11 @@ namespace LoadImpactApp.DeserializableClasses.Xml
         [XmlAttribute]
         public bool Min { get; set; }
         [XmlAttribute]
-        public bool Avg { get; set; }
+        public bool Median { get; set; }
         [XmlAttribute]
         public bool Max { get; set; }
+        [XmlAttribute]
+        public bool LookForStability { get; set; }
         [XmlAttribute]
         public int Precision { get; set; }
 
