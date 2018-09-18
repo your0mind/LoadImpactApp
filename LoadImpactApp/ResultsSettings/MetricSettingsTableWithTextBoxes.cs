@@ -1,24 +1,15 @@
 ﻿using LoadImpactApp.DeserializableClasses.Xml;
 using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
 namespace LoadImpactApp.ResultsSettings
 {
-    public class MetricSettingsTableWithLabels : AbstractMetricSettingsTable
+    public class MetricSettingsTableWithTextBoxes : AbstractMetricSettingsTable
     {
-        public List<string> Metrics { get; set; }
-
-        public MetricSettingsTableWithLabels()
-        {
-            Metrics = new List<string>();
-        }
-
         protected override void RemoveMetricSettingsRow_Click(object sender, EventArgs e)
         {
             int rowToDelete = GetRow((Button)sender);
-            Metrics.Add(((Label)GetControlFromPosition(0, rowToDelete)).Text);
 
             for (int i = 0; i < ColumnCount; i++)
             {
@@ -39,7 +30,7 @@ namespace LoadImpactApp.ResultsSettings
 
         protected override void AddMetricButton_Click(object sender, EventArgs e)
         {
-            var addMetricForm = new AddMetricFormWithComboBox(Metrics);
+            var addMetricForm = new AddMetricFormWithTextBox();
             addMetricForm.FormClosing += AddMetricForm_FormClosing;
             addMetricForm.ShowDialog();
         }
@@ -48,7 +39,7 @@ namespace LoadImpactApp.ResultsSettings
         {
             AddMetricSettings(new MetricSettings()
             {
-                Name = ((AddMetricFormWithComboBox)sender).GetMetric(),
+                Name = ((AddMetricFormWithTextBox)sender).GetMetric(),
                 Min = true,
                 Median = true,
                 Max = true,
@@ -63,12 +54,11 @@ namespace LoadImpactApp.ResultsSettings
             RowStyles.Add(new RowStyle(SizeType.Absolute, 30));
             SetRow(m_AddMetricButton, RowCount - 1);
 
-            Controls.Add(new Label() { Dock = DockStyle.Fill, TextAlign = ContentAlignment.MiddleLeft, Text = metricSettings.Name }, 0, RowCount - 2);
+            Controls.Add(new TextBox() { Dock = DockStyle.Fill, Text = metricSettings.Name }, 0, RowCount - 2);
             Controls.Add(new CheckBox() { Dock = DockStyle.Fill, CheckAlign = ContentAlignment.MiddleCenter, Checked = metricSettings.Min }, 1, RowCount - 2);
             Controls.Add(new CheckBox() { Dock = DockStyle.Fill, CheckAlign = ContentAlignment.MiddleCenter, Checked = metricSettings.Min }, 2, RowCount - 2);
             Controls.Add(new CheckBox() { Dock = DockStyle.Fill, CheckAlign = ContentAlignment.MiddleCenter, Checked = metricSettings.Min }, 3, RowCount - 2);
-            Controls.Add(new CheckBox() { Dock = DockStyle.Fill, CheckAlign = ContentAlignment.MiddleCenter, Checked = metricSettings.Min }, 4, RowCount - 2);
-            Controls.Add(new NumericUpDown() { Value = metricSettings.Precision, Font = new Font("Microsoft Sans Serif", 10), Maximum = 5 }, 5, RowCount - 2);
+            Controls.Add(new NumericUpDown() { Value = metricSettings.Precision, Font = new Font("Microsoft Sans Serif", 10), Maximum = 5 }, 4, RowCount - 2);
             Controls.Add(new Button()
             {
                 TextAlign = ContentAlignment.MiddleCenter,
@@ -77,10 +67,7 @@ namespace LoadImpactApp.ResultsSettings
                 ForeColor = Color.Red,
                 Dock = DockStyle.Fill,
                 Text = "X"
-            }, 6, RowCount - 2);
-
-            Metrics.Remove(metricSettings.Name);
+            }, 5, RowCount - 2);
         }
-
     }
 }

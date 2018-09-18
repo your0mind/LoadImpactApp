@@ -11,7 +11,7 @@ namespace LoadImpactApp
             InitializeComponent();
         }
 
-        string GetMetric()
+        public string GetMetric()
         {
             return m_MetricName;
         }

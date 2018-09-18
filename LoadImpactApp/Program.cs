@@ -12,11 +12,11 @@ namespace LoadImpactApp
         static void Main()
         {
             Settings.GetFromFile("UserSettings.xml");
-            //Settings.SaveToFile("UserSettings.xml");
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new ConnectionForm());
+            Application.Run(new ResultsSettingsForm(null));
+            //Application.Run(new ConnectionForm());
         }
     }
 }

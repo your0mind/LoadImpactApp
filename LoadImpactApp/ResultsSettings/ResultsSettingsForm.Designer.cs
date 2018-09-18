@@ -28,15 +28,16 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ResultsSettingsForm));
             this.panel1 = new System.Windows.Forms.Panel();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.analisisCheckBox2 = new System.Windows.Forms.CheckBox();
             this.analisisCheckBox1 = new System.Windows.Forms.CheckBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
             this.finalGetResultsButton = new System.Windows.Forms.Button();
+            this.standardMetricSettingsTableWithLabels = new LoadImpactApp.ResultsSettings.MetricSettingsTableWithLabels();
             this.panel1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -52,7 +53,7 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(436, 576);
+            this.panel1.Size = new System.Drawing.Size(506, 576);
             this.panel1.TabIndex = 0;
             // 
             // tableLayoutPanel1
@@ -62,15 +63,14 @@
             this.tableLayoutPanel1.BackColor = System.Drawing.SystemColors.ControlLight;
             this.tableLayoutPanel1.ColumnCount = 1;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel1.Controls.Add(this.analisisCheckBox2, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.analisisCheckBox1, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.label1, 0, 3);
-            this.tableLayoutPanel1.Controls.Add(this.label2, 0, 6);
-            this.tableLayoutPanel1.Controls.Add(this.label3, 0, 9);
+            this.tableLayoutPanel1.Controls.Add(this.label1, 0, 2);
+            this.tableLayoutPanel1.Controls.Add(this.label2, 0, 5);
+            this.tableLayoutPanel1.Controls.Add(this.label3, 0, 8);
+            this.tableLayoutPanel1.Controls.Add(this.standardMetricSettingsTableWithLabels, 0, 3);
             this.tableLayoutPanel1.Location = new System.Drawing.Point(23, 14);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 12;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowCount = 11;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -82,19 +82,9 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(388, 271);
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(464, 327);
             this.tableLayoutPanel1.TabIndex = 2;
-            // 
-            // analisisCheckBox2
-            // 
-            this.analisisCheckBox2.AutoSize = true;
-            this.analisisCheckBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.analisisCheckBox2.Location = new System.Drawing.Point(3, 29);
-            this.analisisCheckBox2.Name = "analisisCheckBox2";
-            this.analisisCheckBox2.Size = new System.Drawing.Size(261, 20);
-            this.analisisCheckBox2.TabIndex = 4;
-            this.analisisCheckBox2.Text = "Look for stable sections of the schedule";
-            this.analisisCheckBox2.UseVisualStyleBackColor = true;
             // 
             // analisisCheckBox1
             // 
@@ -110,7 +100,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(3, 82);
+            this.label1.Location = new System.Drawing.Point(3, 56);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(89, 13);
             this.label1.TabIndex = 5;
@@ -119,7 +109,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(3, 145);
+            this.label2.Location = new System.Drawing.Point(3, 201);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(107, 13);
             this.label2.TabIndex = 6;
@@ -128,7 +118,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(3, 208);
+            this.label3.Location = new System.Drawing.Point(3, 264);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(71, 13);
             this.label3.TabIndex = 7;
@@ -141,13 +131,13 @@
             this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panel2.Location = new System.Drawing.Point(0, 576);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(436, 36);
+            this.panel2.Size = new System.Drawing.Size(506, 36);
             this.panel2.TabIndex = 1;
             // 
             // finalGetResultsButton
             // 
             this.finalGetResultsButton.BackColor = System.Drawing.Color.Transparent;
-            this.finalGetResultsButton.Location = new System.Drawing.Point(334, 4);
+            this.finalGetResultsButton.Location = new System.Drawing.Point(404, 4);
             this.finalGetResultsButton.Name = "finalGetResultsButton";
             this.finalGetResultsButton.Size = new System.Drawing.Size(75, 23);
             this.finalGetResultsButton.TabIndex = 0;
@@ -155,12 +145,35 @@
             this.finalGetResultsButton.UseVisualStyleBackColor = false;
             this.finalGetResultsButton.Click += new System.EventHandler(this.finalGetResultsButton_Click);
             // 
+            // standardMetricSettingsTableWithLabels
+            // 
+            this.standardMetricSettingsTableWithLabels.AutoSize = true;
+            this.standardMetricSettingsTableWithLabels.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.standardMetricSettingsTableWithLabels.BackColor = System.Drawing.Color.LemonChiffon;
+            this.standardMetricSettingsTableWithLabels.CellBorderStyle = System.Windows.Forms.TableLayoutPanelCellBorderStyle.Inset;
+            this.standardMetricSettingsTableWithLabels.ColumnCount = 7;
+            this.standardMetricSettingsTableWithLabels.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 150F));
+            this.standardMetricSettingsTableWithLabels.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.standardMetricSettingsTableWithLabels.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            this.standardMetricSettingsTableWithLabels.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.standardMetricSettingsTableWithLabels.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 60F));
+            this.standardMetricSettingsTableWithLabels.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 70F));
+            this.standardMetricSettingsTableWithLabels.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 32F));
+            this.standardMetricSettingsTableWithLabels.Location = new System.Drawing.Point(3, 72);
+            this.standardMetricSettingsTableWithLabels.Metrics = ((System.Collections.Generic.List<string>)(resources.GetObject("standardMetricSettingsTableWithLabels.Metrics")));
+            this.standardMetricSettingsTableWithLabels.Name = "standardMetricSettingsTableWithLabels";
+            this.standardMetricSettingsTableWithLabels.RowCount = 2;
+            this.standardMetricSettingsTableWithLabels.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.standardMetricSettingsTableWithLabels.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.standardMetricSettingsTableWithLabels.Size = new System.Drawing.Size(458, 76);
+            this.standardMetricSettingsTableWithLabels.TabIndex = 8;
+            // 
             // ResultsSettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlDark;
-            this.ClientSize = new System.Drawing.Size(436, 612);
+            this.ClientSize = new System.Drawing.Size(506, 612);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -185,10 +198,10 @@
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Button finalGetResultsButton;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-        private System.Windows.Forms.CheckBox analisisCheckBox2;
         private System.Windows.Forms.CheckBox analisisCheckBox1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
+        private ResultsSettings.MetricSettingsTableWithLabels standardMetricSettingsTableWithLabels;
     }
 }

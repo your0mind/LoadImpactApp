@@ -136,7 +136,7 @@ namespace LoadImpactApp
                 metric = ((TextBox)m_MetricControl).Text;
             }
 
-            AddMetricSettings(new MetricSettings() { Name = metric, Min = true, Avg = true, Max = true, Precision = 2 });
+            AddMetricSettings(new MetricSettings() { Name = metric, Min = true, Median = true, Max = true, Precision = 2 });
             m_AddMetricForm.Close();
         }
 
@@ -158,7 +158,7 @@ namespace LoadImpactApp
                     Controls.Add(new TextBox() { Dock = DockStyle.Fill, Text = metricSettings.Name }, 0, RowCount - 2);
                 }
                 Controls.Add(new CheckBox() { Dock = DockStyle.Fill, Checked = metricSettings.Min, CheckAlign = ContentAlignment.MiddleCenter }, 1, RowCount - 2);
-                Controls.Add(new CheckBox() { Dock = DockStyle.Fill, Checked = metricSettings.Avg, CheckAlign = ContentAlignment.MiddleCenter }, 2, RowCount - 2);
+                Controls.Add(new CheckBox() { Dock = DockStyle.Fill, Checked = metricSettings.Median, CheckAlign = ContentAlignment.MiddleCenter }, 2, RowCount - 2);
                 Controls.Add(new CheckBox() { Dock = DockStyle.Fill, Checked = metricSettings.Max, CheckAlign = ContentAlignment.MiddleCenter }, 3, RowCount - 2);
                 Controls.Add(new NumericUpDown() { Dock = DockStyle.Fill, Value = metricSettings.Precision, Font = new Font("Microsoft Sans Serif", 10), Maximum = 5 }, 4, RowCount - 2);
                 Controls.Add(new Button()
@@ -191,7 +191,7 @@ namespace LoadImpactApp
                 {
                     Name = GetControlFromPosition(0, i).Text,
                     Min = ((CheckBox)GetControlFromPosition(1, i)).Checked,
-                    Avg = ((CheckBox)GetControlFromPosition(2, i)).Checked,
+                    Median = ((CheckBox)GetControlFromPosition(2, i)).Checked,
                     Max = ((CheckBox)GetControlFromPosition(3, i)).Checked,
                     Precision = (int)((NumericUpDown)GetControlFromPosition(4, i)).Value
                 });

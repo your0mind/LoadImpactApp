@@ -87,7 +87,14 @@
     </Compile>
     <Compile Include="MathLogic\MetricCalculator.cs" />
     <Compile Include="MathLogic\MetricPoints.cs" />
+    <Compile Include="ResultsSettings\AbstractMetricSettingsTable.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ResultsSettings\MetricSettingsTableDescriptionProvider.cs" />
     <Compile Include="ResultsSettings\MetricSettingsTableWithLabels.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ResultsSettings\MetricSettingsTableWithTextBoxes.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="ResultsSettings\ResultsSettingsForm.cs">
@@ -114,6 +121,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ResultsSettings\AbstractMetricSettingsTable.resx">
+      <DependentUpon>AbstractMetricSettingsTable.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ResultsSettings\ResultsSettingsForm.resx">
       <DependentUpon>ResultsSettingsForm.cs</DependentUpon>

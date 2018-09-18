@@ -16,7 +16,6 @@ namespace LoadImpactApp
         private BindingSource m_BindingFavTitlesListBox;
         private BindingSource m_BindingAllTitlesComboBox;
         private BindingSource m_BindingFavTitlesComboBox;
-        private List<string> m_MetricsList = new List<string>() { "CPU", "Memusage" };
 
         public MainForm(ConnectionForm form)
         {
@@ -308,7 +307,7 @@ namespace LoadImpactApp
                 testResultsDataGridView.Rows[index].Cells[1].Value = "-";
             }
 
-            if (metricSettings.Avg)
+            if (metricSettings.Median)
             {
                 testResultsDataGridView.Rows[index].Cells[2].Value = Math.Round(mc.Median(), metricSettings.Precision);
             }
