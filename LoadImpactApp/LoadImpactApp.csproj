@@ -51,17 +51,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ResultsSettings\AddMetricFormWithTextBox.cs">
+    <Compile Include="ResultsSettings\AddMetricFormBase.cs">
       <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ResultsSettings\AddMetricFormWithTextBox.Designer.cs">
-      <DependentUpon>AddMetricFormWithTextBox.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ResultsSettings\AddMetricFormWithComboBox.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ResultsSettings\AddMetricFormWithComboBox.Designer.cs">
-      <DependentUpon>AddMetricFormWithComboBox.cs</DependentUpon>
     </Compile>
     <Compile Include="Api\ApiLoadImpact.cs" />
     <Compile Include="DeserializableClasses\Json\TestConfig.cs" />
@@ -87,10 +78,21 @@
     </Compile>
     <Compile Include="MathLogic\MetricCalculator.cs" />
     <Compile Include="MathLogic\MetricPoints.cs" />
-    <Compile Include="ResultsSettings\AbstractMetricSettingsTable.cs">
+    <Compile Include="ResultsSettings\MetricSettingsTableBase.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="ResultsSettings\MetricSettingsTableDescriptionProvider.cs" />
+    <Compile Include="ResultsSettings\AddMetricFormWithComboBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ResultsSettings\AddMetricFormWithComboBox.designer.cs">
+      <DependentUpon>AddMetricFormWithComboBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ResultsSettings\AddMetricFormWithTextBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ResultsSettings\AddMetricFormWithTextBox.Designer.cs">
+      <DependentUpon>AddMetricFormWithTextBox.cs</DependentUpon>
+    </Compile>
     <Compile Include="ResultsSettings\MetricSettingsTableWithLabels.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -105,25 +107,22 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ResultsSettings\MetricsTableLayoutPanel.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="Settings.cs" />
     <Compile Include="TabPadding.cs" />
-    <EmbeddedResource Include="ResultsSettings\AddMetricFormWithTextBox.resx">
-      <DependentUpon>AddMetricFormWithTextBox.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ResultsSettings\AddMetricFormWithComboBox.resx">
-      <DependentUpon>AddMetricFormWithComboBox.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="ConnectionForm.resx">
       <DependentUpon>ConnectionForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ResultsSettings\AbstractMetricSettingsTable.resx">
-      <DependentUpon>AbstractMetricSettingsTable.cs</DependentUpon>
+    <EmbeddedResource Include="ResultsSettings\MetricSettingsTableBase.resx">
+      <DependentUpon>MetricSettingsTableBase.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ResultsSettings\AddMetricFormWithComboBox.resx">
+      <DependentUpon>AddMetricFormWithComboBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ResultsSettings\AddMetricFormWithTextBox.resx">
+      <DependentUpon>AddMetricFormWithTextBox.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ResultsSettings\ResultsSettingsForm.resx">
       <DependentUpon>ResultsSettingsForm.cs</DependentUpon>

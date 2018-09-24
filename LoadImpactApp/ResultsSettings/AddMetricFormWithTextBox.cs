@@ -1,19 +1,12 @@
-﻿using System.Windows.Forms;
+﻿using LoadImpactApp.ResultsSettings;
 
 namespace LoadImpactApp
 {
-    public partial class AddMetricFormWithTextBox : Form
+    public partial class AddMetricFormWithTextBox : AddMetricFormBase
     {
-        private string m_MetricName;
-
         public AddMetricFormWithTextBox()
         {
             InitializeComponent();
-        }
-
-        public string GetMetric()
-        {
-            return m_MetricName;
         }
 
         private void okButton_Click(object sender, System.EventArgs e)

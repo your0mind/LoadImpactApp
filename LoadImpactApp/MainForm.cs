@@ -39,7 +39,7 @@ namespace LoadImpactApp
             CurrentContextData.FavoritesTitles.AddRange(Settings.LoadImpactService.User.FavoritesTests.
                 Select(test => test.Name).ToList());
 
-            //RefreshContainersAsync();
+            RefreshContainersAsync();
         }
 
         private async void refreshButton_Click(object sender, EventArgs e)
@@ -119,14 +119,7 @@ namespace LoadImpactApp
         {
             Settings.Update();
 
-            TestSettings test = null;
-            if (Settings.LoadImpactService.User.FavoritesTests != null)
-            {
-                test = Settings.LoadImpactService.User.FavoritesTests
-                    .Find(t => t.Name == ((TestRun)runsListBox.SelectedItem).Title);
-            }
-
-            var resultsSettingsForm = new ResultsSettingsForm(test);
+            var resultsSettingsForm = new ResultsSettingsForm(((TestRun)runsListBox.SelectedItem).Title);
             resultsSettingsForm.FormClosing += ResultsSettingsForm_FormClosing;
             resultsSettingsForm.ShowDialog();
         }
@@ -157,19 +150,12 @@ namespace LoadImpactApp
 
         private void runsListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (runsListBox.SelectedItem != null)
-            {
-                getResultsButton.Enabled = true;
-            }
-            else
-            {
-                getResultsButton.Enabled = false;
-            }
+            getResultsButton.Enabled = (runsListBox.SelectedItem != null) ? true : false;
         }
 
         private async void ResultsSettingsForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            var testSettingsToUse = ((ResultsSettingsForm)sender).TestSettings;
+            var testSettingsToUse = ((ResultsSettingsForm)sender).GetTestSettings();
             if (testSettingsToUse != null)
             {
                 await ShowTestResultsAsync(testSettingsToUse);
@@ -213,24 +199,24 @@ namespace LoadImpactApp
 
             var notFoundedMetrics = new List<String>();
 
-            foreach (var standartMetric in testSettingsToUse.StandartMetrics)
+            foreach (var standardMetric in testSettingsToUse.StandartMetrics)
             {
-                var attributes = await ApiLoadImpact.GetStandartMetricPointsAsync(runId, standartMetric.Name);
+                var attributes = await ApiLoadImpact.GetStandartMetricPointsAsync(runId, standardMetric.Name);
                 if (attributes != null)
                 {
                     foreach (var attribute in attributes)
                     {
                         var metricCalculator = new MetricCalculator(attribute, bordersOfAnalisis, 
-                            testSettingsToUse.UseAnalisisWithVusNumber, testSettingsToUse.UseAnalisisWithStableSections);
+                            testSettingsToUse.UseAnalisisWithVusNumber, standardMetric.LookForStability);
 
-                        AddRowResultsToDataGridView(standartMetric, attribute.AttributeName, metricCalculator,
+                        AddRowResultsToDataGridView(standardMetric, attribute.AttributeName, metricCalculator,
                             Color.LemonChiffon, Settings.LoadImpactService.TimelessMetrics.StandartMetricsInfo
-                                .FirstOrDefault(info => info.Name == standartMetric.Name).Unit);
+                                .FirstOrDefault(info => info.Name == standardMetric.Name).Unit);
                     }
                 }
                 else
                 {
-                    notFoundedMetrics.Add(standartMetric.Name);
+                    notFoundedMetrics.Add(standardMetric.Name);
                 }
             }
 
@@ -247,7 +233,7 @@ namespace LoadImpactApp
                         foreach (var attribute in attributes)
                         {
                             var metricCalculator = new MetricCalculator(attribute, bordersOfAnalisis,
-                                testSettingsToUse.UseAnalisisWithVusNumber, testSettingsToUse.UseAnalisisWithStableSections);
+                                testSettingsToUse.UseAnalisisWithVusNumber, serverAgentMetric.LookForStability);
 
                             AddRowResultsToDataGridView(serverAgentMetric, attribute.AttributeName, metricCalculator,
                                 Color.LightCyan, Settings.LoadImpactService.TimelessMetrics.ServerAgentMetricsInfo
@@ -271,7 +257,7 @@ namespace LoadImpactApp
                     foreach (var attribute in attributes)
                     {
                         var metricCalculator = new MetricCalculator(attribute, bordersOfAnalisis,
-                            testSettingsToUse.UseAnalisisWithVusNumber, testSettingsToUse.UseAnalisisWithStableSections);
+                            testSettingsToUse.UseAnalisisWithVusNumber, pageMetric.LookForStability);
 
                         AddRowResultsToDataGridView(pageMetric, attribute.AttributeName, metricCalculator, Color.PaleGreen, "sec");
                     }

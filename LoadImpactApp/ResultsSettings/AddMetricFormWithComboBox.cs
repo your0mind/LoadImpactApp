@@ -1,21 +1,14 @@
-﻿using System.Collections.Generic;
-using System.Windows.Forms;
+using LoadImpactApp.ResultsSettings;
+using System.Collections.Generic;
 
 namespace LoadImpactApp
 {
-    public partial class AddMetricFormWithComboBox : Form
+    public partial class AddMetricFormWithComboBox : AddMetricFormBase
     {
-        private string m_MetricName;
-
         public AddMetricFormWithComboBox(List<string> metricList)
         {
             InitializeComponent();
             metricNameComboBox.DataSource = metricList;
-        }
-
-        public string GetMetric()
-        {
-            return m_MetricName;
         }
 
         private void okButton_Click(object sender, System.EventArgs e)

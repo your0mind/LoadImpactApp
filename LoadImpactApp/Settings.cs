@@ -14,7 +14,7 @@ namespace LoadImpactApp
             //LoadImpactService = new LoadImpact();
             //LoadImpactService.BaseUrl = "https://api.loadimpact.com/v2";
             //LoadImpactService.User = new User();
-            //LoadImpactService.User.Token = "35ea142ac9baa9e3d11ea4e58d0548df6c0dfbbd76b80286a34f88477ab252e1";
+            //LoadImpactService.User.Token = "";
             //LoadImpactService.User.FavoritesTests = new List<Test>();
             //LoadImpactService.TimelessMetrics = new TimelessMetrics();
             //LoadImpactService.TimelessMetrics.StandartMetricsInfo = new List<TimelessMetricInfo>();

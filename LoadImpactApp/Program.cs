@@ -15,8 +15,7 @@ namespace LoadImpactApp
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new ResultsSettingsForm(null));
-            //Application.Run(new ConnectionForm());
+            Application.Run(new ConnectionForm());
         }
     }
 }
