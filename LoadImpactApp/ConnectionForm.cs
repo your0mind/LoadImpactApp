@@ -67,5 +67,9 @@ namespace LoadImpactApp
             Application.Exit();
         }
 
+        private void ConnectionForm_Load(object sender, EventArgs e)
+        {
+            connectButton.Select();
+        }
     }
 }

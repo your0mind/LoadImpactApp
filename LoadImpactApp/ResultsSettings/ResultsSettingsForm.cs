@@ -84,5 +84,10 @@ namespace LoadImpactApp
         {
             return m_ReturnTestSettings;
         }
+
+        private void ResultsSettingsForm_Load(object sender, EventArgs e)
+        {
+            finalGetResultsButton.Select();
+        }
     }
 }

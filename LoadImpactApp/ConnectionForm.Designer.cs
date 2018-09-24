@@ -117,6 +117,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "LoadImpactApp";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.ConnectionForm_FormClosed);
+            this.Load += new System.EventHandler(this.ConnectionForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

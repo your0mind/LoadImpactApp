@@ -174,6 +174,7 @@
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Result settings";
+            this.Load += new System.EventHandler(this.ResultsSettingsForm_Load);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.metricSettingsPanel.ResumeLayout(false);

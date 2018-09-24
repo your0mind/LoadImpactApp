@@ -283,34 +283,15 @@ namespace LoadImpactApp
 
             testResultsDataGridView.Rows[index].DefaultCellStyle.BackColor = color;
             testResultsDataGridView.Rows[index].Cells[0].Value = metricSettings.Name + $" ({attributeName})";
-
-            if (metricSettings.Min)
-            {
-                testResultsDataGridView.Rows[index].Cells[1].Value = Math.Round(mc.Min(), metricSettings.Precision);
-            }
-            else
-            {
-                testResultsDataGridView.Rows[index].Cells[1].Value = "-";
-            }
-
-            if (metricSettings.Median)
-            {
-                testResultsDataGridView.Rows[index].Cells[2].Value = Math.Round(mc.Median(), metricSettings.Precision);
-            }
-            else
-            {
-                testResultsDataGridView.Rows[index].Cells[2].Value = "-";
-            }
-
-            if (metricSettings.Max)
-            {
-                testResultsDataGridView.Rows[index].Cells[3].Value = Math.Round(mc.Max(), metricSettings.Precision);
-            }
-            else
-            {
-                testResultsDataGridView.Rows[index].Cells[3].Value = "-";
-            }
-
+            testResultsDataGridView.Rows[index].Cells[1].Value = (metricSettings.Min)
+                ? (object)Math.Round(mc.Min(), metricSettings.Precision)
+                : (object)"-";
+            testResultsDataGridView.Rows[index].Cells[1].Value = (metricSettings.Median)
+                ? (object)Math.Round(mc.Median(), metricSettings.Precision)
+                : (object)"-";
+            testResultsDataGridView.Rows[index].Cells[1].Value = (metricSettings.Max)
+                ? (object)Math.Round(mc.Max(), metricSettings.Precision)
+                : (object)"-";
             testResultsDataGridView.Rows[index].Cells[4].Value = unit;
         }
 
