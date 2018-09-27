@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using LoadImpactApp.Api;
 using LoadImpactApp.DeserializableClasses.Xml;
+using System.Threading;
 
 namespace LoadImpactApp
 {
@@ -44,7 +45,7 @@ namespace LoadImpactApp
 
         private async void refreshButton_Click(object sender, EventArgs e)
         {
-            await RefreshContainersAsync();
+                await RefreshContainersAsync();
         }
 
         private void addToFavButton_Click(object sender, EventArgs e)
@@ -195,6 +196,17 @@ namespace LoadImpactApp
             if (testSettingsToUse.UseAnalisisWithVusNumber)
             {
                 bordersOfAnalisis = MetricCalculator.GetBordersByStableVusActive(vusActiveMetricPoints.First());
+
+                double areaOfVusStableActive = 100 * (double)(bordersOfAnalisis.Item2 - bordersOfAnalisis.Item1) /
+                    (vusActiveMetricPoints.First().Points.Last().Timestamp - vusActiveMetricPoints.First().Points.First().Timestamp);
+                testInfoDataGridView.Rows[0].Cells[3].Value = Math.Round(areaOfVusStableActive, 2);
+
+                testInfoDataGridView.Rows[0].Cells[3].Style.ForeColor = (areaOfVusStableActive > 50)
+                    ? Color.Green : (areaOfVusStableActive > 10) ? Color.Orange : Color.Red;
+            }
+            else
+            {
+                testInfoDataGridView.Rows[0].Cells[3].Value = "-";
             }
 
             var notFoundedMetrics = new List<String>();

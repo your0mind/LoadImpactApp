@@ -67,7 +67,7 @@ namespace LoadImpactApp
             }
         }
 
-        public static Tuple<long, long> GetBordersByStableVusActive(MetricPoints metricPoints)
+        public static Tuple<long, long> GetBordersByStableVusActive(MetricPoints metricPointsOfVusActive)
         {
             long leftBorderMax = 0;
             long rightBorderMax = 0;
@@ -75,22 +75,22 @@ namespace LoadImpactApp
             long currentRightBorder = 0;
             bool isFindingRightBorder = false;
 
-            for (int i = 0; i < metricPoints.Points.Length; i++)
+            for (int i = 0; i < metricPointsOfVusActive.Points.Length; i++)
             {
                 if (!isFindingRightBorder)
                 {
-                    currentLeftBorder = metricPoints.Points[i].Timestamp;
+                    currentLeftBorder = metricPointsOfVusActive.Points[i].Timestamp;
                     isFindingRightBorder = true;
                 }
                 else
                 {
-                    if (metricPoints.Points[i].Value == metricPoints.Points[i - 1].Value)
+                    if (metricPointsOfVusActive.Points[i].Value == metricPointsOfVusActive.Points[i - 1].Value)
                     {
-                        currentRightBorder = metricPoints.Points[i].Timestamp;
+                        currentRightBorder = metricPointsOfVusActive.Points[i].Timestamp;
                     }
                     else
                     {
-                        currentRightBorder = metricPoints.Points[i-- - 1].Timestamp;
+                        currentRightBorder = metricPointsOfVusActive.Points[i-- - 1].Timestamp;
                         if ((currentRightBorder - currentLeftBorder) > (rightBorderMax - leftBorderMax))
                         {
                             leftBorderMax = currentLeftBorder;
@@ -101,7 +101,7 @@ namespace LoadImpactApp
                 }
             }
 
-            if (currentRightBorder == metricPoints.Points[metricPoints.Points.Length - 1].Timestamp)
+            if (currentRightBorder == metricPointsOfVusActive.Points[metricPointsOfVusActive.Points.Length - 1].Timestamp)
             {
                 if ((currentRightBorder - currentLeftBorder) > (rightBorderMax - leftBorderMax))
                 {
@@ -115,6 +115,11 @@ namespace LoadImpactApp
 
         private double GetMedian(MetricPoint[] metricPoints)
         {
+            if (metricPoints.Length == 0)
+            {
+                return 0.0;
+            }
+
             double[] tempPoints = metricPoints.Select(p => p.Value).ToArray();
             int count = tempPoints.Length;
 
