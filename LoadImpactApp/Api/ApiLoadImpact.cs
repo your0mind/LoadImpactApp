@@ -77,11 +77,12 @@ namespace LoadImpactApp.Api
         {
             var response = await MakeRequestAsync("/tests");
             var jsonContent = await response.Content.ReadAsStringAsync();
-
-            var allTestRuns = JsonConvert.DeserializeObject<List<TestRun>>(jsonContent);
-            allTestRuns.RemoveAll(testRun => testRun.Status != 3);
-
-            return allTestRuns;
+            return await Task.Run(() =>
+            {
+                var allTestRuns = JsonConvert.DeserializeObject<List<TestRun>>(jsonContent);
+                allTestRuns.RemoveAll(testRun => testRun.Status != 3);
+                return allTestRuns;
+            });
         }
 
         public static async Task<List<TestConfig>> GetTestConfigsAsync()
