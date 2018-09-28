@@ -86,6 +86,8 @@ namespace LoadImpactApp
 
         private async Task RefreshContainersAsync()
         {
+            refreshButton.Enabled = false;
+
             allTestsListBox.DataSource = null;
             allTestsComboBox.DataSource = null;
             favoritesTestsListBox.DataSource = null;
@@ -100,6 +102,8 @@ namespace LoadImpactApp
 
             SetOptimalComboBoxWidth(allTestsComboBox);
             SetOptimalComboBoxWidth(favoritesTestsComboBox);
+
+            refreshButton.Enabled = true;
         }
 
         private void SetOptimalComboBoxWidth(ComboBox comboBox)
@@ -165,6 +169,8 @@ namespace LoadImpactApp
 
         private async Task ShowTestResultsAsync(TestSettings testSettingsToUse)
         {
+            Enabled = false;
+
             while (testResultsDataGridView.RowCount > 0)
             {
                 testResultsDataGridView.Rows.RemoveAt(0);
@@ -286,6 +292,8 @@ namespace LoadImpactApp
                 testResultsDataGridView.Rows[testResultsDataGridView.Rows.Count - 1].DefaultCellStyle.BackColor = Color.Silver;
                 testResultsDataGridView.Rows[testResultsDataGridView.Rows.Count - 1].Cells[0].Value = metric + " (Not found)";
             }
+
+            Enabled = true;
         }
 
         private void AddRowResultsToDataGridView(MetricSettings metricSettings, string attributeName, MetricCalculator mc, Color color, string unit)

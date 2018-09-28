@@ -25,14 +25,7 @@ namespace LoadImpactApp
             {
                 if (await ApiLoadImpact.CheckTokenAsync(tokenBox.Text))
                 {
-                    if (rememeberCheck.Checked)
-                    {
-                        Settings.LoadImpactService.User.Token = tokenBox.Text;
-                    }
-                    else
-                    {
-                        Settings.LoadImpactService.User.Token = "";
-                    }
+                    Settings.LoadImpactService.User.Token = (rememeberCheck.Checked) ? tokenBox.Text : "";
 
                     if (m_MainForm == null)
                     {
