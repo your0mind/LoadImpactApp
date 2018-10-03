@@ -57,7 +57,12 @@
             this.testsPage = new System.Windows.Forms.TabPage();
             this.tabControl2 = new System.Windows.Forms.TabControl();
             this.resultsPage = new System.Windows.Forms.TabPage();
+            this.extractResultsButton = new System.Windows.Forms.Button();
             this.testInfoDataGridView = new System.Windows.Forms.DataGridView();
+            this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column6 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.testResultsDataGridView = new System.Windows.Forms.DataGridView();
             this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -72,10 +77,6 @@
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.favoritesTestsComboBox = new System.Windows.Forms.ComboBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewTextBoxColumn5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewTextBoxColumn4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column6 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabPage2.SuspendLayout();
             this.allTestsPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
@@ -337,6 +338,7 @@
             // resultsPage
             // 
             this.resultsPage.BackColor = System.Drawing.SystemColors.Control;
+            this.resultsPage.Controls.Add(this.extractResultsButton);
             this.resultsPage.Controls.Add(this.testInfoDataGridView);
             this.resultsPage.Controls.Add(this.testResultsDataGridView);
             this.resultsPage.Controls.Add(this.getResultsButton);
@@ -348,6 +350,18 @@
             this.resultsPage.Size = new System.Drawing.Size(758, 496);
             this.resultsPage.TabIndex = 1;
             this.resultsPage.Text = "Results";
+            // 
+            // extractResultsButton
+            // 
+            this.extractResultsButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.extractResultsButton.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.extractResultsButton.Location = new System.Drawing.Point(511, 447);
+            this.extractResultsButton.Name = "extractResultsButton";
+            this.extractResultsButton.Size = new System.Drawing.Size(232, 33);
+            this.extractResultsButton.TabIndex = 6;
+            this.extractResultsButton.Text = "Extract results";
+            this.extractResultsButton.UseVisualStyleBackColor = true;
+            this.extractResultsButton.Click += new System.EventHandler(this.extractResultsButton_Click);
             // 
             // testInfoDataGridView
             // 
@@ -389,6 +403,42 @@
             this.testInfoDataGridView.Size = new System.Drawing.Size(477, 57);
             this.testInfoDataGridView.TabIndex = 5;
             // 
+            // dataGridViewTextBoxColumn1
+            // 
+            this.dataGridViewTextBoxColumn1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.dataGridViewTextBoxColumn1.FillWeight = 35F;
+            this.dataGridViewTextBoxColumn1.HeaderText = "Test name";
+            this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
+            this.dataGridViewTextBoxColumn1.ReadOnly = true;
+            this.dataGridViewTextBoxColumn1.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // dataGridViewTextBoxColumn5
+            // 
+            this.dataGridViewTextBoxColumn5.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.dataGridViewTextBoxColumn5.FillWeight = 15F;
+            this.dataGridViewTextBoxColumn5.HeaderText = "Ended";
+            this.dataGridViewTextBoxColumn5.Name = "dataGridViewTextBoxColumn5";
+            this.dataGridViewTextBoxColumn5.ReadOnly = true;
+            this.dataGridViewTextBoxColumn5.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // dataGridViewTextBoxColumn4
+            // 
+            this.dataGridViewTextBoxColumn4.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.dataGridViewTextBoxColumn4.FillWeight = 10F;
+            this.dataGridViewTextBoxColumn4.HeaderText = "Max VUs";
+            this.dataGridViewTextBoxColumn4.Name = "dataGridViewTextBoxColumn4";
+            this.dataGridViewTextBoxColumn4.ReadOnly = true;
+            this.dataGridViewTextBoxColumn4.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Column6
+            // 
+            this.Column6.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.Column6.FillWeight = 40F;
+            this.Column6.HeaderText = "Area of stable VUs active (%)";
+            this.Column6.Name = "Column6";
+            this.Column6.ReadOnly = true;
+            this.Column6.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
             // testResultsDataGridView
             // 
             this.testResultsDataGridView.AllowUserToAddRows = false;
@@ -428,7 +478,7 @@
             this.testResultsDataGridView.RowTemplate.Height = 30;
             this.testResultsDataGridView.RowTemplate.ReadOnly = true;
             this.testResultsDataGridView.RowTemplate.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.testResultsDataGridView.Size = new System.Drawing.Size(477, 397);
+            this.testResultsDataGridView.Size = new System.Drawing.Size(477, 356);
             this.testResultsDataGridView.TabIndex = 4;
             // 
             // Column1
@@ -573,42 +623,6 @@
             this.tabControl1.Size = new System.Drawing.Size(766, 522);
             this.tabControl1.TabIndex = 0;
             // 
-            // dataGridViewTextBoxColumn1
-            // 
-            this.dataGridViewTextBoxColumn1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.dataGridViewTextBoxColumn1.FillWeight = 35F;
-            this.dataGridViewTextBoxColumn1.HeaderText = "Test name";
-            this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
-            this.dataGridViewTextBoxColumn1.ReadOnly = true;
-            this.dataGridViewTextBoxColumn1.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // dataGridViewTextBoxColumn5
-            // 
-            this.dataGridViewTextBoxColumn5.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.dataGridViewTextBoxColumn5.FillWeight = 15F;
-            this.dataGridViewTextBoxColumn5.HeaderText = "Ended";
-            this.dataGridViewTextBoxColumn5.Name = "dataGridViewTextBoxColumn5";
-            this.dataGridViewTextBoxColumn5.ReadOnly = true;
-            this.dataGridViewTextBoxColumn5.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // dataGridViewTextBoxColumn4
-            // 
-            this.dataGridViewTextBoxColumn4.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.dataGridViewTextBoxColumn4.FillWeight = 10F;
-            this.dataGridViewTextBoxColumn4.HeaderText = "Max VUs";
-            this.dataGridViewTextBoxColumn4.Name = "dataGridViewTextBoxColumn4";
-            this.dataGridViewTextBoxColumn4.ReadOnly = true;
-            this.dataGridViewTextBoxColumn4.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // Column6
-            // 
-            this.Column6.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.Column6.FillWeight = 40F;
-            this.Column6.HeaderText = "Area of stable VUs active (%)";
-            this.Column6.Name = "Column6";
-            this.Column6.ReadOnly = true;
-            this.Column6.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -683,5 +697,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn5;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn4;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column6;
+        private System.Windows.Forms.Button extractResultsButton;
     }
 }

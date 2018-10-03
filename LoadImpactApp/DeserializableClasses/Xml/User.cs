@@ -8,6 +8,7 @@ namespace LoadImpactApp.DeserializableClasses.Xml
         [XmlAttribute]
         public string Token { get; set; }
         public List<TestSettings> FavoritesTests { get; set; }
+        public ExportSettings ExportSettings { get; set; }
 
         public User()
         {

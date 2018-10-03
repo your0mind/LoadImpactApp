@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using LoadImpactApp.Api;
 using LoadImpactApp.DeserializableClasses.Xml;
-using System.Threading;
 
 namespace LoadImpactApp
 {
@@ -35,7 +34,6 @@ namespace LoadImpactApp
             m_BindingAllTitlesComboBox = new BindingSource(CurrentContextData.Titles, null);
             m_BindingFavTitlesListBox = new BindingSource(CurrentContextData.FavoritesTitles, null);
             m_BindingFavTitlesComboBox = new BindingSource(CurrentContextData.FavoritesTitles, null);
-
 
             CurrentContextData.FavoritesTitles.AddRange(Settings.LoadImpactService.User.FavoritesTests.
                 Select(test => test.Name).ToList());
@@ -296,7 +294,7 @@ namespace LoadImpactApp
             Enabled = true;
         }
 
-        private void AddRowResultsToDataGridView(MetricSettings metricSettings, string attributeName, MetricCalculator mc, Color color, string unit)
+        private void AddRowResultsToDataGridView(MetricSettings metricSettings, string attributeName, MetricCalculator mc, System.Drawing.Color color, string unit)
         {
             testResultsDataGridView.Rows.Add();
             int index = testResultsDataGridView.Rows.Count - 1;
@@ -328,6 +326,12 @@ namespace LoadImpactApp
             Settings.Update();
             Settings.SaveToFile("UserSettings.xml");
             Application.Exit();
+        }
+
+        private void extractResultsButton_Click(object sender, EventArgs e)
+        {
+            var exportResultsForm = new ExportResultsForm();
+            exportResultsForm.ShowDialog();
         }
     }
 }
