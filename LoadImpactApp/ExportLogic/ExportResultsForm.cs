@@ -8,12 +8,13 @@ using Google.Apis.Util.Store;
 using System.IO;
 using System.Threading;
 using System.Collections.Generic;
+using LoadImpactApp.ExportLogic;
+using System.Text.RegularExpressions;
 
 namespace LoadImpactApp
 {
     public partial class ExportResultsForm : Form
     {
-        private static SheetsService m_SheetsService = GetSheetsService();
         private List<string> m_ExtractFormatList;
 
         public ExportResultsForm()
@@ -31,67 +32,49 @@ namespace LoadImpactApp
             sprintTextBox.Text = Settings.LoadImpactService.User.ExportSettings.Sprint;
         }
 
-        private static SheetsService GetSheetsService()
+
+        private void extractButton_Click(object sender, EventArgs eventArgs)
         {
-            UserCredential credential;
             try
             {
-                using (var stream = new FileStream("credentials.json", FileMode.Open, FileAccess.Read))
+                var spreadSheetIdReg = new Regex(@"/spreadsheets/d/([a-zA-Z0-9-_]+)");
+                var match = spreadSheetIdReg.Match(linkTextBox.Text);
+                string spreadSheetId;
+
+                if (match.Success)
                 {
-                    string credPath = "token.json";
-                    credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
-                        GoogleClientSecrets.Load(stream).Secrets,
-                        new string[] { SheetsService.Scope.Spreadsheets },
-                        "user",
-                        CancellationToken.None,
-                        new FileDataStore(credPath, true)).Result;
+                    spreadSheetId = match.Groups[1].Value;
+                }
+                else
+                {
+                    throw new ArgumentException("Link to spreadsheet isn't valid");
                 }
 
-                return new SheetsService(new BaseClientService.Initializer()
+                if (extractFormatComboBox.SelectedIndex == 0)
                 {
-                    HttpClientInitializer = credential,
-                    //ApplicationName = ApplicationName,
-                });
+                    String range = "0!A114:B114";
+
+                    var valueRange = new ValueRange();
+                    List<object> values = new List<object>() { 3, 3 };
+                    valueRange.Values = new List<IList<object>> { values };
+
+                    var appendRequest = GoogleSheets.Service.Spreadsheets.Values.Append(valueRange, spreadSheetId, range);
+                    appendRequest.ValueInputOption = SpreadsheetsResource.ValuesResource.AppendRequest.ValueInputOptionEnum.USERENTERED;
+                    var appendReponse = appendRequest.Execute();
+                }
             }
-            catch (FileNotFoundException)
+            catch (ArgumentException e) when (e.Message == "Link to spreadsheet isn't valid")
             {
-
+                MessageBox.Show(e.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
-        }
-
-        private void extractButton_Click(object sender, EventArgs e)
-        {
-            UserCredential credential;
-
-            using (var stream = new FileStream("credentials.json", FileMode.Open, FileAccess.Read))
+            catch (TypeInitializationException e) when (e.InnerException is FileNotFoundException)
             {
-                string credPath = "token.json";
-                credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
-                    GoogleClientSecrets.Load(stream).Secrets,
-                    Scopes,
-                    "user",
-                    CancellationToken.None,
-                    new FileDataStore(credPath, true)).Result;
+                MessageBox.Show(e.InnerException.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
-            var service = new SheetsService(new BaseClientService.Initializer()
+            catch (Google.GoogleApiException e)
             {
-                HttpClientInitializer = credential,
-                ApplicationName = ApplicationName,
-            });
-
-
-            String spreadsheetId = "1iZpXC6I1aJFAmqA1k9QCtpkDIa80t2w1xAjUAlhl32E";
-            String range = "Main metrics!A9:B9";
-
-            var valueRange = new ValueRange();
-            List<object> values = new List<object>() { 3, 3 };
-            valueRange.Values = new List<IList<object>> { values };
-
-            var appendRequest = service.Spreadsheets.Values.Append(valueRange, spreadsheetId, range);
-            appendRequest.ValueInputOption = SpreadsheetsResource.ValuesResource.AppendRequest.ValueInputOptionEnum.USERENTERED;
-            var appendReponse = appendRequest.Execute();
+                MessageBox.Show(e.Error.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void extractFormatComboBox_SelectedIndexChanged(object sender, EventArgs e)
