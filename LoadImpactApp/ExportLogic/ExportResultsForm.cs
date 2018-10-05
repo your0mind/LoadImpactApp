@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using Google;
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Services;
 using Google.Apis.Sheets.v4;
@@ -31,7 +32,6 @@ namespace LoadImpactApp
             linkTextBox.Text = Settings.LoadImpactService.User.ExportSettings.SpreadsheetLink;
             sprintTextBox.Text = Settings.LoadImpactService.User.ExportSettings.Sprint;
         }
-
 
         private void extractButton_Click(object sender, EventArgs eventArgs)
         {
@@ -71,9 +71,17 @@ namespace LoadImpactApp
             {
                 MessageBox.Show(e.InnerException.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            catch (Google.GoogleApiException e)
+            catch (TypeInitializationException e) when (e.InnerException is TimeoutException)
             {
-                MessageBox.Show(e.Error.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(e.InnerException.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            catch (GoogleApiException e)
+            {
+                var result = MessageBox.Show(e.Error.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                if (result == DialogResult.OK)
+                {
+
+                }
             }
         }
 
