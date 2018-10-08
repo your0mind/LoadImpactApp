@@ -11,81 +11,35 @@ using System.Threading;
 using System.Collections.Generic;
 using LoadImpactApp.ExportLogic;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using System.Linq;
 
 namespace LoadImpactApp
 {
     public partial class ExportResultsForm : Form
     {
         private List<string> m_ExtractFormatList;
+        private DataGridView m_InfoGrid;
+        private DataGridView m_ResultsGrid;
 
-        public ExportResultsForm()
+        public ExportResultsForm(DataGridView infoGrid, DataGridView resultsGrid)
         {
             InitializeComponent();
+            m_InfoGrid = infoGrid;
+            m_ResultsGrid = resultsGrid;
             m_ExtractFormatList = new List<string>() { "Default", "FLS QA" };
-            extractFormatComboBox.DataSource = m_ExtractFormatList;
+            exportFormatComboBox.DataSource = m_ExtractFormatList;
 
             if (Settings.LoadImpactService.User.ExportSettings.ExportFormat == "FLS QA")
             {
-                extractFormatComboBox.SelectedIndex = 1;
+                exportFormatComboBox.SelectedIndex = 1;
             }
 
             linkTextBox.Text = Settings.LoadImpactService.User.ExportSettings.SpreadsheetLink;
             sprintTextBox.Text = Settings.LoadImpactService.User.ExportSettings.Sprint;
         }
 
-        private void extractButton_Click(object sender, EventArgs eventArgs)
-        {
-            try
-            {
-                var spreadSheetIdReg = new Regex(@"/spreadsheets/d/([a-zA-Z0-9-_]+)");
-                var match = spreadSheetIdReg.Match(linkTextBox.Text);
-                string spreadSheetId;
-
-                if (match.Success)
-                {
-                    spreadSheetId = match.Groups[1].Value;
-                }
-                else
-                {
-                    throw new ArgumentException("Link to spreadsheet isn't valid");
-                }
-
-                if (extractFormatComboBox.SelectedIndex == 0)
-                {
-                    String range = "0!A114:B114";
-
-                    var valueRange = new ValueRange();
-                    List<object> values = new List<object>() { 3, 3 };
-                    valueRange.Values = new List<IList<object>> { values };
-
-                    var appendRequest = GoogleSheets.Service.Spreadsheets.Values.Append(valueRange, spreadSheetId, range);
-                    appendRequest.ValueInputOption = SpreadsheetsResource.ValuesResource.AppendRequest.ValueInputOptionEnum.USERENTERED;
-                    var appendReponse = appendRequest.Execute();
-                }
-            }
-            catch (ArgumentException e) when (e.Message == "Link to spreadsheet isn't valid")
-            {
-                MessageBox.Show(e.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            catch (TypeInitializationException e) when (e.InnerException is FileNotFoundException)
-            {
-                MessageBox.Show(e.InnerException.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            catch (TypeInitializationException e) when (e.InnerException is TimeoutException)
-            {
-                MessageBox.Show(e.InnerException.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            catch (GoogleApiException e)
-            {
-                var result = MessageBox.Show(e.Error.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                if (result == DialogResult.OK)
-                {
-
-                }
-            }
-        }
-
-        private void extractFormatComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        private void exportFormatComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (((ComboBox)sender).SelectedIndex == 1)
             {
@@ -102,9 +56,82 @@ namespace LoadImpactApp
         private void saveButton_Click(object sender, EventArgs e)
         {
             Settings.LoadImpactService.User.ExportSettings.SpreadsheetLink = linkTextBox.Text;
-            Settings.LoadImpactService.User.ExportSettings.ExportFormat = extractFormatComboBox.SelectedItem.ToString();
+            Settings.LoadImpactService.User.ExportSettings.ExportFormat = exportFormatComboBox.SelectedItem.ToString();
             Settings.LoadImpactService.User.ExportSettings.Sprint = sprintTextBox.Text;
             Settings.Update();
+        }
+
+        private async void exportButton_Click(object sender, EventArgs e)
+        {
+            Enabled = false;
+
+            try
+            {
+                var spreadSheetReg = new Regex(@"/spreadsheets/d/([a-zA-Z0-9-_]+).*gid=(\d+)");
+                var match = spreadSheetReg.Match(linkTextBox.Text);
+                string spreadSheetId;
+                int sheetId;
+
+                if (match.Success)
+                {
+                    spreadSheetId = match.Groups[1].Value;
+                    sheetId = Int32.Parse(match.Groups[2].Value);
+                }
+                else
+                {
+                    throw new ArgumentException("Link to spreadsheet isn't valid.");
+                }
+
+                var service = await GoogleSheets.GetSheetsService();
+                var sheets = service.Spreadsheets.Get(spreadSheetId).Execute();
+                var title = sheets.Sheets.FirstOrDefault(s => s.Properties.SheetId == sheetId)?.Properties.Title;
+
+                if (title == null)
+                {
+                    throw new ArgumentException("Gid in link isn't valid.");
+                }
+
+                if (exportFormatComboBox.SelectedIndex == 1)
+                {
+                    var request = service.Spreadsheets.Values.Get(spreadSheetId, title + "!A");
+                    var response = request.Execute();
+
+                    /*var valueRange = new ValueRange();
+                    List<object> values = new List<object>() { 3, 3 };
+                    valueRange.Values = new List<IList<object>> { values };
+
+                    var appendRequest = service.Spreadsheets.Values.Append(valueRange, spreadSheetId, range);
+                    appendRequest.ValueInputOption = SpreadsheetsResource.ValuesResource.AppendRequest.ValueInputOptionEnum.USERENTERED;
+                    var appendReponse = appendRequest.Execute();*/
+                }
+            }
+            catch (Exception ex)
+            {
+                while (ex.InnerException != null)
+                {
+                    ex = ex.InnerException;
+                }
+
+                string message = null;
+                if (ex is OperationCanceledException)
+                {
+                    message = ex.Message + " Timeout of authorize.";
+                }
+                else if (ex is GoogleApiException)
+                {
+                    message = ((GoogleApiException)ex).Error.Message +
+                        "\n\nIf you want to change your Google account, then delete the 'google-token' folder " +
+                        "in the folder of executable file and try to export results again.";
+                }
+                else
+                {
+                    message = ex.Message;
+                }
+
+                MessageBox.Show(message, "Exporting results", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            Enabled = true;
         }
     }
 }

@@ -8,40 +8,52 @@ using System.Collections.Generic;
 using Google.Apis.Auth.OAuth2;
 using System;
 using System.Threading.Tasks;
+using Google.Apis.Auth.OAuth2.Responses;
+using Google.Apis.Auth.OAuth2.Flows;
 
 namespace LoadImpactApp.ExportLogic
 {
     public static class GoogleSheets
     {
-        public static int AuthorizationTimeout { get; set; }
+        public static int AuthorizeTimeoutSec { get; set; }
 
-        public static SheetsService Service;
+        private static SheetsService m_Service;
 
         static GoogleSheets()
         {
-            AuthorizationTimeout = 10000;
-            Service = GetSheetsService();
+            AuthorizeTimeoutSec = 10;
         }
 
-        private static async Task<SheetsService> GetSheetsService()
+        public static async Task<SheetsService> GetSheetsService()
         {
-            UserCredential credential = null;
-            using (var stream = new FileStream("credentials.json", FileMode.Open, FileAccess.Read))
+            if (m_Service != null)
             {
-                string credPath = "google-token";
-                credential = await GoogleWebAuthorizationBroker.AuthorizeAsync(
-                    GoogleClientSecrets.Load(stream).Secrets,
-                    new string[] { SheetsService.Scope.Spreadsheets },
-                    "user",
-                    CancellationToken.None,
-                    new FileDataStore(credPath, true));
+                return m_Service;
             }
-
-            return new SheetsService(new BaseClientService.Initializer()
+            else
             {
-                HttpClientInitializer = credential,
-                //ApplicationName = ApplicationName,
-            });
+                UserCredential credential = null;
+
+                var cts = new CancellationTokenSource();
+                cts.CancelAfter(TimeSpan.FromSeconds(AuthorizeTimeoutSec));
+
+                using (var stream = new FileStream("credentials.json", FileMode.Open, FileAccess.Read))
+                {
+                    string credPath = "google-token";
+                    credential = await GoogleWebAuthorizationBroker.AuthorizeAsync(
+                        GoogleClientSecrets.Load(stream).Secrets,
+                        new string[] { SheetsService.Scope.Spreadsheets },
+                        "user",
+                        cts.Token,
+                        new FileDataStore(credPath, true));
+                }
+
+                return new SheetsService(new BaseClientService.Initializer()
+                {
+                    HttpClientInitializer = credential,
+                    //ApplicationName = ApplicationName,
+                });
+            }
         }
     }
 }

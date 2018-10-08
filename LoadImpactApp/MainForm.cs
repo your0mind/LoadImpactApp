@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using LoadImpactApp.Api;
 using LoadImpactApp.DeserializableClasses.Xml;
+using LoadImpactApp.ExportLogic;
 
 namespace LoadImpactApp
 {
@@ -328,9 +329,9 @@ namespace LoadImpactApp
             Application.Exit();
         }
 
-        private void extractResultsButton_Click(object sender, EventArgs e)
+        private void exportResultsButton_Click(object sender, EventArgs e)
         {
-            var exportResultsForm = new ExportResultsForm();
+            var exportResultsForm = new ExportResultsForm(testInfoDataGridView, testResultsDataGridView);
             exportResultsForm.ShowDialog();
         }
     }
