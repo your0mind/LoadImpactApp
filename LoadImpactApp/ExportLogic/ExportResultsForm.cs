@@ -1,18 +1,13 @@
-﻿using System;
-using System.Windows.Forms;
-using Google;
-using Google.Apis.Auth.OAuth2;
-using Google.Apis.Services;
+﻿using Google;
 using Google.Apis.Sheets.v4;
 using Google.Apis.Sheets.v4.Data;
-using Google.Apis.Util.Store;
-using System.IO;
-using System.Threading;
-using System.Collections.Generic;
 using LoadImpactApp.ExportLogic;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
+using System.Windows.Forms;
+using static Google.Apis.Sheets.v4.SpreadsheetsResource.ValuesResource;
 
 namespace LoadImpactApp
 {
@@ -72,6 +67,11 @@ namespace LoadImpactApp
                 string spreadSheetId;
                 int sheetId;
 
+                // The range of values that we will write
+                var valueRange = new ValueRange();
+                valueRange.Values = new List<IList<object>>();
+                valueRange.Values.Add(new List<object>());
+
                 if (match.Success)
                 {
                     spreadSheetId = match.Groups[1].Value;
@@ -84,25 +84,66 @@ namespace LoadImpactApp
 
                 var service = await GoogleSheets.GetSheetsService();
                 var sheets = service.Spreadsheets.Get(spreadSheetId).Execute();
-                var title = sheets.Sheets.FirstOrDefault(s => s.Properties.SheetId == sheetId)?.Properties.Title;
 
-                if (title == null)
+                // Getting sheet title by sheet id
+                var sheetTitle = sheets.Sheets.FirstOrDefault(s => s.Properties.SheetId == sheetId)?.Properties.Title;
+                if (sheetTitle == null)
                 {
                     throw new ArgumentException("Gid in link isn't valid.");
                 }
 
                 if (exportFormatComboBox.SelectedIndex == 1)
                 {
-                    var request = service.Spreadsheets.Values.Get(spreadSheetId, title + "!A");
+                    var request = service.Spreadsheets.Values.Get(spreadSheetId, $"{sheetTitle}!A1:B");
                     var response = request.Execute();
 
-                    /*var valueRange = new ValueRange();
-                    List<object> values = new List<object>() { 3, 3 };
-                    valueRange.Values = new List<IList<object>> { values };
+                    // First step - find row index of our test
+                    int rowIndex = -1;
+                    for (int i = 0; i < response.Values.Count; i++)
+                    {
+                        if ((response.Values[i].Count > 0) && (response.Values[i][0].ToString().Contains("SETd34_ss_Login")))
+                        {
+                            rowIndex = i;
+                            break;
+                        }
+                    }
 
-                    var appendRequest = service.Spreadsheets.Values.Append(valueRange, spreadSheetId, range);
-                    appendRequest.ValueInputOption = SpreadsheetsResource.ValuesResource.AppendRequest.ValueInputOptionEnum.USERENTERED;
-                    var appendReponse = appendRequest.Execute();*/
+                    // If we didn't find our test then create
+                    if (rowIndex == -1)
+                    {
+                        var req = new Request
+                        {
+                            CopyPaste = new CopyPasteRequest
+                            {
+                                Source = new GridRange
+                                {
+                                    SheetId = sheetId,
+                                    StartColumnIndex = 0,
+                                    EndColumnIndex = 1,
+                                    StartRowIndex = response.Values.Count - 6,
+                                    EndRowIndex = response.Values.Count
+                                },
+                                Destination = new GridRange
+                                {
+                                    SheetId = sheetId,
+                                    StartColumnIndex = 0,
+                                    EndColumnIndex = 1,
+                                    StartRowIndex = response.Values.Count + 1,
+                                    EndRowIndex = response.Values.Count + 2
+                                },
+                                PasteType = "PASTE_FORMAT"
+                            }
+                        };
+                        var batch = new BatchUpdateSpreadsheetRequest();
+                        batch.Requests = new List<Request> { req };
+                        service.Spreadsheets.BatchUpdate(batch, spreadSheetId).Execute();
+
+
+                        /*valueRange.Values[0].Add("fsdf");
+                        var a = service.Spreadsheets.Values.Append(valueRange, spreadSheetId, $"{sheetTitle}!A124");
+                        a.ValueInputOption = AppendRequest.ValueInputOptionEnum.USERENTERED;
+                        a.Execute();*/
+                    }
                 }
             }
             catch (Exception ex)

@@ -98,6 +98,7 @@ namespace LoadImpactApp.Api
                 testConfig.Name = config.SelectToken("name").Value<string>();
                 testConfig.ServerMetricAgents = config.SelectToken("config.server_metric_agents").ToObject<List<string>>();
                 testConfig.UserScenarioId = config.SelectToken("config.tracks[0].clips[0].user_scenario_id").Value<int>();
+                testConfig.TestId = config.SelectToken("id").Value<int>();
                 testConfings.Add(testConfig);
             }
 

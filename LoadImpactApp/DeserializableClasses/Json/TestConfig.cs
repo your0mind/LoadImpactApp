@@ -8,6 +8,7 @@ namespace LoadImpactApp.Api
         public string Name { get; set; }
         public List<string> ServerMetricAgents { get; set; }
         public int UserScenarioId { get; set; }
+        public int TestId { get; set; }
 
         public TestConfig()
         {

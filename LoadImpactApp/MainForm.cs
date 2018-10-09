@@ -189,12 +189,13 @@ namespace LoadImpactApp
 
             testInfoDataGridView.Rows.Add();
             testInfoDataGridView.Rows[0].Cells[0].Value = ((ComboBox)tabControl3.SelectedTab.Controls[0]).SelectedItem.ToString();
+            testInfoDataGridView.Rows[0].Cells[1].Value = CurrentContextData.TestConfigs[indexOfConfig].TestId;
             string selectedRunDate = ((TestRun)runsListBox.SelectedItem).Ended;
-            testInfoDataGridView.Rows[0].Cells[1].Value = selectedRunDate.Remove(selectedRunDate.Length - 6);
+            testInfoDataGridView.Rows[0].Cells[2].Value = selectedRunDate.Remove(selectedRunDate.Length - 6);
 
             var vusActiveMetricPoints = await ApiLoadImpact.GetStandartMetricPointsAsync(runId, "VU active");
             int maxVus = (int)vusActiveMetricPoints.First().Points.Max(u => u.Value);
-            testInfoDataGridView.Rows[0].Cells[2].Value = maxVus;
+            testInfoDataGridView.Rows[0].Cells[3].Value = maxVus;
 
             Tuple<long, long> bordersOfAnalisis = null;
 
@@ -204,9 +205,9 @@ namespace LoadImpactApp
 
                 double areaOfVusStableActive = 100 * (double)(bordersOfAnalisis.Item2 - bordersOfAnalisis.Item1) /
                     (vusActiveMetricPoints.First().Points.Last().Timestamp - vusActiveMetricPoints.First().Points.First().Timestamp);
-                testInfoDataGridView.Rows[0].Cells[3].Value = Math.Round(areaOfVusStableActive, 2);
+                testInfoDataGridView.Rows[0].Cells[4].Value = Math.Round(areaOfVusStableActive, 2);
 
-                testInfoDataGridView.Rows[0].Cells[3].Style.ForeColor = (areaOfVusStableActive > 50)
+                testInfoDataGridView.Rows[0].Cells[4].Style.ForeColor = (areaOfVusStableActive > 50)
                     ? Color.Green : (areaOfVusStableActive > 10) ? Color.Orange : Color.Red;
             }
             else
