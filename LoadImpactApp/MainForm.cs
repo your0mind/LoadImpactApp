@@ -212,7 +212,7 @@ namespace LoadImpactApp
             }
             else
             {
-                testInfoDataGridView.Rows[0].Cells[3].Value = "-";
+                testInfoDataGridView.Rows[0].Cells[4].Value = "-";
             }
 
             var notFoundedMetrics = new List<String>();
@@ -228,7 +228,7 @@ namespace LoadImpactApp
                             testSettingsToUse.UseAnalisisWithVusNumber, standardMetric.LookForStability);
 
                         AddRowResultsToDataGridView(standardMetric, attribute.AttributeName, metricCalculator,
-                            Color.LemonChiffon, Settings.LoadImpactService.TimelessMetrics.StandartMetricsInfo
+                            MetricColor.StandardType, Settings.LoadImpactService.TimelessMetrics.StandartMetricsInfo
                                 .FirstOrDefault(info => info.Name == standardMetric.Name).Unit);
                     }
                 }
@@ -254,7 +254,7 @@ namespace LoadImpactApp
                                 testSettingsToUse.UseAnalisisWithVusNumber, serverAgentMetric.LookForStability);
 
                             AddRowResultsToDataGridView(serverAgentMetric, attribute.AttributeName, metricCalculator,
-                                Color.LightCyan, Settings.LoadImpactService.TimelessMetrics.ServerAgentMetricsInfo
+                                MetricColor.ServerAgentType, Settings.LoadImpactService.TimelessMetrics.ServerAgentMetricsInfo
                                     .FirstOrDefault(info => info.Name == serverAgentLabelName).Unit);
                         }
                     }
@@ -277,7 +277,7 @@ namespace LoadImpactApp
                         var metricCalculator = new MetricCalculator(attribute, bordersOfAnalisis,
                             testSettingsToUse.UseAnalisisWithVusNumber, pageMetric.LookForStability);
 
-                        AddRowResultsToDataGridView(pageMetric, attribute.AttributeName, metricCalculator, Color.PaleGreen, "sec");
+                        AddRowResultsToDataGridView(pageMetric, attribute.AttributeName, metricCalculator, MetricColor.PageType, "sec");
                     }
                 }
                 else
@@ -296,7 +296,7 @@ namespace LoadImpactApp
             Enabled = true;
         }
 
-        private void AddRowResultsToDataGridView(MetricSettings metricSettings, string attributeName, MetricCalculator mc, System.Drawing.Color color, string unit)
+        private void AddRowResultsToDataGridView(MetricSettings metricSettings, string attributeName, MetricCalculator mc, Color color, string unit)
         {
             testResultsDataGridView.Rows.Add();
             int index = testResultsDataGridView.Rows.Count - 1;

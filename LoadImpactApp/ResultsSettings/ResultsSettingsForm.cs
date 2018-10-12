@@ -1,8 +1,6 @@
-﻿using LoadImpactApp.Api;
-using LoadImpactApp.DeserializableClasses.Xml;
+﻿using LoadImpactApp.DeserializableClasses.Xml;
 using LoadImpactApp.ResultsSettings;
 using System;
-using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -23,16 +21,16 @@ namespace LoadImpactApp
             m_StandardMetricsTable = new MetricSettingsTableWithLabels()
             {
                 Metrics = Settings.LoadImpactService.TimelessMetrics.StandartMetricsInfo.Select(i => i.Name).ToList(),
-                BackColor = Color.LemonChiffon
+                BackColor = MetricColor.StandardType
             };
             m_ServerAgentMetricsTable = new MetricSettingsTableWithLabels()
             {
                 Metrics = Settings.LoadImpactService.TimelessMetrics.ServerAgentMetricsInfo.Select(i => i.Name).ToList(),
-                BackColor = Color.LightCyan
+                BackColor = MetricColor.ServerAgentType
             };
             m_PageMetricsTable = new MetricSettingsTableWithTextBoxes()
             {
-                BackColor = Color.PaleGreen
+                BackColor = MetricColor.PageType
             };
 
             metricSettingsPanel.Controls.Add(m_StandardMetricsTable, 0, 3);

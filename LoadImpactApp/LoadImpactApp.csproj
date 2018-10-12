@@ -100,6 +100,7 @@
       <DependentUpon>ExportResultsForm.cs</DependentUpon>
     </Compile>
     <Compile Include="ExportLogic\GoogleSheets.cs" />
+    <Compile Include="MetricColor.cs" />
     <Compile Include="ResultsSettings\AddMetricFormBase.cs">
       <SubType>Form</SubType>
     </Compile>

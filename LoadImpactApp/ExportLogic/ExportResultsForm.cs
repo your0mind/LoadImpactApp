@@ -94,6 +94,41 @@ namespace LoadImpactApp
 
                 if (exportFormatComboBox.SelectedIndex == 1)
                 {
+                    // Getting results from table
+                    valueRange.Values[0].Add(sprintTextBox.Text);
+                    valueRange.Values[0].Add(m_InfoGrid.Rows[0].Cells[3].Value);
+
+                    var metricNames = new List<object>()
+                    {
+                        "Requests/second (avg)",
+                        "CPU EPWEBCAP01 (avg)",
+                        "CPU EPWEBCAP02 (avg)",
+                        "CPU EPWEBCAP01 (max)",
+                        "CPU EPWEBCAP02 (max)",
+                        "Memusage EPWEBCAP01 (avg)",
+                        "Memusage EPWEBCAP02 (avg)"
+                    };
+
+                    int pageMetricsIndex = 0;
+                    while ((pageMetricsIndex < m_ResultsGrid.Rows.Count) &&
+                           (m_ResultsGrid.Rows[pageMetricsIndex++].Cells[0].Style.BackColor != MetricColor.PageType))
+                        ;
+
+                    int i;
+                    foreach (var metricName in metricNames)
+                    {
+                        for (i = 0; i < pageMetricsIndex; i++)
+                        {
+                            if (m_ResultsGrid.Rows[i].Cells[0].Value == metricName)
+                            {
+                                break;
+                            }
+                        }
+                        valueRange.Values[0].Add((i < pageMetricsIndex) ? m_ResultsGrid.Rows[i].Cells[2].Value : "-");
+                    }
+
+
+
                     var request = service.Spreadsheets.Values.Get(spreadSheetId, $"{sheetTitle}!A1:B");
                     var response = request.Execute();
 
@@ -111,7 +146,8 @@ namespace LoadImpactApp
                     // If we didn't find our test then create
                     if (rowIndex == -1)
                     {
-                        var req = new Request
+
+                        var copyFormatRequest = new Request
                         {
                             CopyPaste = new CopyPasteRequest
                             {
@@ -119,15 +155,15 @@ namespace LoadImpactApp
                                 {
                                     SheetId = sheetId,
                                     StartColumnIndex = 0,
-                                    EndColumnIndex = 1,
-                                    StartRowIndex = response.Values.Count - 6,
+                                    EndColumnIndex = 12,
+                                    StartRowIndex = response.Values.Count - 1,
                                     EndRowIndex = response.Values.Count
                                 },
                                 Destination = new GridRange
                                 {
                                     SheetId = sheetId,
                                     StartColumnIndex = 0,
-                                    EndColumnIndex = 1,
+                                    EndColumnIndex = 12,
                                     StartRowIndex = response.Values.Count + 1,
                                     EndRowIndex = response.Values.Count + 2
                                 },
@@ -135,7 +171,7 @@ namespace LoadImpactApp
                             }
                         };
                         var batch = new BatchUpdateSpreadsheetRequest();
-                        batch.Requests = new List<Request> { req };
+                        batch.Requests = new List<Request> { copyFormatRequest };
                         service.Spreadsheets.BatchUpdate(batch, spreadSheetId).Execute();
 
 
