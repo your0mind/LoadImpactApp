@@ -25,7 +25,7 @@ namespace LoadImpactApp
 
             if (useAnalisisWithStableSections)
             {
-                m_Median = GetMedian(m_MetricPoints);
+                m_Median = (m_MetricPoints.Length > 0) ? GetMedian(m_MetricPoints) : 0.0;
             }
         }
 
@@ -38,7 +38,7 @@ namespace LoadImpactApp
             }
             else
             {
-                return m_MetricPoints.Min(p => p.Value);
+                return (m_MetricPoints.Length > 0) ? m_MetricPoints.Min(p => p.Value) : 0.0;
             }
         }
 
@@ -50,7 +50,7 @@ namespace LoadImpactApp
             }
             else
             {
-                return GetMedian(m_MetricPoints);
+                return (m_MetricPoints.Length > 0) ? GetMedian(m_MetricPoints) : 0.0;
             }
         }
 
@@ -63,7 +63,7 @@ namespace LoadImpactApp
             }
             else
             {
-                return m_MetricPoints.Max(p => p.Value);
+                return (m_MetricPoints.Length > 0) ? m_MetricPoints.Max(p => p.Value) : 0.0;
             }
         }
 
@@ -115,11 +115,6 @@ namespace LoadImpactApp
 
         private double GetMedian(MetricPoint[] metricPoints)
         {
-            if (metricPoints.Length == 0)
-            {
-                return 0.0;
-            }
-
             double[] tempPoints = metricPoints.Select(p => p.Value).ToArray();
             int count = tempPoints.Length;
 
