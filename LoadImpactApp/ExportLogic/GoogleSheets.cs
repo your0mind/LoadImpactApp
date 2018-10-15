@@ -24,7 +24,7 @@ namespace LoadImpactApp.ExportLogic
             AuthorizeTimeoutSec = 10;
         }
 
-        public static async Task<SheetsService> GetSheetsService()
+        public static async Task<SheetsService> GetSheetsServiceAsync()
         {
             if (m_Service != null)
             {

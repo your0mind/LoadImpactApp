@@ -82,12 +82,12 @@ namespace LoadImpactApp
                     throw new ArgumentException("Link to spreadsheet isn't valid.");
                 }
 
-                var service = await GoogleSheets.GetSheetsService();
-                var sheets = service.Spreadsheets.Get(spreadSheetId).Execute();
+                var service = await GoogleSheets.GetSheetsServiceAsync();
+                var sheets = await service.Spreadsheets.Get(spreadSheetId).ExecuteAsync();
 
                 // Getting sheet title by sheet id
-                var sheetTitle = sheets.Sheets.FirstOrDefault(s => s.Properties.SheetId == sheetId)?.Properties.Title;
-                if (sheetTitle == null)
+                var sheet = sheets.Sheets.FirstOrDefault(s => s.Properties.SheetId == sheetId);
+                if (sheet == null)
                 {
                     throw new ArgumentException("Gid in link isn't valid.");
                 }
@@ -95,6 +95,7 @@ namespace LoadImpactApp
                 if (exportFormatComboBox.SelectedIndex == 1)
                 {
                     // Getting results from table
+                    valueRange.Values[0].Add("");
                     valueRange.Values[0].Add(sprintTextBox.Text);
                     valueRange.Values[0].Add(m_InfoGrid.Rows[0].Cells[3].Value);
 
@@ -111,7 +112,7 @@ namespace LoadImpactApp
 
                     int pageMetricsIndex = 0;
                     while ((pageMetricsIndex < m_ResultsGrid.Rows.Count) &&
-                           (m_ResultsGrid.Rows[pageMetricsIndex++].Cells[0].Style.BackColor != MetricColor.PageType))
+                           (m_ResultsGrid.Rows[pageMetricsIndex++].InheritedStyle.BackColor != MetricColor.PageType))
                         ;
 
                     int i;
@@ -119,7 +120,7 @@ namespace LoadImpactApp
                     {
                         for (i = 0; i < pageMetricsIndex; i++)
                         {
-                            if (m_ResultsGrid.Rows[i].Cells[0].Value == metricName)
+                            if (m_ResultsGrid.Rows[i].Cells[0].Value.Equals(metricName))
                             {
                                 break;
                             }
@@ -127,16 +128,32 @@ namespace LoadImpactApp
                         valueRange.Values[0].Add((i < pageMetricsIndex) ? m_ResultsGrid.Rows[i].Cells[2].Value : "-");
                     }
 
+                    string testName;
+                    string pageMetricResults = "";
+                    var pageMetricsWithoutPrefix = new List<string>();
+                    for (i = pageMetricsIndex; i < m_ResultsGrid.Rows.Count; i++)
+                    {
+                        testName = m_ResultsGrid.Rows[i].Cells[0].Value.ToString();
+                        if (testName.Substring(testName.Length - 5) == "(avg)")
+                        {
+                            pageMetricsWithoutPrefix.Add(testName.Substring(6, testName.Length - 12));
+                            pageMetricResults += m_ResultsGrid.Rows[i].Cells[2].Value.ToString() + " / ";
+                        }
+                    }
+                    pageMetricResults = (pageMetricResults.Length > 2) ?
+                        pageMetricResults.Substring(0, pageMetricResults.Length - 3) : "-";
+                    valueRange.Values[0].Add(pageMetricResults);
+                    valueRange.Values[0].Add(m_InfoGrid.Rows[0].Cells[2].Value);
 
-
-                    var request = service.Spreadsheets.Values.Get(spreadSheetId, $"{sheetTitle}!A1:B");
-                    var response = request.Execute();
+                    // Getting 2 columns from our spreadsheet
+                    var response = await service.Spreadsheets.Values.Get(spreadSheetId, $"{sheet.Properties.Title}!A1:B").ExecuteAsync();
 
                     // First step - find row index of our test
                     int rowIndex = -1;
-                    for (int i = 0; i < response.Values.Count; i++)
+                    for (i = 0; i < response.Values.Count; i++)
                     {
-                        if ((response.Values[i].Count > 0) && (response.Values[i][0].ToString().Contains("SETd34_ss_Login")))
+                        if ((response.Values[i].Count > 0) &&
+                            (response.Values[i][0].ToString().Contains(m_InfoGrid.Rows[0].Cells[0].Value.ToString())))
                         {
                             rowIndex = i;
                             break;
@@ -144,42 +161,140 @@ namespace LoadImpactApp
                     }
 
                     // If we didn't find our test then create
+                    var batch = new BatchUpdateSpreadsheetRequest();
+                    batch.Requests = new List<Request>();
                     if (rowIndex == -1)
                     {
-
-                        var copyFormatRequest = new Request
+                        // Creating test title
+                        string testTitle = $"{m_InfoGrid.Rows[0].Cells[0].Value}\n";
+                        if (pageMetricsWithoutPrefix.Count > 1)
                         {
-                            CopyPaste = new CopyPasteRequest
+                            testTitle += "( ";
+                            foreach (var metricName in pageMetricsWithoutPrefix)
                             {
-                                Source = new GridRange
+                                testTitle += metricName + " / ";
+                            }
+                            testTitle = testTitle.Substring(0, testTitle.Length - 2);
+                            testTitle += ")\n";
+                        }
+                        testTitle += $"\nID: {m_InfoGrid.Rows[0].Cells[1].Value}";
+                        valueRange.Values[0][0] = testTitle;
+
+                        rowIndex = response.Values.Count + 2;
+                    }
+                    else
+                    {
+                        // Searching a row which wiil be processed
+                        int rowIndexOfTitle = rowIndex;
+                        foreach (var merge in sheet.Merges)
+                        {
+                            if ((merge.StartColumnIndex == 0) && (merge.EndColumnIndex == 1) &&
+                                (rowIndexOfTitle >= merge.StartRowIndex) && (rowIndexOfTitle < merge.EndRowIndex))
+                            {
+                                rowIndex = merge.EndRowIndex ?? default(int);
+                                break;
+                            }
+                        }
+
+                        if (rowIndex == rowIndexOfTitle)
+                        {
+                            rowIndex++;
+                        }
+
+                        // Creating some formatting requests
+                        var insertRowRequest = new Request
+                        {
+                            InsertDimension = new InsertDimensionRequest
+                            {
+                                Range = new DimensionRange
+                                {
+                                    Dimension = "ROWS",
+                                    SheetId = sheetId,
+                                    StartIndex = rowIndex,
+                                    EndIndex = rowIndex + 1
+                                }
+                            },
+                        };
+                        batch.Requests.Add(insertRowRequest);
+
+                        var mergeTestTitleRequest = new Request
+                        {
+                            MergeCells = new MergeCellsRequest
+                            {
+                                MergeType = "MERGE_ALL",
+                                Range = new GridRange
                                 {
                                     SheetId = sheetId,
                                     StartColumnIndex = 0,
-                                    EndColumnIndex = 12,
-                                    StartRowIndex = response.Values.Count - 1,
-                                    EndRowIndex = response.Values.Count
-                                },
-                                Destination = new GridRange
-                                {
-                                    SheetId = sheetId,
-                                    StartColumnIndex = 0,
-                                    EndColumnIndex = 12,
-                                    StartRowIndex = response.Values.Count + 1,
-                                    EndRowIndex = response.Values.Count + 2
-                                },
-                                PasteType = "PASTE_FORMAT"
+                                    EndColumnIndex = 1,
+                                    StartRowIndex = rowIndexOfTitle,
+                                    EndRowIndex = rowIndex + 1
+                                }
                             }
                         };
-                        var batch = new BatchUpdateSpreadsheetRequest();
-                        batch.Requests = new List<Request> { copyFormatRequest };
-                        service.Spreadsheets.BatchUpdate(batch, spreadSheetId).Execute();
+                        batch.Requests.Add(mergeTestTitleRequest);
 
-
-                        /*valueRange.Values[0].Add("fsdf");
-                        var a = service.Spreadsheets.Values.Append(valueRange, spreadSheetId, $"{sheetTitle}!A124");
-                        a.ValueInputOption = AppendRequest.ValueInputOptionEnum.USERENTERED;
-                        a.Execute();*/
+                        // If results with this sprint is already exists then merge sprint cells
+                        //if (response.Values[rowIndex - 1][1].Equals(valueRange.Values[0][1]))
+                        //{
+                        //    var mergeSprintCellsRequest = new Request
+                        //    {
+                        //        MergeCells = new MergeCellsRequest
+                        //        {
+                        //            MergeType = "MERGE_ALL",
+                        //            Range = new GridRange
+                        //            {
+                        //                SheetId = sheetId,
+                        //                StartColumnIndex = 1,
+                        //                EndColumnIndex = 2,
+                        //                StartRowIndex = rowIndex - 1,
+                        //                EndRowIndex = rowIndex + 1
+                        //            }
+                        //        }
+                        //    };
+                        //    batch.Requests.Add(mergeSprintCellsRequest);
+                        //}
                     }
+
+                    var copyFormatRequest = new Request
+                    {
+                        CopyPaste = new CopyPasteRequest
+                        {
+                            Source = new GridRange
+                            {
+                                SheetId = sheetId,
+                                StartColumnIndex = 0,
+                                EndColumnIndex = 12,
+                                StartRowIndex = 2,
+                                EndRowIndex = 3
+                            },
+                            Destination = new GridRange
+                            {
+                                SheetId = sheetId,
+                                StartColumnIndex = 0,
+                                EndColumnIndex = 12,
+                                StartRowIndex = rowIndex,
+                                EndRowIndex = rowIndex + 1
+                            },
+                            PasteType = "PASTE_FORMAT"
+                        }
+                    };
+
+                    if (batch.Requests.Count > 0)
+                    {
+                        batch.Requests.Insert(1, copyFormatRequest);
+                    }
+                    else
+                    {
+                        batch.Requests.Add(copyFormatRequest);
+                    }
+                    service.Spreadsheets.BatchUpdate(batch, spreadSheetId).ExecuteAsync();
+
+                    // Sending our test's results
+                    var appendValuesRequest = service.Spreadsheets.Values.Append(valueRange, spreadSheetId,
+                        $"{sheet.Properties.Title}!A{rowIndex}");
+                    appendValuesRequest.ValueInputOption = AppendRequest.ValueInputOptionEnum.USERENTERED;
+                    appendValuesRequest.ExecuteAsync();
                 }
             }
             catch (Exception ex)
