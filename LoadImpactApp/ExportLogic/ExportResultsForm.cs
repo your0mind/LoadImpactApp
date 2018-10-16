@@ -146,23 +146,35 @@ namespace LoadImpactApp
                     valueRange.Values[0].Add(m_InfoGrid.Rows[0].Cells[2].Value);
 
                     // Getting 2 columns from our spreadsheet
-                    var response = await service.Spreadsheets.Values.Get(spreadSheetId, $"{sheet.Properties.Title}!A1:B").ExecuteAsync();
+                    var getDataRequest = service.Spreadsheets.Values.Get(spreadSheetId, $"{sheet.Properties.Title}!A1:B");
+                    getDataRequest.MajorDimension = GetRequest.MajorDimensionEnum.COLUMNS;
+                    var response = await getDataRequest.ExecuteAsync();
+
+                    if ((response.Values == null) || (response.Values.Count < 2))
+                    {
+                        throw new ApplicationException("Can't recognize Google spreadsheet.");
+                    }
 
                     // First step - find row index of our test
                     int rowIndex = -1;
-                    for (i = 0; i < response.Values.Count; i++)
+                    for (i = 0; i < response.Values[0].Count; i++)
                     {
-                        if ((response.Values[i].Count > 0) &&
-                            (response.Values[i][0].ToString().Contains(m_InfoGrid.Rows[0].Cells[0].Value.ToString())))
+                        if (response.Values[0][i].ToString().Contains(m_InfoGrid.Rows[0].Cells[1].Value.ToString()))
                         {
                             rowIndex = i;
                             break;
                         }
                     }
 
+                    // Steps
+                    Request addRowsRequest = null;
+                    Request copyFormattingRequest = null;
+                    Request clearFormattingRequest = null;
+                    Request mergeTestTitleRequest = null;
+                    Request mergeSprintCellsRequest = null;
+
                     // If we didn't find our test then create
-                    var batch = new BatchUpdateSpreadsheetRequest();
-                    batch.Requests = new List<Request>();
+                    int rowIndexOfTestTitle;
                     if (rowIndex == -1)
                     {
                         // Creating test title
@@ -180,44 +192,24 @@ namespace LoadImpactApp
                         testTitle += $"\nID: {m_InfoGrid.Rows[0].Cells[1].Value}";
                         valueRange.Values[0][0] = testTitle;
 
-                        rowIndex = response.Values.Count + 2;
+                        // Searching a row which will be processed
+                        rowIndex = response.Values[0].Count;
+                        while ((rowIndex - 1 >= 0) && (response.Values[0][rowIndex-- - 1].Equals("")))
+                            ;
+
+                        var mergedRange = GetMergedRangeByCell(0, rowIndex, sheet.Merges);
+                        rowIndex = (mergedRange != null) ? mergedRange.EndRowIndex + 1 ?? default(int) : rowIndex + 2 ;
+                        rowIndexOfTestTitle = rowIndex;
                     }
                     else
                     {
-                        // Searching a row which wiil be processed
-                        int rowIndexOfTitle = rowIndex;
-                        foreach (var merge in sheet.Merges)
-                        {
-                            if ((merge.StartColumnIndex == 0) && (merge.EndColumnIndex == 1) &&
-                                (rowIndexOfTitle >= merge.StartRowIndex) && (rowIndexOfTitle < merge.EndRowIndex))
-                            {
-                                rowIndex = merge.EndRowIndex ?? default(int);
-                                break;
-                            }
-                        }
-
-                        if (rowIndex == rowIndexOfTitle)
-                        {
-                            rowIndex++;
-                        }
+                        // Searching a row which will be processed
+                        rowIndexOfTestTitle = rowIndex;
+                        var mergedRange = GetMergedRangeByCell(0, rowIndex, sheet.Merges);
+                        rowIndex = (mergedRange != null) ? mergedRange.EndRowIndex ?? default(int) : rowIndex + 1;
 
                         // Creating some formatting requests
-                        var insertRowRequest = new Request
-                        {
-                            InsertDimension = new InsertDimensionRequest
-                            {
-                                Range = new DimensionRange
-                                {
-                                    Dimension = "ROWS",
-                                    SheetId = sheetId,
-                                    StartIndex = rowIndex,
-                                    EndIndex = rowIndex + 1
-                                }
-                            },
-                        };
-                        batch.Requests.Add(insertRowRequest);
-
-                        var mergeTestTitleRequest = new Request
+                        mergeTestTitleRequest = new Request
                         {
                             MergeCells = new MergeCellsRequest
                             {
@@ -227,36 +219,62 @@ namespace LoadImpactApp
                                     SheetId = sheetId,
                                     StartColumnIndex = 0,
                                     EndColumnIndex = 1,
-                                    StartRowIndex = rowIndexOfTitle,
+                                    StartRowIndex = rowIndexOfTestTitle,
                                     EndRowIndex = rowIndex + 1
                                 }
                             }
                         };
-                        batch.Requests.Add(mergeTestTitleRequest);
 
                         // If results with this sprint is already exists then merge sprint cells
-                        //if (response.Values[rowIndex - 1][1].Equals(valueRange.Values[0][1]))
-                        //{
-                        //    var mergeSprintCellsRequest = new Request
-                        //    {
-                        //        MergeCells = new MergeCellsRequest
-                        //        {
-                        //            MergeType = "MERGE_ALL",
-                        //            Range = new GridRange
-                        //            {
-                        //                SheetId = sheetId,
-                        //                StartColumnIndex = 1,
-                        //                EndColumnIndex = 2,
-                        //                StartRowIndex = rowIndex - 1,
-                        //                EndRowIndex = rowIndex + 1
-                        //            }
-                        //        }
-                        //    };
-                        //    batch.Requests.Add(mergeSprintCellsRequest);
-                        //}
+                        int rowIndexOfPrevSprint = (rowIndex > response.Values[1].Count) ? response.Values[1].Count : rowIndex ;
+                        while ((--rowIndexOfPrevSprint > 0) && (response.Values[1][rowIndexOfPrevSprint].Equals("")))
+                            ;
+
+                        if (response.Values[1][rowIndexOfPrevSprint].Equals(valueRange.Values[0][1]))
+                        {
+                            mergeSprintCellsRequest = new Request
+                            {
+                                MergeCells = new MergeCellsRequest
+                                {
+                                    MergeType = "MERGE_ALL",
+                                    Range = new GridRange
+                                    {
+                                        SheetId = sheetId,
+                                        StartColumnIndex = 1,
+                                        EndColumnIndex = 2,
+                                        StartRowIndex = rowIndexOfPrevSprint,
+                                        EndRowIndex = rowIndex + 1
+                                    }
+                                }
+                            };
+                        }
                     }
 
-                    var copyFormatRequest = new Request
+                    addRowsRequest = new Request();
+                    if (rowIndex < sheet.Properties.GridProperties.RowCount)
+                    {
+                        addRowsRequest.InsertDimension = new InsertDimensionRequest
+                        {
+                            Range = new DimensionRange
+                            {
+                                Dimension = "ROWS",
+                                SheetId = sheetId,
+                                StartIndex = rowIndex,
+                                EndIndex = rowIndex + 1
+                            }
+                        };
+                    }
+                    else
+                    {
+                        addRowsRequest.AppendDimension = new AppendDimensionRequest
+                        {
+                            SheetId = sheetId,
+                            Dimension = "ROWS",
+                            Length = rowIndex - sheet.Properties.GridProperties.RowCount + 1
+                        };
+                    }
+
+                    copyFormattingRequest = new Request
                     {
                         CopyPaste = new CopyPasteRequest
                         {
@@ -280,20 +298,89 @@ namespace LoadImpactApp
                         }
                     };
 
-                    if (batch.Requests.Count > 0)
+                    var batchRequests = new BatchUpdateSpreadsheetRequest();
+                    batchRequests.Requests = new List<Request>
                     {
-                        batch.Requests.Insert(1, copyFormatRequest);
-                    }
-                    else
+                        addRowsRequest,
+                        copyFormattingRequest
+                    };
+
+                    // Clear formatting in row that will be created by append request
+                    if ((addRowsRequest.AppendDimension != null) && (addRowsRequest.AppendDimension.Length == 2))
                     {
-                        batch.Requests.Add(copyFormatRequest);
+                        clearFormattingRequest = new Request
+                        {
+                            UpdateCells = new UpdateCellsRequest
+                            {
+                                Range = new GridRange
+                                {
+                                    SheetId = sheetId,
+                                    StartColumnIndex = 0,
+                                    StartRowIndex = rowIndex - 1,
+                                    EndRowIndex = rowIndex
+                                },
+                                Fields = "*"
+                            }
+                        };
+                        batchRequests.Requests.Add(clearFormattingRequest);
                     }
-                    service.Spreadsheets.BatchUpdate(batch, spreadSheetId).ExecuteAsync();
+
+                    if (mergeTestTitleRequest != null)
+                    {
+                        batchRequests.Requests.Add(mergeTestTitleRequest);
+                    }
+
+                    if (mergeSprintCellsRequest != null)
+                    {
+                        batchRequests.Requests.Add(mergeSprintCellsRequest);
+                    }
+                    /////////////////////////////////////////////////////
+                    if (rowIndex >= response.Values[1].Count)
+                    {
+                        for (i = response.Values[1].Count; i < rowIndex; i++)
+                        {
+                            response.Values[1].Add("");
+                        }
+
+                        response.Values[1].Add((mergeSprintCellsRequest == null) ? valueRange.Values[0][1] : "");
+                    }
+
+                    var sprintsGridRanges = new List<GridRange>();
+                    for (i = rowIndex; i >= rowIndexOfTestTitle; i--)
+                    {
+                        if (!response.Values[1][i].Equals(""))
+                    }
+
+                    var ff = new Request
+                    {
+                        CopyPaste = new CopyPasteRequest
+                        {
+                            Source = new GridRange
+                            {
+                                SheetId = sheetId,
+                                StartColumnIndex = 1,
+                                EndColumnIndex = 2,
+                                StartRowIndex = 103,
+                                EndRowIndex = 104
+                            },
+                            Destination = new GridRange
+                            {
+                                SheetId = sheetId,
+                                StartColumnIndex = 1,
+                                EndColumnIndex = 2,
+                                StartRowIndex = 111,
+                                EndRowIndex = 114
+                            },
+                            PasteType = "PASTE_FORMAT"
+                        }
+                    };
+
+                    service.Spreadsheets.BatchUpdate(batchRequests, spreadSheetId).ExecuteAsync();
 
                     // Sending our test's results
-                    var appendValuesRequest = service.Spreadsheets.Values.Append(valueRange, spreadSheetId,
-                        $"{sheet.Properties.Title}!A{rowIndex}");
-                    appendValuesRequest.ValueInputOption = AppendRequest.ValueInputOptionEnum.USERENTERED;
+                    var appendValuesRequest = service.Spreadsheets.Values.Update(valueRange, spreadSheetId,
+                        $"{sheet.Properties.Title}!A{rowIndex + 1}");
+                    appendValuesRequest.ValueInputOption = UpdateRequest.ValueInputOptionEnum.USERENTERED;
                     appendValuesRequest.ExecuteAsync();
                 }
             }
@@ -324,6 +411,19 @@ namespace LoadImpactApp
             }
 
             Enabled = true;
+        }
+
+        private GridRange GetMergedRangeByCell(int column, int row, IList<GridRange> merges)
+        {
+            foreach (var merge in merges)
+            {
+                if ((column >= merge.StartColumnIndex) && (column < merge.EndColumnIndex) &&
+                    (row >= merge.StartRowIndex) && (row < merge.EndRowIndex))
+                {
+                    return merge;
+                }
+            }
+            return null;
         }
     }
 }
