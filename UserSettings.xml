@@ -2,6 +2,7 @@
 <LoadImpact BaseUrl="https://api.loadimpact.com/v2">
   <User Token="">
     <FavoritesTests />
+    <ExportSettings SpreadsheetLink="" ExportFormat="" Sprint="" />
   </User>
   <TimelessMetrics>
     <StandartMetricsInfo>
