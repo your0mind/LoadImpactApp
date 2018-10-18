@@ -1,5 +1,5 @@
 # LoadImpactApp
-More quick and convenient extraction of LoadImpact's test results.
+More quick and convenient extraction of LoadImpact's test results
 
 
 # Installation
@@ -13,4 +13,4 @@ You should have your own google console project and *credentials.json* file from
 2. Find the title "Step 1: Turn on the Google Sheets API" and follow the steps described there
 3. In the end put your *credentials.json* file to the folder with the built-in application
 
-When you try to export results for the first time you will need to give permission to access to your Google Sheets docs in the opened browser tab
+When you try to export results for the first time you will need to give permission to access to your Google Sheets docs in the automatically opened browser tab
