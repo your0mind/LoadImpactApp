@@ -28,6 +28,8 @@ namespace LoadImpactApp
             var fix2 = new TabPadding(tabControl2);
             var fix3 = new TabPadding(tabControl3);
 
+            testInfoDataGridView.RowsAdded += TestInfoDataGridView_RowsAdded;
+
             allTestsComboBox.SelectedIndexChanged += TestsComboBoxSelectionIndexChanged;
             favoritesTestsComboBox.SelectedIndexChanged += TestsComboBoxSelectionIndexChanged;
 
@@ -293,6 +295,7 @@ namespace LoadImpactApp
                 testResultsDataGridView.Rows[testResultsDataGridView.Rows.Count - 1].Cells[0].Value = metric + " (Not found)";
             }
 
+            exportResultsButton.Select();
             Enabled = true;
         }
 
@@ -328,6 +331,11 @@ namespace LoadImpactApp
             Settings.Update();
             Settings.SaveToFile("UserSettings.xml");
             Application.Exit();
+        }
+
+        private void TestInfoDataGridView_RowsAdded(object sender, DataGridViewRowsAddedEventArgs e)
+        {
+            exportResultsButton.Enabled = true;
         }
 
         private void exportResultsButton_Click(object sender, EventArgs e)

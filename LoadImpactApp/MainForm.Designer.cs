@@ -355,6 +355,7 @@
             // exportResultsButton
             // 
             this.exportResultsButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.exportResultsButton.Enabled = false;
             this.exportResultsButton.ForeColor = System.Drawing.SystemColors.WindowText;
             this.exportResultsButton.Location = new System.Drawing.Point(511, 447);
             this.exportResultsButton.Name = "exportResultsButton";
