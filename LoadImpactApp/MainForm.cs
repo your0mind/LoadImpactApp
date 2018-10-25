@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using LoadImpactApp.Api;
 using LoadImpactApp.DeserializableClasses.Xml;
-using LoadImpactApp.ExportLogic;
 
 namespace LoadImpactApp
 {

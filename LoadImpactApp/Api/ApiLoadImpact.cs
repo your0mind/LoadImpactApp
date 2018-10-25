@@ -105,7 +105,7 @@ namespace LoadImpactApp.Api
             return testConfings;
         }
 
-        public static async Task<List<MetricPoints>> GetStandartMetricPointsAsync(int testRunId, string metricName)
+        public static async Task<List<MetricPointsPack>> GetStandartMetricPointsAsync(int testRunId, string metricName)
         {
             string ids = Settings.LoadImpactService.TimelessMetrics.StandartMetricsInfo
                 .FirstOrDefault(metricInfo => metricInfo.Name == metricName).MetricId;
@@ -115,7 +115,7 @@ namespace LoadImpactApp.Api
             return ParseMetricPointsJson(jsonContent, ids);
         }
 
-        public static async Task<List<MetricPoints>> GetServerAgentMetricPointsAsync(int testRunId, string serverAgentName, string serverLabelName)
+        public static async Task<List<MetricPointsPack>> GetServerAgentMetricPointsAsync(int testRunId, string serverAgentName, string serverLabelName)
         {
             string ids = "__server_metric_";
 
@@ -134,7 +134,7 @@ namespace LoadImpactApp.Api
             return ParseMetricPointsJson(jsonContent, ids);
         }
 
-        public static async Task<List<MetricPoints>> GetPageMetricPointsAsync(int testRunId, string metricName, int scenarioId)
+        public static async Task<List<MetricPointsPack>> GetPageMetricPointsAsync(int testRunId, string metricName, int scenarioId)
         {
             string ids = "__li_page_";
 
@@ -153,7 +153,7 @@ namespace LoadImpactApp.Api
             return ParseMetricPointsJson(jsonContent, ids);
         }
 
-        private static List<MetricPoints> ParseMetricPointsJson(string jsonContent, string metricId)
+        private static List<MetricPointsPack> ParseMetricPointsJson(string jsonContent, string metricId)
         {
             var jObject = JObject.Parse(jsonContent);
             var jTokens = jObject.SelectToken(metricId).ToArray();
@@ -164,12 +164,12 @@ namespace LoadImpactApp.Api
             }
 
             var atrList = new List<string>() { "value", "min", "avg", "max" };
-            var parsedMetricPointsList = new List<MetricPoints>();
+            var parsedMetricPointsList = new List<MetricPointsPack>();
             foreach (var atr in atrList)
             {
                 if (jTokens[0].SelectToken(atr) != null)
                 {
-                    parsedMetricPointsList.Add(new MetricPoints(atr, jTokens.Length));
+                    parsedMetricPointsList.Add(new MetricPointsPack(atr, jTokens.Length));
                 }
             }
 
@@ -178,7 +178,7 @@ namespace LoadImpactApp.Api
                 long timeStamp = jTokens[i].SelectToken("timestamp").Value<long>();
                 foreach (var metricPoints in parsedMetricPointsList)
                 {
-                    metricPoints.Points[i] = new MetricPoint()
+                    metricPoints.Points[i] = new MetricPoint
                     {
                         Timestamp = timeStamp,
                         Value = jTokens[i].SelectToken(metricPoints.AttributeName).Value<double>()

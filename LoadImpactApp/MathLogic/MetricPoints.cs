@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace LoadImpactApp.MathLogic
 {
@@ -13,28 +14,30 @@ namespace LoadImpactApp.MathLogic
         }
     }
 
-    public class MetricPoints
+    public class MetricPointsPack
     {
         public string AttributeName { get; set; }
-        public MetricPoint[] Points { get; set; }
+        public List<MetricPoint> Points { get; set; }
 
-        public MetricPoints(string atrName, int length)
+        public MetricPointsPack(string atrName, int length)
         {
             AttributeName = atrName;
-            Points = new MetricPoint[length];
+            Points = new List<MetricPoint>();
         }
 
-        public MetricPoint[] GetSectionByBorders(Tuple<long, long> borders)
+        public double[] GetSectionByTimeBorders(Tuple<long, long> borders)
         {
-            int indexOfLeftBorder = Array.BinarySearch(Points, new MetricPoint() { Timestamp = borders.Item1 });
+            int indexOfLeftBorder = Points.BinarySearch(new MetricPoint() { Timestamp = borders.Item1 });
             indexOfLeftBorder = (indexOfLeftBorder < 0) ? Math.Abs(indexOfLeftBorder) - 1 : indexOfLeftBorder;
 
-            int indexOfRightBorder = Array.BinarySearch(Points, new MetricPoint() { Timestamp = borders.Item2 });
+            int indexOfRightBorder = Points.BinarySearch(new MetricPoint() { Timestamp = borders.Item2 });
             indexOfRightBorder = (indexOfRightBorder < 0) ? Math.Abs(indexOfRightBorder) - 2 : indexOfRightBorder;
 
-            MetricPoint[] sectionArray = new MetricPoint[indexOfRightBorder - indexOfLeftBorder + 1];
-            Array.Copy(Points, indexOfLeftBorder, sectionArray, 0, sectionArray.Length);
-
+            double[] sectionArray = new double[indexOfRightBorder - indexOfLeftBorder + 1];
+            for (int i = 0; i < sectionArray.Length; i++)
+            {
+                sectionArray[i] = Points[i + indexOfLeftBorder].Value;
+            }
             return sectionArray;
         }
     }

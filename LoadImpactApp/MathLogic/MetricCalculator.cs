@@ -7,25 +7,48 @@ namespace LoadImpactApp
     public class MetricCalculator
     {
         private double m_Median;
-        private MetricPoint[] m_MetricPoints;
+        private double[] m_MetricValues;
         private bool m_UseAnalisisWithStableSections;
 
-        public MetricCalculator(MetricPoints mp, Tuple<long, long> borders, bool useAnalisisWithVusNumber, bool useAnalisisWithStableSections)
+        public MetricCalculator(MetricPointsPack mp, Tuple<long, long> borders, bool useAnalisisWithVusNumber, bool useAnalisisWithStableSections)
         {
             m_UseAnalisisWithStableSections = useAnalisisWithStableSections;
 
             if (useAnalisisWithVusNumber)
             {
-                m_MetricPoints = mp.GetSectionByBorders(borders);
+                var valuesInBorders = mp.GetSectionByTimeBorders(borders);
+
+                // Hardcoded value
+                int nChunks = 25;
+                int chunkLength = valuesInBorders.Length / nChunks;
+
+                if (valuesInBorders.Length >= chunkLength)
+                {
+                    double sum = 0.0;
+                    m_MetricValues = new double[nChunks];
+                    for (int i = 0; i < nChunks * chunkLength; i++)
+                    {
+                        sum += valuesInBorders[i];
+                        if ((i + 1) % chunkLength == 0)
+                        {
+                            m_MetricValues[i / chunkLength] = sum / chunkLength;
+                            sum = 0.0;
+                        }
+                    }
+                }
+                else
+                {
+                    m_MetricValues = valuesInBorders;
+                }
             }
             else
             {
-                m_MetricPoints = mp.Points;
+                m_MetricValues = mp.Points.Select(p => p.Value).ToArray();
             }
 
             if (useAnalisisWithStableSections)
             {
-                m_Median = (m_MetricPoints.Length > 0) ? GetMedian(m_MetricPoints) : 0.0;
+                m_Median = (m_MetricValues.Length > 0) ? GetMedian(m_MetricValues) : 0.0;
             }
         }
 
@@ -33,12 +56,12 @@ namespace LoadImpactApp
         {
             if (m_UseAnalisisWithStableSections)
             {
-                var valuesLessThenMedian = m_MetricPoints.Where(p => p.Value < m_Median).ToArray();
+                var valuesLessThenMedian = m_MetricValues.Where(p => p < m_Median).ToArray();
                 return (valuesLessThenMedian.Length > 0) ? GetMedian(valuesLessThenMedian) : m_Median;
             }
             else
             {
-                return (m_MetricPoints.Length > 0) ? m_MetricPoints.Min(p => p.Value) : 0.0;
+                return (m_MetricValues.Length > 0) ? m_MetricValues.Min() : 0.0;
             }
         }
 
@@ -50,7 +73,7 @@ namespace LoadImpactApp
             }
             else
             {
-                return (m_MetricPoints.Length > 0) ? GetMedian(m_MetricPoints) : 0.0;
+                return (m_MetricValues.Length > 0) ? GetMedian(m_MetricValues) : 0.0;
             }
         }
 
@@ -58,16 +81,16 @@ namespace LoadImpactApp
         {
             if (m_UseAnalisisWithStableSections)
             {
-                var valuesGreaterThenMedian = m_MetricPoints.Where(p => p.Value > m_Median).ToArray();
+                var valuesGreaterThenMedian = m_MetricValues.Where(p => p > m_Median).ToArray();
                 return (valuesGreaterThenMedian.Length > 0) ? GetMedian(valuesGreaterThenMedian) : m_Median; 
             }
             else
             {
-                return (m_MetricPoints.Length > 0) ? m_MetricPoints.Max(p => p.Value) : 0.0;
+                return (m_MetricValues.Length > 0) ? m_MetricValues.Max() : 0.0;
             }
         }
 
-        public static Tuple<long, long> GetBordersByStableVusActive(MetricPoints metricPointsOfVusActive)
+        public static Tuple<long, long> GetBordersByStableVusActive(MetricPointsPack metricPointsOfVusActive)
         {
             long leftBorderMax = 0;
             long rightBorderMax = 0;
@@ -75,7 +98,7 @@ namespace LoadImpactApp
             long currentRightBorder = 0;
             bool isFindingRightBorder = false;
 
-            for (int i = 0; i < metricPointsOfVusActive.Points.Length; i++)
+            for (int i = 0; i < metricPointsOfVusActive.Points.Count; i++)
             {
                 if (!isFindingRightBorder)
                 {
@@ -101,7 +124,7 @@ namespace LoadImpactApp
                 }
             }
 
-            if (currentRightBorder == metricPointsOfVusActive.Points[metricPointsOfVusActive.Points.Length - 1].Timestamp)
+            if (currentRightBorder == metricPointsOfVusActive.Points[metricPointsOfVusActive.Points.Count - 1].Timestamp)
             {
                 if ((currentRightBorder - currentLeftBorder) > (rightBorderMax - leftBorderMax))
                 {
@@ -113,9 +136,9 @@ namespace LoadImpactApp
             return Tuple.Create(leftBorderMax, rightBorderMax);
         }
 
-        private double GetMedian(MetricPoint[] metricPoints)
+        private double GetMedian(double[] values)
         {
-            double[] tempPoints = metricPoints.Select(p => p.Value).ToArray();
+            double[] tempPoints = (double[])values.Clone();
             int count = tempPoints.Length;
 
             Array.Sort(tempPoints);

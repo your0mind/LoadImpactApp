@@ -30,8 +30,8 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugSymbols>false</DebugSymbols>
-    <DebugType>none</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
@@ -213,7 +213,8 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>del "$(TargetDir)Newtonsoft.Json.xml", "$(TargetDir)Google.Apis.Core.xml", "$(TargetDir)Google.Apis.Sheets.v4.xml", "$(TargetDir)Google.Apis.Core.pdb", "$(TargetDir)Google.Apis.Sheets.v4.pdb", "$(TargetDir)Google.Apis.xml", "$(TargetDir)Google.Apis.Auth.xml", "$(TargetDir)Google.Apis.pdb", "$(TargetDir)Google.Apis.Auth.pdb"</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
