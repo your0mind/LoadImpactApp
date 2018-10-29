@@ -22,10 +22,16 @@ namespace LoadImpactApp.MathLogic
         public MetricPointsPack(string atrName, int length)
         {
             AttributeName = atrName;
-            Points = new List<MetricPoint>();
+            Points = new List<MetricPoint>(length);
         }
 
-        public double[] GetSectionByTimeBorders(Tuple<long, long> borders)
+        public MetricPointsPack(MetricPointsPack mp)
+        {
+            AttributeName = mp.AttributeName;
+            Points = new List<MetricPoint>(mp.Points);
+        }
+
+        public MetricPointsPack GetPartByTimeBorders(Tuple<long, long> borders)
         {
             int indexOfLeftBorder = Points.BinarySearch(new MetricPoint() { Timestamp = borders.Item1 });
             indexOfLeftBorder = (indexOfLeftBorder < 0) ? Math.Abs(indexOfLeftBorder) - 1 : indexOfLeftBorder;
@@ -33,12 +39,37 @@ namespace LoadImpactApp.MathLogic
             int indexOfRightBorder = Points.BinarySearch(new MetricPoint() { Timestamp = borders.Item2 });
             indexOfRightBorder = (indexOfRightBorder < 0) ? Math.Abs(indexOfRightBorder) - 2 : indexOfRightBorder;
 
-            double[] sectionArray = new double[indexOfRightBorder - indexOfLeftBorder + 1];
-            for (int i = 0; i < sectionArray.Length; i++)
+            var resultPart = new MetricPointsPack(AttributeName, indexOfRightBorder - indexOfLeftBorder + 1);
+            for (int i = 0; i < resultPart.Points.Count; i++)
             {
-                sectionArray[i] = Points[i + indexOfLeftBorder].Value;
+                resultPart.Points[i] = Points[i + indexOfLeftBorder];
             }
-            return sectionArray;
+            return resultPart;
         }
+
+        public MetricPointsPack GetAvgChunkPoints(int nChunks)
+        {
+            int chunkLength = Points.Count / nChunks;
+            if (chunkLength == 0)
+            {
+                return new MetricPointsPack(this);
+            }
+
+            var result = new MetricPointsPack(AttributeName, nChunks);
+
+            double sum;
+            for (int i = 0; i < nChunks; i++)
+            {
+                sum = 0.0;
+                for (int j = 0; j < chunkLength; j++)
+                {
+                    sum += Points[j + i * chunkLength].Value;
+                }
+                result.Points[i].Value = sum / chunkLength;
+            }
+            return result;
+        }
+
+        public double 
     }
 }

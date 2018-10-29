@@ -7,8 +7,15 @@ namespace LoadImpactApp
     public class MetricCalculator
     {
         private double m_Median;
-        private double[] m_MetricValues;
+        private MetricPointsPack m_MetricPointsPack;
         private bool m_UseAnalisisWithStableSections;
+
+        public MetricCalculator(MetricPointsPack mp)
+        {
+            m_MetricPointsPack = mp;
+        }
+
+        public void 
 
         public MetricCalculator(MetricPointsPack mp, Tuple<long, long> borders, bool useAnalisisWithVusNumber, bool useAnalisisWithStableSections)
         {
@@ -61,7 +68,8 @@ namespace LoadImpactApp
             }
             else
             {
-                return (m_MetricValues.Length > 0) ? m_MetricValues.Min() : 0.0;
+                m_MetricValues.
+                return m_MetricValues.DefaultIfEmpty(0.0).Min();
             }
         }
 
@@ -82,11 +90,11 @@ namespace LoadImpactApp
             if (m_UseAnalisisWithStableSections)
             {
                 var valuesGreaterThenMedian = m_MetricValues.Where(p => p > m_Median).ToArray();
-                return (valuesGreaterThenMedian.Length > 0) ? GetMedian(valuesGreaterThenMedian) : m_Median; 
+                return valuesGreaterThenMedian.DefaultIfEmpty(0.0).Median()
             }
             else
             {
-                return (m_MetricValues.Length > 0) ? m_MetricValues.Max() : 0.0;
+                return m_MetricValues.DefaultIfEmpty(0.0).Max();
             }
         }
 
@@ -134,25 +142,6 @@ namespace LoadImpactApp
             }
 
             return Tuple.Create(leftBorderMax, rightBorderMax);
-        }
-
-        private double GetMedian(double[] values)
-        {
-            double[] tempPoints = (double[])values.Clone();
-            int count = tempPoints.Length;
-
-            Array.Sort(tempPoints);
-
-            if (count % 2 == 0)
-            {
-                double middleElement1 = tempPoints[(count / 2) - 1];
-                double middleElement2 = tempPoints[(count / 2)];
-                return (middleElement1 + middleElement2) / 2;
-            }
-            else
-            {
-                return tempPoints[(count / 2)];
-            }
         }
     }
 }
