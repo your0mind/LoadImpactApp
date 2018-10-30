@@ -160,7 +160,7 @@ namespace LoadImpactApp.Api
 
             if (jTokens.Length == 0)
             {
-                return null;
+                throw new InvalidOperationException("Metric not found.");
             }
 
             var atrList = new List<string>() { "value", "min", "avg", "max" };

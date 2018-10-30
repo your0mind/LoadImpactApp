@@ -72,7 +72,7 @@
             this.Column5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.getResultsButton = new System.Windows.Forms.Button();
             this.runsListBox = new System.Windows.Forms.ListBox();
-            this.tabControl3 = new System.Windows.Forms.TabControl();
+            this.testsTabControl = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.allTestsComboBox = new System.Windows.Forms.ComboBox();
             this.tabPage3 = new System.Windows.Forms.TabPage();
@@ -86,7 +86,7 @@
             this.resultsPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.testInfoDataGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.testResultsDataGridView)).BeginInit();
-            this.tabControl3.SuspendLayout();
+            this.testsTabControl.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage3.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -344,7 +344,7 @@
             this.resultsPage.Controls.Add(this.testResultsDataGridView);
             this.resultsPage.Controls.Add(this.getResultsButton);
             this.resultsPage.Controls.Add(this.runsListBox);
-            this.resultsPage.Controls.Add(this.tabControl3);
+            this.resultsPage.Controls.Add(this.testsTabControl);
             this.resultsPage.Location = new System.Drawing.Point(4, 22);
             this.resultsPage.Name = "resultsPage";
             this.resultsPage.Padding = new System.Windows.Forms.Padding(3);
@@ -569,18 +569,18 @@
             this.runsListBox.TabIndex = 2;
             this.runsListBox.SelectedIndexChanged += new System.EventHandler(this.runsListBox_SelectedIndexChanged);
             // 
-            // tabControl3
+            // testsTabControl
             // 
-            this.tabControl3.Controls.Add(this.tabPage1);
-            this.tabControl3.Controls.Add(this.tabPage3);
-            this.tabControl3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tabControl3.Location = new System.Drawing.Point(15, 15);
-            this.tabControl3.Multiline = true;
-            this.tabControl3.Name = "tabControl3";
-            this.tabControl3.SelectedIndex = 0;
-            this.tabControl3.Size = new System.Drawing.Size(232, 58);
-            this.tabControl3.TabIndex = 1;
-            this.tabControl3.Selecting += new System.Windows.Forms.TabControlCancelEventHandler(this.tabControl3_Selecting);
+            this.testsTabControl.Controls.Add(this.tabPage1);
+            this.testsTabControl.Controls.Add(this.tabPage3);
+            this.testsTabControl.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.testsTabControl.Location = new System.Drawing.Point(15, 15);
+            this.testsTabControl.Multiline = true;
+            this.testsTabControl.Name = "testsTabControl";
+            this.testsTabControl.SelectedIndex = 0;
+            this.testsTabControl.Size = new System.Drawing.Size(232, 58);
+            this.testsTabControl.TabIndex = 1;
+            this.testsTabControl.Selecting += new System.Windows.Forms.TabControlCancelEventHandler(this.tabControl3_Selecting);
             // 
             // tabPage1
             // 
@@ -658,7 +658,7 @@
             this.resultsPage.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.testInfoDataGridView)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.testResultsDataGridView)).EndInit();
-            this.tabControl3.ResumeLayout(false);
+            this.testsTabControl.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage3.ResumeLayout(false);
             this.tabControl1.ResumeLayout(false);
@@ -669,7 +669,7 @@
         #endregion
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabControl tabControl2;
-        private System.Windows.Forms.TabControl tabControl3;
+        private System.Windows.Forms.TabControl testsTabControl;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button disconnectButton;
         private System.Windows.Forms.Button refreshButton;

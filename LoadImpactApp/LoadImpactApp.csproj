@@ -96,6 +96,11 @@
     </Compile>
     <Compile Include="ExportLogic\GoogleSheets.cs" />
     <Compile Include="Extensions\ExtensionMethods.cs" />
+    <Compile Include="MathLogic\IMetricCalcStrategy.cs" />
+    <Compile Include="MathLogic\MetricClassicCalcStrategy.cs" />
+    <Compile Include="MathLogic\MetricPoint.cs" />
+    <Compile Include="MathLogic\MetricStats.cs" />
+    <Compile Include="MathLogic\MetricStrangeCalcStrategy.cs" />
     <Compile Include="MetricColor.cs" />
     <Compile Include="ResultsSettings\AddMetricFormBase.cs">
       <SubType>Form</SubType>
@@ -123,7 +128,7 @@
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="MathLogic\MetricCalculator.cs" />
-    <Compile Include="MathLogic\MetricPoints.cs" />
+    <Compile Include="MathLogic\MetricPointsPack.cs" />
     <Compile Include="ResultsSettings\MetricSettingsTableBase.cs">
       <SubType>Component</SubType>
     </Compile>

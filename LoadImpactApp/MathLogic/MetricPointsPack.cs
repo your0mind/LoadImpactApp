@@ -3,17 +3,6 @@ using System.Collections.Generic;
 
 namespace LoadImpactApp.MathLogic
 {
-    public class MetricPoint : IComparable<MetricPoint>
-    {
-        public long Timestamp { get; set; }
-        public double Value { get; set; }
-
-        public int CompareTo(MetricPoint mp)
-        {
-            return Timestamp.CompareTo(mp.Timestamp);
-        }
-    }
-
     public class MetricPointsPack
     {
         public string AttributeName { get; set; }
@@ -69,7 +58,5 @@ namespace LoadImpactApp.MathLogic
             }
             return result;
         }
-
-        public double 
     }
 }
