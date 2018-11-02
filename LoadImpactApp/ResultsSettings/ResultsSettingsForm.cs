@@ -20,12 +20,12 @@ namespace LoadImpactApp
 
             m_StandardMetricsTable = new MetricSettingsTableWithLabels()
             {
-                Metrics = Settings.LoadImpactService.TimelessMetrics.StandartMetricsInfo.Select(i => i.Name).ToList(),
+                Metrics = Settings.LoadImpactService.TimelessMetrics.StandartMetrics.Select(i => i.Name).ToList(),
                 BackColor = MetricColor.StandardType
             };
             m_ServerAgentMetricsTable = new MetricSettingsTableWithLabels()
             {
-                Metrics = Settings.LoadImpactService.TimelessMetrics.ServerAgentMetricsInfo.Select(i => i.Name).ToList(),
+                Metrics = Settings.LoadImpactService.TimelessMetrics.ServerAgentMetrics.Select(i => i.Name).ToList(),
                 BackColor = MetricColor.ServerAgentType
             };
             m_PageMetricsTable = new MetricSettingsTableWithTextBoxes()

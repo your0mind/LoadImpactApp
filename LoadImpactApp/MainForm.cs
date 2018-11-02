@@ -204,11 +204,20 @@ namespace LoadImpactApp
             int vusMax = (int)vusActivePoints.Max(u => u.Value);
             double areaOfStableVusActive = 100.0 * durationOfStablePart / allRunDuration;
 
-            var areaCellsColor = (areaOfStableVusActive > 50)
+            var areaCellColor = (areaOfStableVusActive > 50)
                 ? Color.Green
                 : (areaOfStableVusActive > 10)
                     ? Color.Orange
                     : Color.Red;
+
+            testInfoDataGridView.Rows.Add(
+                testName,
+                testId,
+                runDate,
+                vusMax,
+                areaOfStableVusActive
+            );
+            testInfoDataGridView.Rows[0].Cells[4].Style.ForeColor = areaCellColor;
 
             var lostMetrics = new List<String>();
 
@@ -219,11 +228,28 @@ namespace LoadImpactApp
                     var pointsPacks = await ApiLoadImpact.GetStandartMetricPointsAsync(runId, standardMetric.Name);
                     foreach (var pointsPack in pointsPacks)
                     {
-                        var metricCalculator = new MetricCalculator(attribute, bordersOfAnalisis,
-                            testSettingsToUse.UseAnalisisWithVusNumber, standardMetric.LookForStability);
+                        var processedPointsPack = pointsPack;
+                        if (testSettingsToUse.UseAnalisisWithVusNumber)
+                        {
+                            processedPointsPack = processedPointsPack.GetPartByTimeBorders(borders);
+                        }
 
-                        AddRowResultsToDataGridView(standardMetric, attribute.AttributeName, metricCalculator,
-                            MetricColor.StandardType, Settings.LoadImpactService.TimelessMetrics.StandartMetricsInfo
+                        IMetricCalcStrategy calcStrategy = new MetricClassicCalcStrategy();
+                        if (standardMetric.LookForStability)
+                        {
+                            processedPointsPack = processedPointsPack.GetAvgChunkPoints(25);
+                            calcStrategy = new MetricStrangeCalcStrategy();
+                        }
+                        else
+                        {
+                            calcStrategy = new MetricClassicCalcStrategy();
+                        }
+
+                        var metricCalculator = new MetricCalculator(processedPointsPack, calcStrategy);
+                        var stats = metricCalculator.GetStats();
+
+                        AddRowResultsToDataGridView(stats, standardMetric, pointsPack.AttributeName, MetricColor.StandardType, 
+                            Settings.LoadImpactService.TimelessMetrics.StandartMetrics
                                 .FirstOrDefault(info => info.Name == standardMetric.Name).Unit);
                     }
                 }
@@ -250,7 +276,7 @@ namespace LoadImpactApp
                                 testSettingsToUse.UseAnalisisWithVusNumber, serverAgentMetric.LookForStability);
 
                             AddRowResultsToDataGridView(serverAgentMetric, attribute.AttributeName, metricCalculator,
-                                MetricColor.ServerAgentType, Settings.LoadImpactService.TimelessMetrics.ServerAgentMetricsInfo
+                                MetricColor.ServerAgentType, Settings.LoadImpactService.TimelessMetrics.ServerAgentMetrics
                                     .FirstOrDefault(info => info.Name == serverAgentLabelName).Unit);
                         }
                     }

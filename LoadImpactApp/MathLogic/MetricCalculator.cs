@@ -1,6 +1,5 @@
 ﻿using LoadImpactApp.MathLogic;
 using System;
-using System.Linq;
 
 namespace LoadImpactApp
 {

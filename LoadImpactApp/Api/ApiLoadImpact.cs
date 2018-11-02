@@ -107,7 +107,7 @@ namespace LoadImpactApp.Api
 
         public static async Task<List<MetricPointsPack>> GetStandartMetricPointsAsync(int testRunId, string metricName)
         {
-            string ids = Settings.LoadImpactService.TimelessMetrics.StandartMetricsInfo
+            string ids = Settings.LoadImpactService.TimelessMetrics.StandartMetrics
                 .FirstOrDefault(metricInfo => metricInfo.Name == metricName).MetricId;
 
             var response = await MakeRequestAsync($"/tests/{testRunId}/results?ids={ids}");
