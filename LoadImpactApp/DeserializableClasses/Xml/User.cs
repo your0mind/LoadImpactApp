@@ -3,16 +3,16 @@ using System.Xml.Serialization;
 
 namespace LoadImpactApp.DeserializableClasses.Xml
 {
-    public class User
+    public class AppUser
     {
         [XmlAttribute]
         public string Token { get; set; }
-        public List<TestSettings> FavoritesTests { get; set; }
+        public List<Test> FavoritesTests { get; set; }
         public ExportSettings ExportSettings { get; set; }
 
-        public User()
+        public AppUser()
         {
-            FavoritesTests = new List<TestSettings>();
+            FavoritesTests = new List<Test>();
         }
     }
 }

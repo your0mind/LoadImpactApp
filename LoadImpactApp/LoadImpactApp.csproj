@@ -118,8 +118,8 @@
     <Compile Include="DeserializableClasses\Xml\LoadImpact.cs" />
     <Compile Include="DeserializableClasses\Xml\MetricSettings.cs" />
     <Compile Include="DeserializableClasses\Xml\TestSettings.cs" />
-    <Compile Include="DeserializableClasses\Xml\TimelessMetrics.cs" />
-    <Compile Include="DeserializableClasses\Xml\TimelessMetricInfo.cs" />
+    <Compile Include="DeserializableClasses\Xml\ConstMetrics.cs" />
+    <Compile Include="DeserializableClasses\Xml\ConstMetricInfo.cs" />
     <Compile Include="DeserializableClasses\Xml\User.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>

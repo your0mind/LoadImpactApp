@@ -11,7 +11,7 @@ namespace LoadImpactApp
         private MetricSettingsTableWithLabels m_StandardMetricsTable;
         private MetricSettingsTableWithLabels m_ServerAgentMetricsTable;
         private MetricSettingsTableWithTextBoxes m_PageMetricsTable;
-        private TestSettings m_ReturnTestSettings;
+        private Test m_ReturnTestSettings;
         private string m_TestName;
 
         public ResultsSettingsForm(string testName)
@@ -20,12 +20,12 @@ namespace LoadImpactApp
 
             m_StandardMetricsTable = new MetricSettingsTableWithLabels()
             {
-                Metrics = Settings.LoadImpactService.TimelessMetrics.StandartMetrics.Select(i => i.Name).ToList(),
+                Metrics = UserSettings.LoadImpactService.TimelessMetrics.Standard.Select(i => i.Name).ToList(),
                 BackColor = MetricColor.StandardType
             };
             m_ServerAgentMetricsTable = new MetricSettingsTableWithLabels()
             {
-                Metrics = Settings.LoadImpactService.TimelessMetrics.ServerAgentMetrics.Select(i => i.Name).ToList(),
+                Metrics = UserSettings.LoadImpactService.TimelessMetrics.ServerAgents.Select(i => i.Name).ToList(),
                 BackColor = MetricColor.ServerAgentType
             };
             m_PageMetricsTable = new MetricSettingsTableWithTextBoxes()
@@ -37,12 +37,12 @@ namespace LoadImpactApp
             metricSettingsPanel.Controls.Add(m_ServerAgentMetricsTable, 0, 6);
             metricSettingsPanel.Controls.Add(m_PageMetricsTable, 0, 9);
 
-            var savedTestSettings = Settings.LoadImpactService.User.FavoritesTests.Find(t => t.Name == testName);
+            var savedTestSettings = UserSettings.LoadImpactService.User.FavoritesTests.Find(t => t.Name == testName);
 
             if (savedTestSettings != null)
             {
-                vusNumberAnalisisCheckBox.Checked = savedTestSettings.UseAnalisisWithVusNumber;
-                m_StandardMetricsTable.AddMetricSettingsRange(savedTestSettings.StandartMetrics);
+                vusNumberAnalisisCheckBox.Checked = savedTestSettings.CheckVusActivity;
+                m_StandardMetricsTable.AddMetricSettingsRange(savedTestSettings.StandardMetrics);
                 m_ServerAgentMetricsTable.AddMetricSettingsRange(savedTestSettings.ServerAgentMetrics);
                 m_PageMetricsTable.AddMetricSettingsRange(savedTestSettings.PageMetrics);
                 saveButton.Enabled = true;
@@ -58,13 +58,13 @@ namespace LoadImpactApp
             Close();
         }
 
-        public TestSettings ExtractTestSettings()
+        public Test ExtractTestSettings()
         {
-            return new TestSettings()
+            return new Test()
             {
                 Name = m_TestName,
-                UseAnalisisWithVusNumber = vusNumberAnalisisCheckBox.Checked,
-                StandartMetrics = m_StandardMetricsTable.GetMetricsSettings(),
+                CheckVusActivity = vusNumberAnalisisCheckBox.Checked,
+                StandardMetrics = m_StandardMetricsTable.GetMetricsSettings(),
                 ServerAgentMetrics = m_ServerAgentMetricsTable.GetMetricsSettings(),
                 PageMetrics = m_PageMetricsTable.GetMetricsSettings()
             };
@@ -73,12 +73,12 @@ namespace LoadImpactApp
         private void saveButton_Click(object sender, EventArgs e)
         {
             var testSettingsToSave = ExtractTestSettings();
-            int indexToDelete = Settings.LoadImpactService.User.FavoritesTests.FindIndex(test => test.Name == testSettingsToSave.Name);
-            Settings.LoadImpactService.User.FavoritesTests.RemoveAt(indexToDelete);
-            Settings.LoadImpactService.User.FavoritesTests.Insert(indexToDelete, testSettingsToSave);
+            int indexToDelete = UserSettings.LoadImpactService.User.FavoritesTests.FindIndex(test => test.Name == testSettingsToSave.Name);
+            UserSettings.LoadImpactService.User.FavoritesTests.RemoveAt(indexToDelete);
+            UserSettings.LoadImpactService.User.FavoritesTests.Insert(indexToDelete, testSettingsToSave);
         }
 
-        public TestSettings GetTestSettings()
+        public Test GetTestSettings()
         {
             return m_ReturnTestSettings;
         }

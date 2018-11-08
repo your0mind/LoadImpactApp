@@ -6,7 +6,7 @@ namespace LoadImpactApp.MathLogic
 {
     public class MetricStrangeCalcStrategy : IMetricCalcStrategy
     {
-        public MetricStats GetStats(MetricPointsPack mp)
+        public MetricStats CalcStats(MetricPointsPack mp)
         {
             if (mp == null)
             {

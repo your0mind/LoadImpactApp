@@ -28,13 +28,13 @@ namespace LoadImpactApp
             m_ExtractFormatList = new List<string>() { "Default", "FLS QA" };
             exportFormatComboBox.DataSource = m_ExtractFormatList;
 
-            if (Settings.LoadImpactService.User.ExportSettings.ExportFormat == "FLS QA")
+            if (UserSettings.LoadImpactService.User.ExportSettings.ExportFormat == "FLS QA")
             {
                 exportFormatComboBox.SelectedIndex = 1;
             }
 
-            linkTextBox.Text = Settings.LoadImpactService.User.ExportSettings.SpreadsheetLink;
-            sprintTextBox.Text = Settings.LoadImpactService.User.ExportSettings.Sprint;
+            linkTextBox.Text = UserSettings.LoadImpactService.User.ExportSettings.SpreadsheetLink;
+            sprintTextBox.Text = UserSettings.LoadImpactService.User.ExportSettings.Sprint;
 
             exportButton.Select();
         }
@@ -55,10 +55,10 @@ namespace LoadImpactApp
 
         private void saveButton_Click(object sender, EventArgs e)
         {
-            Settings.LoadImpactService.User.ExportSettings.SpreadsheetLink = linkTextBox.Text;
-            Settings.LoadImpactService.User.ExportSettings.ExportFormat = exportFormatComboBox.SelectedItem.ToString();
-            Settings.LoadImpactService.User.ExportSettings.Sprint = sprintTextBox.Text;
-            Settings.Update();
+            UserSettings.LoadImpactService.User.ExportSettings.SpreadsheetLink = linkTextBox.Text;
+            UserSettings.LoadImpactService.User.ExportSettings.ExportFormat = exportFormatComboBox.SelectedItem.ToString();
+            UserSettings.LoadImpactService.User.ExportSettings.Sprint = sprintTextBox.Text;
+            UserSettings.Update();
         }
 
         private async void exportButton_Click(object sender, EventArgs e)

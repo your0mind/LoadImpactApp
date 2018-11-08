@@ -13,10 +13,8 @@ namespace LoadImpactApp.DeserializableClasses.Xml
         [XmlAttribute]
         public bool Max { get; set; }
         [XmlAttribute]
-        public bool LookForStability { get; set; }
+        public bool Smoothed { get; set; }
         [XmlAttribute]
         public int Precision { get; set; }
-
-        public MetricSettings() { }
     }
 }

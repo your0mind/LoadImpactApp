@@ -11,7 +11,7 @@ namespace LoadImpactApp
         [STAThread]
         static void Main()
         {
-            Settings.GetFromFile("UserSettings.xml");
+            UserSettings.GetFromFile("UserSettings.xml");
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);

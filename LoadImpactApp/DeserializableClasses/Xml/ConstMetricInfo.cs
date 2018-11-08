@@ -2,7 +2,7 @@
 
 namespace LoadImpactApp.DeserializableClasses.Xml
 {
-    public class TimelessMetricInfo
+    public class ConstMetricInfo
     {
         [XmlAttribute]
         public string Name { get; set; }

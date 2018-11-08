@@ -4,13 +4,13 @@ namespace LoadImpactApp.DeserializableClasses.Xml
 {
     public class ConstMetrics
     {
-        public List<ConstMetricInfo> StandartMetrics { get; set; }
-        public List<ConstMetricInfo> ServerAgentMetrics { get; set; }
+        public List<ConstMetricInfo> Standard { get; set; }
+        public List<ConstMetricInfo> ServerAgents { get; set; }
 
         public ConstMetrics()
         {
-            StandartMetrics = new List<ConstMetricInfo>();
-            ServerAgentMetrics = new List<ConstMetricInfo>();
+            Standard = new List<ConstMetricInfo>();
+            ServerAgents = new List<ConstMetricInfo>();
         }
     }
 }

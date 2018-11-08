@@ -14,9 +14,9 @@ namespace LoadImpactApp
             ContextCalcStrategy = contextCalcStrategy;
         }
 
-        public MetricStats GetStats()
+        public MetricStats CalcStats()
         {
-            return ContextCalcStrategy.GetStats(m_MetricPointsPack);
+            return ContextCalcStrategy.CalcStats(m_MetricPointsPack);
         }
 
         public static Tuple<long, long> GetBordersByStableVusActive(MetricPointsPack metricPointsOfVusActive)

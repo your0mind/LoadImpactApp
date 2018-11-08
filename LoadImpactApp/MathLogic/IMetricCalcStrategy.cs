@@ -2,6 +2,6 @@
 {
     public interface IMetricCalcStrategy
     {
-        MetricStats GetStats(MetricPointsPack mp);
+        MetricStats CalcStats(MetricPointsPack mp);
     }
 }

@@ -46,8 +46,8 @@ namespace LoadImpactApp.Api
         static ApiLoadImpact()
         {
             m_HttpClient = new HttpClient();
-            BaseUrl = Settings.LoadImpactService.BaseUrl;
-            Token = Settings.LoadImpactService.User.Token;
+            BaseUrl = UserSettings.LoadImpactService.BaseUrl;
+            Token = UserSettings.LoadImpactService.User.Token;
         }
 
         public static async Task<HttpResponseMessage> MakeRequestAsync(string path = "/")
@@ -107,7 +107,7 @@ namespace LoadImpactApp.Api
 
         public static async Task<List<MetricPointsPack>> GetStandartMetricPointsAsync(int testRunId, string metricName)
         {
-            string ids = Settings.LoadImpactService.TimelessMetrics.StandartMetrics
+            string ids = UserSettings.LoadImpactService.TimelessMetrics.Standard
                 .FirstOrDefault(metricInfo => metricInfo.Name == metricName).MetricId;
 
             var response = await MakeRequestAsync($"/tests/{testRunId}/results?ids={ids}");

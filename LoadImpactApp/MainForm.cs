@@ -38,7 +38,7 @@ namespace LoadImpactApp
             m_BindingFavTitlesListBox = new BindingSource(CurrentContextData.FavoritesTitles, null);
             m_BindingFavTitlesComboBox = new BindingSource(CurrentContextData.FavoritesTitles, null);
 
-            CurrentContextData.FavoritesTitles.AddRange(Settings.LoadImpactService.User.FavoritesTests.
+            CurrentContextData.FavoritesTitles.AddRange(UserSettings.LoadImpactService.User.FavoritesTests.
                 Select(test => test.Name).ToList());
 
             RefreshContainersAsync();
@@ -123,7 +123,7 @@ namespace LoadImpactApp
 
         private void getResultsButton_Click(object sender, EventArgs e)
         {
-            Settings.Update();
+            UserSettings.Update();
 
             var resultsSettingsForm = new ResultsSettingsForm(((TestRun)runsListBox.SelectedItem).Title);
             resultsSettingsForm.FormClosing += ResultsSettingsForm_FormClosing;
@@ -168,7 +168,7 @@ namespace LoadImpactApp
             }
         }
 
-        private async Task ShowTestResultsAsync(TestSettings testSettingsToUse)
+        private async Task ShowTestResultsAsync(Test testSettingsToUse)
         {
             Enabled = false;
 
@@ -221,35 +221,18 @@ namespace LoadImpactApp
 
             var lostMetrics = new List<String>();
 
-            foreach (var standardMetric in testSettingsToUse.StandartMetrics)
+            foreach (var standardMetric in testSettingsToUse.StandardMetrics)
             {
                 try
                 {
                     var pointsPacks = await ApiLoadImpact.GetStandartMetricPointsAsync(runId, standardMetric.Name);
                     foreach (var pointsPack in pointsPacks)
                     {
-                        var processedPointsPack = pointsPack;
-                        if (testSettingsToUse.UseAnalisisWithVusNumber)
-                        {
-                            processedPointsPack = processedPointsPack.GetPartByTimeBorders(borders);
-                        }
-
-                        IMetricCalcStrategy calcStrategy = new MetricClassicCalcStrategy();
-                        if (standardMetric.LookForStability)
-                        {
-                            processedPointsPack = processedPointsPack.GetAvgChunkPoints(25);
-                            calcStrategy = new MetricStrangeCalcStrategy();
-                        }
-                        else
-                        {
-                            calcStrategy = new MetricClassicCalcStrategy();
-                        }
-
-                        var metricCalculator = new MetricCalculator(processedPointsPack, calcStrategy);
-                        var stats = metricCalculator.GetStats();
+                        var stats = CalcMetricPointsStats(pointsPack, testSettingsToUse.CheckVusActivity,
+                            standardMetric.Smoothed, borders);
 
                         AddRowResultsToDataGridView(stats, standardMetric, pointsPack.AttributeName, MetricColor.StandardType, 
-                            Settings.LoadImpactService.TimelessMetrics.StandartMetrics
+                            UserSettings.LoadImpactService.TimelessMetrics.Standard
                                 .FirstOrDefault(info => info.Name == standardMetric.Name).Unit);
                     }
                 }
@@ -271,12 +254,12 @@ namespace LoadImpactApp
                         serverAgentMetric.Name = serverAgentLabelName + " " + serverAgent;
                         foreach (var attribute in attributes)
                         {
-                            attribute = testSettingsToUse.UseAnalisisWithVusNumber
+                            attribute = testSettingsToUse.CheckVusActivity
                             var metricCalculator = new MetricCalculator(attribute, bordersOfAnalisis,
-                                testSettingsToUse.UseAnalisisWithVusNumber, serverAgentMetric.LookForStability);
+                                testSettingsToUse.CheckVusActivity, serverAgentMetric.Smoothed);
 
                             AddRowResultsToDataGridView(serverAgentMetric, attribute.AttributeName, metricCalculator,
-                                MetricColor.ServerAgentType, Settings.LoadImpactService.TimelessMetrics.ServerAgentMetrics
+                                MetricColor.ServerAgentType, UserSettings.LoadImpactService.TimelessMetrics.ServerAgents
                                     .FirstOrDefault(info => info.Name == serverAgentLabelName).Unit);
                         }
                     }
@@ -297,7 +280,7 @@ namespace LoadImpactApp
                     foreach (var attribute in attributes)
                     {
                         var metricCalculator = new MetricCalculator(attribute, bordersOfAnalisis,
-                            testSettingsToUse.UseAnalisisWithVusNumber, pageMetric.LookForStability);
+                            testSettingsToUse.CheckVusActivity, pageMetric.Smoothed);
 
                         AddRowResultsToDataGridView(pageMetric, attribute.AttributeName, metricCalculator, MetricColor.PageType, "sec");
                     }
@@ -317,6 +300,29 @@ namespace LoadImpactApp
 
             exportResultsButton.Select();
             Enabled = true;
+        }
+
+        private MetricStats CalcMetricPointsStats(MetricPointsPack mpp, bool CheckVusActivity, bool Smoothed, Tuple<long, long> borders)
+        {
+            const int CHUNKS_COUNT = 25;
+            if (CheckVusActivity)
+            {
+                mpp = mpp.GetPartByTimeBorders(borders);
+            }
+
+            IMetricCalcStrategy calcStrategy;
+            if (Smoothed)
+            {
+                mpp = mpp.GetAvgChunkPoints(CHUNKS_COUNT);
+                calcStrategy = new MetricStrangeCalcStrategy();
+            }
+            else
+            {
+                calcStrategy = new MetricClassicCalcStrategy();
+            }
+
+            var metricCalculator = new MetricCalculator(mpp, calcStrategy);
+            return metricCalculator.CalcStats();
         }
 
         private void AddRowResultsToDataGridView(MetricStats ms, MetricSettings metricSettings, string attributeName, Color color, string unit)
@@ -340,16 +346,16 @@ namespace LoadImpactApp
 
         private void disconnectButton_Click(object sender, EventArgs e)
         {
-            Settings.Update();
-            Settings.SaveToFile("UserSettings.xml");
+            UserSettings.Update();
+            UserSettings.SaveToFile("UserSettings.xml");
             this.Visible = false;
             m_ConnectionForm.Visible = true;
         }
 
         private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
         {
-            Settings.Update();
-            Settings.SaveToFile("UserSettings.xml");
+            UserSettings.Update();
+            UserSettings.SaveToFile("UserSettings.xml");
             Application.Exit();
         }
 

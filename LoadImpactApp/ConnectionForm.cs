@@ -12,10 +12,10 @@ namespace LoadImpactApp
         public ConnectionForm()
         {
             InitializeComponent();
-            if (Settings.LoadImpactService.User.Token != "")
+            if (UserSettings.LoadImpactService.User.Token != "")
             {
                 rememeberCheck.Checked = true;
-                tokenBox.Text = Settings.LoadImpactService.User.Token;
+                tokenBox.Text = UserSettings.LoadImpactService.User.Token;
             }
         }
 
@@ -25,7 +25,7 @@ namespace LoadImpactApp
             {
                 if (await ApiLoadImpact.CheckTokenAsync(tokenBox.Text))
                 {
-                    Settings.LoadImpactService.User.Token = (rememeberCheck.Checked) ? tokenBox.Text : "";
+                    UserSettings.LoadImpactService.User.Token = (rememeberCheck.Checked) ? tokenBox.Text : "";
 
                     if (m_MainForm == null)
                     {
