@@ -30,8 +30,8 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugSymbols>false</DebugSymbols>
-    <DebugType>none</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
@@ -80,11 +80,14 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Net.Http" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Consts\GlobalConsts.cs" />
     <Compile Include="DeserializableClasses\Xml\ExportSettings.cs" />
     <Compile Include="ExportLogic\ExportResultsForm.cs">
       <SubType>Form</SubType>
@@ -93,7 +96,12 @@
       <DependentUpon>ExportResultsForm.cs</DependentUpon>
     </Compile>
     <Compile Include="ExportLogic\GoogleSheets.cs" />
-    <Compile Include="MetricColor.cs" />
+    <Compile Include="MathLogic\IMetricCalcStrategy.cs" />
+    <Compile Include="MathLogic\MetricClassicCalcStrategy.cs" />
+    <Compile Include="MathLogic\MetricPoint.cs" />
+    <Compile Include="MathLogic\MetricStats.cs" />
+    <Compile Include="MathLogic\MetricStrangeCalcStrategy.cs" />
+    <Compile Include="Consts\ColorConsts.cs" />
     <Compile Include="ResultsSettings\AddMetricFormBase.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -110,8 +118,8 @@
     <Compile Include="DeserializableClasses\Xml\LoadImpact.cs" />
     <Compile Include="DeserializableClasses\Xml\MetricSettings.cs" />
     <Compile Include="DeserializableClasses\Xml\TestSettings.cs" />
-    <Compile Include="DeserializableClasses\Xml\TimelessMetrics.cs" />
-    <Compile Include="DeserializableClasses\Xml\TimelessMetricInfo.cs" />
+    <Compile Include="DeserializableClasses\Xml\ConstMetrics.cs" />
+    <Compile Include="DeserializableClasses\Xml\ConstMetricInfo.cs" />
     <Compile Include="DeserializableClasses\Xml\User.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
@@ -120,7 +128,7 @@
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="MathLogic\MetricCalculator.cs" />
-    <Compile Include="MathLogic\MetricPoints.cs" />
+    <Compile Include="MathLogic\MetricPointsPack.cs" />
     <Compile Include="ResultsSettings\MetricSettingsTableBase.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -213,7 +221,8 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>del "$(TargetDir)Newtonsoft.Json.xml", "$(TargetDir)Google.Apis.Core.xml", "$(TargetDir)Google.Apis.Sheets.v4.xml", "$(TargetDir)Google.Apis.Core.pdb", "$(TargetDir)Google.Apis.Sheets.v4.pdb", "$(TargetDir)Google.Apis.xml", "$(TargetDir)Google.Apis.Auth.xml", "$(TargetDir)Google.Apis.pdb", "$(TargetDir)Google.Apis.Auth.pdb"</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

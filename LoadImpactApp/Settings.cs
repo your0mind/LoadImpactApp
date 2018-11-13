@@ -5,11 +5,11 @@ using System.Xml.Serialization;
 
 namespace LoadImpactApp
 {
-    public static class Settings
+    public static class UserSettings
     {
         public static LoadImpact LoadImpactService;
 
-        static Settings()
+        static UserSettings()
         {
             //LoadImpactService = new LoadImpact();
             //LoadImpactService.BaseUrl = "https://api.loadimpact.com/v2";
@@ -39,7 +39,7 @@ namespace LoadImpactApp
 
                 if (!isPresent)
                 {
-                    LoadImpactService.User.FavoritesTests.Add(new TestSettings() { Name = title });
+                    LoadImpactService.User.FavoritesTests.Add(new Test() { Name = title });
                 }
             }
         }

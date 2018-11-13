@@ -46,8 +46,8 @@ namespace LoadImpactApp.Api
         static ApiLoadImpact()
         {
             m_HttpClient = new HttpClient();
-            BaseUrl = Settings.LoadImpactService.BaseUrl;
-            Token = Settings.LoadImpactService.User.Token;
+            BaseUrl = UserSettings.LoadImpactService.BaseUrl;
+            Token = UserSettings.LoadImpactService.User.Token;
         }
 
         public static async Task<HttpResponseMessage> MakeRequestAsync(string path = "/")
@@ -105,9 +105,9 @@ namespace LoadImpactApp.Api
             return testConfings;
         }
 
-        public static async Task<List<MetricPoints>> GetStandartMetricPointsAsync(int testRunId, string metricName)
+        public static async Task<List<MetricPointsPack>> GetStandartMetricPointsAsync(int testRunId, string metricName)
         {
-            string ids = Settings.LoadImpactService.TimelessMetrics.StandartMetricsInfo
+            string ids = UserSettings.LoadImpactService.ConstMetrics.Standard
                 .FirstOrDefault(metricInfo => metricInfo.Name == metricName).MetricId;
 
             var response = await MakeRequestAsync($"/tests/{testRunId}/results?ids={ids}");
@@ -115,7 +115,7 @@ namespace LoadImpactApp.Api
             return ParseMetricPointsJson(jsonContent, ids);
         }
 
-        public static async Task<List<MetricPoints>> GetServerAgentMetricPointsAsync(int testRunId, string serverAgentName, string serverLabelName)
+        public static async Task<List<MetricPointsPack>> GetServerAgentMetricPointsAsync(int testRunId, string serverAgentName, string serverLabelName)
         {
             string ids = "__server_metric_";
 
@@ -134,7 +134,7 @@ namespace LoadImpactApp.Api
             return ParseMetricPointsJson(jsonContent, ids);
         }
 
-        public static async Task<List<MetricPoints>> GetPageMetricPointsAsync(int testRunId, string metricName, int scenarioId)
+        public static async Task<List<MetricPointsPack>> GetPageMetricPointsAsync(int testRunId, string metricName, int scenarioId)
         {
             string ids = "__li_page_";
 
@@ -153,39 +153,35 @@ namespace LoadImpactApp.Api
             return ParseMetricPointsJson(jsonContent, ids);
         }
 
-        private static List<MetricPoints> ParseMetricPointsJson(string jsonContent, string metricId)
+        private static List<MetricPointsPack> ParseMetricPointsJson(string jsonContent, string metricId)
         {
             var jObject = JObject.Parse(jsonContent);
             var jTokens = jObject.SelectToken(metricId).ToArray();
 
             if (jTokens.Length == 0)
             {
-                return null;
+                throw new InvalidOperationException("Metric not found.");
             }
 
-            var atrList = new List<string>() { "value", "min", "avg", "max" };
-            var parsedMetricPointsList = new List<MetricPoints>();
-            foreach (var atr in atrList)
+            var attrList = new List<string>() { "value", "min", "avg", "max" };
+            var pointsPacks = new List<MetricPointsPack>();
+            foreach (var attr in attrList)
             {
-                if (jTokens[0].SelectToken(atr) != null)
+                if (jTokens[0].SelectToken(attr) != null)
                 {
-                    parsedMetricPointsList.Add(new MetricPoints(atr, jTokens.Length));
+                    pointsPacks.Add(new MetricPointsPack(attr, jTokens.Length));
                 }
             }
 
             for (int i = 0; i < jTokens.Length; i++)
             {
                 long timeStamp = jTokens[i].SelectToken("timestamp").Value<long>();
-                foreach (var metricPoints in parsedMetricPointsList)
+                foreach (var pointsPack in pointsPacks)
                 {
-                    metricPoints.Points[i] = new MetricPoint()
-                    {
-                        Timestamp = timeStamp,
-                        Value = jTokens[i].SelectToken(metricPoints.AttributeName).Value<double>()
-                    };
+                    pointsPack.Points.Add(new MetricPoint(timeStamp,jTokens[i].SelectToken(pointsPack.AttrName).Value<double>()));
                 }
             }
-            return parsedMetricPointsList;
+            return pointsPacks;
         }
     }
 }

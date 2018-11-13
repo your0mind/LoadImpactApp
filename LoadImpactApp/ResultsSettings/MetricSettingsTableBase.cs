@@ -82,10 +82,7 @@ namespace LoadImpactApp.ResultsSettings
                 AddMetricSettings(new MetricSettings()
                 {
                     Name = metricSettings.Name,
-                    Min = metricSettings.Min,
-                    Median = metricSettings.Median,
-                    Max = metricSettings.Max,
-                    LookForStability = metricSettings.LookForStability,
+                    Smoothed = metricSettings.Smoothed,
                     Precision = metricSettings.Precision
                 });
             }
@@ -99,10 +96,7 @@ namespace LoadImpactApp.ResultsSettings
                 metricsSettings.Add(new MetricSettings()
                 {
                     Name = GetControlFromPosition(0, i).Text,
-                    Min = ((CheckBox)GetControlFromPosition(1, i)).Checked,
-                    Median = ((CheckBox)GetControlFromPosition(2, i)).Checked,
-                    Max = ((CheckBox)GetControlFromPosition(3, i)).Checked,
-                    LookForStability = ((CheckBox)GetControlFromPosition(4, i)).Checked,
+                    Smoothed = ((CheckBox)GetControlFromPosition(4, i)).Checked,
                     Precision = (int)((NumericUpDown)GetControlFromPosition(5, i)).Value
                 });
             }
@@ -120,7 +114,7 @@ namespace LoadImpactApp.ResultsSettings
                     Min = true,
                     Median = true,
                     Max = true,
-                    LookForStability = true,
+                    Smoothed = true,
                     Precision = 2
                 });
             }
@@ -135,7 +129,7 @@ namespace LoadImpactApp.ResultsSettings
             Controls.Add(new CheckBox() { Dock = DockStyle.Fill, CheckAlign = ContentAlignment.MiddleCenter, Checked = metricSettings.Min }, 1, RowCount - 2);
             Controls.Add(new CheckBox() { Dock = DockStyle.Fill, CheckAlign = ContentAlignment.MiddleCenter, Checked = metricSettings.Median }, 2, RowCount - 2);
             Controls.Add(new CheckBox() { Dock = DockStyle.Fill, CheckAlign = ContentAlignment.MiddleCenter, Checked = metricSettings.Max }, 3, RowCount - 2);
-            Controls.Add(new CheckBox() { Dock = DockStyle.Fill, CheckAlign = ContentAlignment.MiddleCenter, Checked = metricSettings.LookForStability }, 4, RowCount - 2);
+            Controls.Add(new CheckBox() { Dock = DockStyle.Fill, CheckAlign = ContentAlignment.MiddleCenter, Checked = metricSettings.Smoothed }, 4, RowCount - 2);
             Controls.Add(new NumericUpDown() { Value = metricSettings.Precision, Font = new Font("Microsoft Sans Serif", 10), Maximum = 5 }, 5, RowCount - 2);
             Controls.Add(new Button()
             {

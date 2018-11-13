@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using LoadImpactApp.Api;
 using LoadImpactApp.DeserializableClasses.Xml;
-using LoadImpactApp.ExportLogic;
+using LoadImpactApp.MathLogic;
+using LoadImpactApp.Consts;
 
 namespace LoadImpactApp
 {
@@ -26,7 +27,7 @@ namespace LoadImpactApp
             // These var's are just for fixing visual border's glitch in TabControls
             var fix = new TabPadding(tabControl1);
             var fix2 = new TabPadding(tabControl2);
-            var fix3 = new TabPadding(tabControl3);
+            var fix3 = new TabPadding(testsTabControl);
 
             testInfoDataGridView.RowsAdded += TestInfoDataGridView_RowsAdded;
 
@@ -38,7 +39,7 @@ namespace LoadImpactApp
             m_BindingFavTitlesListBox = new BindingSource(CurrentContextData.FavoritesTitles, null);
             m_BindingFavTitlesComboBox = new BindingSource(CurrentContextData.FavoritesTitles, null);
 
-            CurrentContextData.FavoritesTitles.AddRange(Settings.LoadImpactService.User.FavoritesTests.
+            CurrentContextData.FavoritesTitles.AddRange(UserSettings.LoadImpactService.User.FavoritesTests.
                 Select(test => test.Name).ToList());
 
             RefreshContainersAsync();
@@ -123,7 +124,7 @@ namespace LoadImpactApp
 
         private void getResultsButton_Click(object sender, EventArgs e)
         {
-            Settings.Update();
+            UserSettings.Update();
 
             var resultsSettingsForm = new ResultsSettingsForm(((TestRun)runsListBox.SelectedItem).Title);
             resultsSettingsForm.FormClosing += ResultsSettingsForm_FormClosing;
@@ -139,7 +140,7 @@ namespace LoadImpactApp
         private void tabControl3_Selecting(object sender, TabControlCancelEventArgs e)
         {
             runsListBox.DataSource = null;
-            ((ComboBox)tabControl3.SelectedTab.Controls[0]).SelectedItem = null;
+            ((ComboBox)testsTabControl.SelectedTab.Controls[0]).SelectedItem = null;
         }
 
         private void TestsComboBoxSelectionIndexChanged(object sender, EventArgs e)
@@ -168,168 +169,177 @@ namespace LoadImpactApp
             }
         }
 
-        private async Task ShowTestResultsAsync(TestSettings testSettingsToUse)
+        private async Task ShowTestResultsAsync(Test testSettingsToUse)
         {
             Enabled = false;
 
-            while (testResultsDataGridView.RowCount > 0)
-            {
-                testResultsDataGridView.Rows.RemoveAt(0);
-            }
-
-            if (testInfoDataGridView.RowCount > 0)
-            {
-                testInfoDataGridView.Rows.RemoveAt(0);
-            }
+            testInfoDataGridView.Rows.Clear();
+            testResultsDataGridView.Rows.Clear();
 
             var indexOfConfig = CurrentContextData.TestConfigs.BinarySearch(new TestConfig()
             {
-                Name = ((ComboBox)tabControl3.SelectedTab.Controls[0]).SelectedItem.ToString()
+                Name = ((ComboBox)testsTabControl.SelectedTab.Controls[0]).SelectedItem.ToString()
             });
 
             int runId = ((TestRun)runsListBox.SelectedItem).Id;
+            var vusActivePointsPacks = await ApiLoadImpact.GetStandartMetricPointsAsync(runId, "VU active");
+            var vusActivePoints = vusActivePointsPacks[0].Points;
 
-            testInfoDataGridView.Rows.Add();
-            testInfoDataGridView.Rows[0].Cells[0].Value = ((ComboBox)tabControl3.SelectedTab.Controls[0]).SelectedItem.ToString();
-            testInfoDataGridView.Rows[0].Cells[1].Value = CurrentContextData.TestConfigs[indexOfConfig].TestId;
-            string selectedRunDate = ((TestRun)runsListBox.SelectedItem).Ended;
-            testInfoDataGridView.Rows[0].Cells[2].Value = selectedRunDate.Remove(selectedRunDate.Length - 6);
+            var borders = MetricCalculator.GetBordersByStableVusActive(vusActivePointsPacks[0]);
+            long durationOfStablePart = borders.Item2 - borders.Item1;
+            long allRunDuration = vusActivePoints[vusActivePoints.Count - 1].Timestamp - vusActivePoints[0].Timestamp;
 
-            var vusActiveMetricPoints = await ApiLoadImpact.GetStandartMetricPointsAsync(runId, "VU active");
-            int maxVus = (int)vusActiveMetricPoints.First().Points.Max(u => u.Value);
-            testInfoDataGridView.Rows[0].Cells[3].Value = maxVus;
+            object testName = ((ComboBox)testsTabControl.SelectedTab.Controls[0]).SelectedItem;
+            int testId = CurrentContextData.TestConfigs[indexOfConfig].TestId;
+            string runDate = ((TestRun)runsListBox.SelectedItem).Ended.Substring(0, 12);
+            int vusMax = (int)vusActivePoints.Max(u => u.Value);
+            double areaOfStableVusActive = Math.Round(100.0 * durationOfStablePart / allRunDuration, 2);
 
-            Tuple<long, long> bordersOfAnalisis = null;
+            var areaCellColor = (areaOfStableVusActive > 50)
+                ? Color.Green
+                : (areaOfStableVusActive > 10)
+                    ? Color.Orange
+                    : Color.Red;
 
-            if (testSettingsToUse.UseAnalisisWithVusNumber)
+            testInfoDataGridView.Rows.Add(
+                testName,
+                testId,
+                runDate,
+                vusMax,
+                areaOfStableVusActive
+            );
+            testInfoDataGridView.Rows[0].Cells[4].Style.ForeColor = areaCellColor;
+
+            var lostMetrics = new List<String>();
+
+            foreach (var standardMetric in testSettingsToUse.StandardMetrics)
             {
-                bordersOfAnalisis = MetricCalculator.GetBordersByStableVusActive(vusActiveMetricPoints.First());
-
-                double areaOfVusStableActive = 100 * (double)(bordersOfAnalisis.Item2 - bordersOfAnalisis.Item1) /
-                    (vusActiveMetricPoints.First().Points.Last().Timestamp - vusActiveMetricPoints.First().Points.First().Timestamp);
-                testInfoDataGridView.Rows[0].Cells[4].Value = Math.Round(areaOfVusStableActive, 2);
-
-                testInfoDataGridView.Rows[0].Cells[4].Style.ForeColor = (areaOfVusStableActive > 50)
-                    ? Color.Green : (areaOfVusStableActive > 10) ? Color.Orange : Color.Red;
-            }
-            else
-            {
-                testInfoDataGridView.Rows[0].Cells[4].Value = "-";
-            }
-
-            var notFoundedMetrics = new List<String>();
-
-            foreach (var standardMetric in testSettingsToUse.StandartMetrics)
-            {
-                var attributes = await ApiLoadImpact.GetStandartMetricPointsAsync(runId, standardMetric.Name);
-                if (attributes != null)
+                try
                 {
-                    foreach (var attribute in attributes)
+                    var pointsPacks = await ApiLoadImpact.GetStandartMetricPointsAsync(runId, standardMetric.Name);
+                    foreach (var pointsPack in pointsPacks)
                     {
-                        var metricCalculator = new MetricCalculator(attribute, bordersOfAnalisis, 
-                            testSettingsToUse.UseAnalisisWithVusNumber, standardMetric.LookForStability);
+                        var stats = CalcMetricPointsStats(pointsPack, testSettingsToUse.CheckVusActivity,
+                            standardMetric.Smoothed, borders);
 
-                        AddRowResultsToDataGridView(standardMetric, attribute.AttributeName, metricCalculator,
-                            MetricColor.StandardType, Settings.LoadImpactService.TimelessMetrics.StandartMetricsInfo
+                        AddRowResultsToDataGridView(stats, standardMetric, pointsPack.AttrName, ColorConsts.STANDARD_METRIC, 
+                            UserSettings.LoadImpactService.ConstMetrics.Standard
                                 .FirstOrDefault(info => info.Name == standardMetric.Name).Unit);
                     }
                 }
-                else
+                catch (InvalidOperationException)
                 {
-                    notFoundedMetrics.Add(standardMetric.Name);
+                    lostMetrics.Add(standardMetric.Name);
                 }
             }
 
             foreach (var serverAgentMetric in testSettingsToUse.ServerAgentMetrics)
             {
                 string serverAgentLabelName = serverAgentMetric.Name;
-
                 foreach (var serverAgent in CurrentContextData.TestConfigs[indexOfConfig].ServerMetricAgents)
                 {
-                    var attributes = await ApiLoadImpact.GetServerAgentMetricPointsAsync(runId, serverAgent, serverAgentLabelName);
-                    if (attributes != null)
+                    var pointsPacks = await ApiLoadImpact.GetServerAgentMetricPointsAsync(runId, serverAgent, serverAgentLabelName);
+                    try
                     {
                         serverAgentMetric.Name = serverAgentLabelName + " " + serverAgent;
-                        foreach (var attribute in attributes)
+                        foreach (var pointsPack in pointsPacks)
                         {
-                            var metricCalculator = new MetricCalculator(attribute, bordersOfAnalisis,
-                                testSettingsToUse.UseAnalisisWithVusNumber, serverAgentMetric.LookForStability);
+                            var stats = CalcMetricPointsStats(pointsPack, testSettingsToUse.CheckVusActivity,
+                                serverAgentMetric.Smoothed, borders);
 
-                            AddRowResultsToDataGridView(serverAgentMetric, attribute.AttributeName, metricCalculator,
-                                MetricColor.ServerAgentType, Settings.LoadImpactService.TimelessMetrics.ServerAgentMetricsInfo
+                            AddRowResultsToDataGridView(stats, serverAgentMetric, pointsPack.AttrName, ColorConsts.SERVER_AGENT_METRIC,
+                                UserSettings.LoadImpactService.ConstMetrics.ServerAgent
                                     .FirstOrDefault(info => info.Name == serverAgentLabelName).Unit);
                         }
                     }
-                    else
+                    catch (InvalidOperationException)
                     {
-                        notFoundedMetrics.Add(serverAgentLabelName + " " + serverAgent);
+                        lostMetrics.Add(serverAgentLabelName + " " + serverAgent);
                     }
                 }
             }
 
             foreach (var pageMetric in testSettingsToUse.PageMetrics)
             {
-                var attributes = await ApiLoadImpact.GetPageMetricPointsAsync(runId, pageMetric.Name, 
+                var pointsPacks = await ApiLoadImpact.GetPageMetricPointsAsync(runId, pageMetric.Name, 
                     CurrentContextData.TestConfigs[indexOfConfig].UserScenarioId);
 
-                if (attributes != null)
+                try
                 {
-                    foreach (var attribute in attributes)
+                    foreach (var pointsPack in pointsPacks)
                     {
-                        var metricCalculator = new MetricCalculator(attribute, bordersOfAnalisis,
-                            testSettingsToUse.UseAnalisisWithVusNumber, pageMetric.LookForStability);
+                        var stats = CalcMetricPointsStats(pointsPack, testSettingsToUse.CheckVusActivity,
+                                pageMetric.Smoothed, borders);
 
-                        AddRowResultsToDataGridView(pageMetric, attribute.AttributeName, metricCalculator, MetricColor.PageType, "sec");
+                        AddRowResultsToDataGridView(stats, pageMetric, pointsPack.AttrName,
+                            ColorConsts.PAGE_METRIC, GlobalConsts.PAGE_METRIC_UNIT);
                     }
                 }
-                else
+                catch (InvalidOperationException)
                 {
-                    notFoundedMetrics.Add(pageMetric.Name);
+                    lostMetrics.Add(pageMetric.Name);
                 }
             }
 
-            foreach (var metric in notFoundedMetrics)
+            foreach (var metric in lostMetrics)
             {
                 testResultsDataGridView.Rows.Add();
                 testResultsDataGridView.Rows[testResultsDataGridView.Rows.Count - 1].DefaultCellStyle.BackColor = Color.Silver;
-                testResultsDataGridView.Rows[testResultsDataGridView.Rows.Count - 1].Cells[0].Value = metric + " (Not found)";
+                testResultsDataGridView.Rows[testResultsDataGridView.Rows.Count - 1].Cells[0].Value = metric + " " +
+                    $"({GlobalConsts.LOST_METRIC_ATTR})";
             }
 
             exportResultsButton.Select();
             Enabled = true;
         }
 
-        private void AddRowResultsToDataGridView(MetricSettings metricSettings, string attributeName, MetricCalculator mc, Color color, string unit)
+        private MetricStats CalcMetricPointsStats(MetricPointsPack mpp, bool CheckVusActivity, bool Smoothed, Tuple<long, long> borders)
+        {
+            if (CheckVusActivity)
+            {
+                mpp = mpp.GetPartByTimeBorders(borders);
+            }
+
+            IMetricCalcStrategy calcStrategy;
+            if (Smoothed)
+            {
+                mpp = mpp.GetAvgChunkPoints(GlobalConsts.CHUNKS_COUNT);
+                calcStrategy = new MetricStrangeCalcStrategy();
+            }
+            else
+            {
+                calcStrategy = new MetricClassicCalcStrategy();
+            }
+
+            var metricCalculator = new MetricCalculator(mpp, calcStrategy);
+            return metricCalculator.CalcStats();
+        }
+
+        private void AddRowResultsToDataGridView(MetricStats ms, MetricSettings metricSettings, string attributeName, Color color, string unit)
         {
             testResultsDataGridView.Rows.Add();
             int index = testResultsDataGridView.Rows.Count - 1;
 
             testResultsDataGridView.Rows[index].DefaultCellStyle.BackColor = color;
             testResultsDataGridView.Rows[index].Cells[0].Value = metricSettings.Name + $" ({attributeName})";
-            testResultsDataGridView.Rows[index].Cells[1].Value = (metricSettings.Min)
-                ? (object)Math.Round(mc.Min(), metricSettings.Precision)
-                : (object)"-";
-            testResultsDataGridView.Rows[index].Cells[2].Value = (metricSettings.Median)
-                ? (object)Math.Round(mc.Median(), metricSettings.Precision)
-                : (object)"-";
-            testResultsDataGridView.Rows[index].Cells[3].Value = (metricSettings.Max)
-                ? (object)Math.Round(mc.Max(), metricSettings.Precision)
-                : (object)"-";
+            testResultsDataGridView.Rows[index].Cells[1].Value = Math.Round(ms.Min, metricSettings.Precision);
+            testResultsDataGridView.Rows[index].Cells[2].Value = Math.Round(ms.Median, metricSettings.Precision);
+            testResultsDataGridView.Rows[index].Cells[3].Value = Math.Round(ms.Max, metricSettings.Precision);
             testResultsDataGridView.Rows[index].Cells[4].Value = unit;
         }
 
         private void disconnectButton_Click(object sender, EventArgs e)
         {
-            Settings.Update();
-            Settings.SaveToFile("UserSettings.xml");
+            UserSettings.Update();
+            UserSettings.SaveToFile("UserSettings.xml");
             this.Visible = false;
             m_ConnectionForm.Visible = true;
         }
 
         private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
         {
-            Settings.Update();
-            Settings.SaveToFile("UserSettings.xml");
+            UserSettings.Update();
+            UserSettings.SaveToFile("UserSettings.xml");
             Application.Exit();
         }
 
