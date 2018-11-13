@@ -162,7 +162,7 @@ namespace LoadImpactApp
 
             int pageMetricsIndex = 0;
             while ((pageMetricsIndex < m_ResultsGrid.Rows.Count) &&
-                   (m_ResultsGrid.Rows[pageMetricsIndex++].InheritedStyle.BackColor != MetricColor.PageType))
+                   (m_ResultsGrid.Rows[pageMetricsIndex++].InheritedStyle.BackColor != ColorConsts.PAGE_METRIC))
                 ;
 
             foreach (var metricName in metricNames)

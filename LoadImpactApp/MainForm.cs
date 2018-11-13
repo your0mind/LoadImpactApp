@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using LoadImpactApp.Api;
 using LoadImpactApp.DeserializableClasses.Xml;
 using LoadImpactApp.MathLogic;
+using LoadImpactApp.Consts;
 
 namespace LoadImpactApp
 {
@@ -175,16 +176,6 @@ namespace LoadImpactApp
             testInfoDataGridView.Rows.Clear();
             testResultsDataGridView.Rows.Clear();
 
-            //while (testResultsDataGridView.RowCount > 0)
-            //{
-            //    testResultsDataGridView.Rows.RemoveAt(0);
-            //}
-
-            //if (testInfoDataGridView.RowCount > 0)
-            //{
-            //    testInfoDataGridView.Rows.RemoveAt(0);
-            //}
-
             var indexOfConfig = CurrentContextData.TestConfigs.BinarySearch(new TestConfig()
             {
                 Name = ((ComboBox)testsTabControl.SelectedTab.Controls[0]).SelectedItem.ToString()
@@ -202,7 +193,7 @@ namespace LoadImpactApp
             int testId = CurrentContextData.TestConfigs[indexOfConfig].TestId;
             string runDate = ((TestRun)runsListBox.SelectedItem).Ended.Substring(0, 12);
             int vusMax = (int)vusActivePoints.Max(u => u.Value);
-            double areaOfStableVusActive = 100.0 * durationOfStablePart / allRunDuration;
+            double areaOfStableVusActive = Math.Round(100.0 * durationOfStablePart / allRunDuration, 2);
 
             var areaCellColor = (areaOfStableVusActive > 50)
                 ? Color.Green
@@ -231,8 +222,8 @@ namespace LoadImpactApp
                         var stats = CalcMetricPointsStats(pointsPack, testSettingsToUse.CheckVusActivity,
                             standardMetric.Smoothed, borders);
 
-                        AddRowResultsToDataGridView(stats, standardMetric, pointsPack.AttributeName, MetricColor.StandardType, 
-                            UserSettings.LoadImpactService.TimelessMetrics.Standard
+                        AddRowResultsToDataGridView(stats, standardMetric, pointsPack.AttrName, ColorConsts.STANDARD_METRIC, 
+                            UserSettings.LoadImpactService.ConstMetrics.Standard
                                 .FirstOrDefault(info => info.Name == standardMetric.Name).Unit);
                     }
                 }
@@ -245,57 +236,57 @@ namespace LoadImpactApp
             foreach (var serverAgentMetric in testSettingsToUse.ServerAgentMetrics)
             {
                 string serverAgentLabelName = serverAgentMetric.Name;
-
                 foreach (var serverAgent in CurrentContextData.TestConfigs[indexOfConfig].ServerMetricAgents)
                 {
-                    var attributes = await ApiLoadImpact.GetServerAgentMetricPointsAsync(runId, serverAgent, serverAgentLabelName);
-                    if (attributes != null)
+                    var pointsPacks = await ApiLoadImpact.GetServerAgentMetricPointsAsync(runId, serverAgent, serverAgentLabelName);
+                    try
                     {
                         serverAgentMetric.Name = serverAgentLabelName + " " + serverAgent;
-                        foreach (var attribute in attributes)
+                        foreach (var pointsPack in pointsPacks)
                         {
-                            attribute = testSettingsToUse.CheckVusActivity
-                            var metricCalculator = new MetricCalculator(attribute, bordersOfAnalisis,
-                                testSettingsToUse.CheckVusActivity, serverAgentMetric.Smoothed);
+                            var stats = CalcMetricPointsStats(pointsPack, testSettingsToUse.CheckVusActivity,
+                                serverAgentMetric.Smoothed, borders);
 
-                            AddRowResultsToDataGridView(serverAgentMetric, attribute.AttributeName, metricCalculator,
-                                MetricColor.ServerAgentType, UserSettings.LoadImpactService.TimelessMetrics.ServerAgents
+                            AddRowResultsToDataGridView(stats, serverAgentMetric, pointsPack.AttrName, ColorConsts.SERVER_AGENT_METRIC,
+                                UserSettings.LoadImpactService.ConstMetrics.ServerAgent
                                     .FirstOrDefault(info => info.Name == serverAgentLabelName).Unit);
                         }
                     }
-                    else
+                    catch (InvalidOperationException)
                     {
-                        notFoundedMetrics.Add(serverAgentLabelName + " " + serverAgent);
+                        lostMetrics.Add(serverAgentLabelName + " " + serverAgent);
                     }
                 }
             }
 
             foreach (var pageMetric in testSettingsToUse.PageMetrics)
             {
-                var attributes = await ApiLoadImpact.GetPageMetricPointsAsync(runId, pageMetric.Name, 
+                var pointsPacks = await ApiLoadImpact.GetPageMetricPointsAsync(runId, pageMetric.Name, 
                     CurrentContextData.TestConfigs[indexOfConfig].UserScenarioId);
 
-                if (attributes != null)
+                try
                 {
-                    foreach (var attribute in attributes)
+                    foreach (var pointsPack in pointsPacks)
                     {
-                        var metricCalculator = new MetricCalculator(attribute, bordersOfAnalisis,
-                            testSettingsToUse.CheckVusActivity, pageMetric.Smoothed);
+                        var stats = CalcMetricPointsStats(pointsPack, testSettingsToUse.CheckVusActivity,
+                                pageMetric.Smoothed, borders);
 
-                        AddRowResultsToDataGridView(pageMetric, attribute.AttributeName, metricCalculator, MetricColor.PageType, "sec");
+                        AddRowResultsToDataGridView(stats, pageMetric, pointsPack.AttrName,
+                            ColorConsts.PAGE_METRIC, GlobalConsts.PAGE_METRIC_UNIT);
                     }
                 }
-                else
+                catch (InvalidOperationException)
                 {
-                    notFoundedMetrics.Add(pageMetric.Name);
+                    lostMetrics.Add(pageMetric.Name);
                 }
             }
 
-            foreach (var metric in notFoundedMetrics)
+            foreach (var metric in lostMetrics)
             {
                 testResultsDataGridView.Rows.Add();
                 testResultsDataGridView.Rows[testResultsDataGridView.Rows.Count - 1].DefaultCellStyle.BackColor = Color.Silver;
-                testResultsDataGridView.Rows[testResultsDataGridView.Rows.Count - 1].Cells[0].Value = metric + " (Not found)";
+                testResultsDataGridView.Rows[testResultsDataGridView.Rows.Count - 1].Cells[0].Value = metric + " " +
+                    $"({GlobalConsts.LOST_METRIC_ATTR})";
             }
 
             exportResultsButton.Select();
@@ -304,7 +295,6 @@ namespace LoadImpactApp
 
         private MetricStats CalcMetricPointsStats(MetricPointsPack mpp, bool CheckVusActivity, bool Smoothed, Tuple<long, long> borders)
         {
-            const int CHUNKS_COUNT = 25;
             if (CheckVusActivity)
             {
                 mpp = mpp.GetPartByTimeBorders(borders);
@@ -313,7 +303,7 @@ namespace LoadImpactApp
             IMetricCalcStrategy calcStrategy;
             if (Smoothed)
             {
-                mpp = mpp.GetAvgChunkPoints(CHUNKS_COUNT);
+                mpp = mpp.GetAvgChunkPoints(GlobalConsts.CHUNKS_COUNT);
                 calcStrategy = new MetricStrangeCalcStrategy();
             }
             else
@@ -332,15 +322,9 @@ namespace LoadImpactApp
 
             testResultsDataGridView.Rows[index].DefaultCellStyle.BackColor = color;
             testResultsDataGridView.Rows[index].Cells[0].Value = metricSettings.Name + $" ({attributeName})";
-            testResultsDataGridView.Rows[index].Cells[1].Value = (metricSettings.Min)
-                ? (object)Math.Round(mc.Min(), metricSettings.Precision)
-                : (object)"-";
-            testResultsDataGridView.Rows[index].Cells[2].Value = (metricSettings.Median)
-                ? (object)Math.Round(mc.Median(), metricSettings.Precision)
-                : (object)"-";
-            testResultsDataGridView.Rows[index].Cells[3].Value = (metricSettings.Max)
-                ? (object)Math.Round(mc.Max(), metricSettings.Precision)
-                : (object)"-";
+            testResultsDataGridView.Rows[index].Cells[1].Value = Math.Round(ms.Min, metricSettings.Precision);
+            testResultsDataGridView.Rows[index].Cells[2].Value = Math.Round(ms.Median, metricSettings.Precision);
+            testResultsDataGridView.Rows[index].Cells[3].Value = Math.Round(ms.Max, metricSettings.Precision);
             testResultsDataGridView.Rows[index].Cells[4].Value = unit;
         }
 

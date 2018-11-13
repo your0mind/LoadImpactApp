@@ -7,11 +7,11 @@ namespace LoadImpactApp.DeserializableClasses.Xml
         [XmlAttribute]
         public string BaseUrl { get; set; }
         public AppUser User { get; set; }
-        public ConstMetrics TimelessMetrics { get; set; }
+        public ConstMetrics ConstMetrics { get; set; }
 
         public LoadImpact()
         {
-            TimelessMetrics = new ConstMetrics();
+            ConstMetrics = new ConstMetrics();
         }
     }
 }

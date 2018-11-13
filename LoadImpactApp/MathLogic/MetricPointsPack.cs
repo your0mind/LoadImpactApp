@@ -5,33 +5,33 @@ namespace LoadImpactApp.MathLogic
 {
     public class MetricPointsPack
     {
-        public string AttributeName { get; set; }
+        public string AttrName { get; set; }
         public List<MetricPoint> Points { get; set; }
 
-        public MetricPointsPack(string atrName, int length)
+        public MetricPointsPack(string attrName, int length)
         {
-            AttributeName = atrName;
-            Points = new List<MetricPoint>(length);
+            AttrName = attrName;
+            Points = new List<MetricPoint>() { Capacity = length };
         }
 
         public MetricPointsPack(MetricPointsPack mp)
         {
-            AttributeName = mp.AttributeName;
+            AttrName = mp.AttrName;
             Points = new List<MetricPoint>(mp.Points);
         }
 
         public MetricPointsPack GetPartByTimeBorders(Tuple<long, long> borders)
         {
-            int indexOfLeftBorder = Points.BinarySearch(new MetricPoint() { Timestamp = borders.Item1 });
+            int indexOfLeftBorder = Points.BinarySearch(new MetricPoint(borders.Item1, 0));
             indexOfLeftBorder = (indexOfLeftBorder < 0) ? Math.Abs(indexOfLeftBorder) - 1 : indexOfLeftBorder;
 
-            int indexOfRightBorder = Points.BinarySearch(new MetricPoint() { Timestamp = borders.Item2 });
+            int indexOfRightBorder = Points.BinarySearch(new MetricPoint(borders.Item2, 0));
             indexOfRightBorder = (indexOfRightBorder < 0) ? Math.Abs(indexOfRightBorder) - 2 : indexOfRightBorder;
 
-            var resultPart = new MetricPointsPack(AttributeName, indexOfRightBorder - indexOfLeftBorder + 1);
-            for (int i = 0; i < resultPart.Points.Count; i++)
+            var resultPart = new MetricPointsPack(AttrName, indexOfRightBorder - indexOfLeftBorder + 1);
+            for (int i = 0; i < resultPart.Points.Capacity; i++)
             {
-                resultPart.Points[i] = Points[i + indexOfLeftBorder];
+                resultPart.Points.Add(new MetricPoint(Points[i + indexOfLeftBorder]));
             }
             return resultPart;
         }
@@ -44,7 +44,7 @@ namespace LoadImpactApp.MathLogic
                 return new MetricPointsPack(this);
             }
 
-            var result = new MetricPointsPack(AttributeName, nChunks);
+            var result = new MetricPointsPack(AttrName, nChunks);
 
             double sum;
             for (int i = 0; i < nChunks; i++)
@@ -54,7 +54,7 @@ namespace LoadImpactApp.MathLogic
                 {
                     sum += Points[j + i * chunkLength].Value;
                 }
-                result.Points[i].Value = sum / chunkLength;
+                result.Points.Add(new MetricPoint(0, sum / chunkLength));
             }
             return result;
         }

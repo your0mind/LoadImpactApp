@@ -82,9 +82,6 @@ namespace LoadImpactApp.ResultsSettings
                 AddMetricSettings(new MetricSettings()
                 {
                     Name = metricSettings.Name,
-                    Min = metricSettings.Min,
-                    Median = metricSettings.Median,
-                    Max = metricSettings.Max,
                     Smoothed = metricSettings.Smoothed,
                     Precision = metricSettings.Precision
                 });
@@ -99,9 +96,6 @@ namespace LoadImpactApp.ResultsSettings
                 metricsSettings.Add(new MetricSettings()
                 {
                     Name = GetControlFromPosition(0, i).Text,
-                    Min = ((CheckBox)GetControlFromPosition(1, i)).Checked,
-                    Median = ((CheckBox)GetControlFromPosition(2, i)).Checked,
-                    Max = ((CheckBox)GetControlFromPosition(3, i)).Checked,
                     Smoothed = ((CheckBox)GetControlFromPosition(4, i)).Checked,
                     Precision = (int)((NumericUpDown)GetControlFromPosition(5, i)).Value
                 });

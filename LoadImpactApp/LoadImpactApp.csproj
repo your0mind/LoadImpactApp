@@ -87,6 +87,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Consts\GlobalConsts.cs" />
     <Compile Include="DeserializableClasses\Xml\ExportSettings.cs" />
     <Compile Include="ExportLogic\ExportResultsForm.cs">
       <SubType>Form</SubType>
@@ -95,13 +96,12 @@
       <DependentUpon>ExportResultsForm.cs</DependentUpon>
     </Compile>
     <Compile Include="ExportLogic\GoogleSheets.cs" />
-    <Compile Include="Extensions\ExtensionMethods.cs" />
     <Compile Include="MathLogic\IMetricCalcStrategy.cs" />
     <Compile Include="MathLogic\MetricClassicCalcStrategy.cs" />
     <Compile Include="MathLogic\MetricPoint.cs" />
     <Compile Include="MathLogic\MetricStats.cs" />
     <Compile Include="MathLogic\MetricStrangeCalcStrategy.cs" />
-    <Compile Include="MetricColor.cs" />
+    <Compile Include="Consts\ColorConsts.cs" />
     <Compile Include="ResultsSettings\AddMetricFormBase.cs">
       <SubType>Form</SubType>
     </Compile>

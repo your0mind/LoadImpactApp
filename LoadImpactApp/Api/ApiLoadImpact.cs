@@ -107,7 +107,7 @@ namespace LoadImpactApp.Api
 
         public static async Task<List<MetricPointsPack>> GetStandartMetricPointsAsync(int testRunId, string metricName)
         {
-            string ids = UserSettings.LoadImpactService.TimelessMetrics.Standard
+            string ids = UserSettings.LoadImpactService.ConstMetrics.Standard
                 .FirstOrDefault(metricInfo => metricInfo.Name == metricName).MetricId;
 
             var response = await MakeRequestAsync($"/tests/{testRunId}/results?ids={ids}");
@@ -163,29 +163,25 @@ namespace LoadImpactApp.Api
                 throw new InvalidOperationException("Metric not found.");
             }
 
-            var atrList = new List<string>() { "value", "min", "avg", "max" };
-            var parsedMetricPointsList = new List<MetricPointsPack>();
-            foreach (var atr in atrList)
+            var attrList = new List<string>() { "value", "min", "avg", "max" };
+            var pointsPacks = new List<MetricPointsPack>();
+            foreach (var attr in attrList)
             {
-                if (jTokens[0].SelectToken(atr) != null)
+                if (jTokens[0].SelectToken(attr) != null)
                 {
-                    parsedMetricPointsList.Add(new MetricPointsPack(atr, jTokens.Length));
+                    pointsPacks.Add(new MetricPointsPack(attr, jTokens.Length));
                 }
             }
 
             for (int i = 0; i < jTokens.Length; i++)
             {
                 long timeStamp = jTokens[i].SelectToken("timestamp").Value<long>();
-                foreach (var metricPoints in parsedMetricPointsList)
+                foreach (var pointsPack in pointsPacks)
                 {
-                    metricPoints.Points[i] = new MetricPoint
-                    {
-                        Timestamp = timeStamp,
-                        Value = jTokens[i].SelectToken(metricPoints.AttributeName).Value<double>()
-                    };
+                    pointsPack.Points.Add(new MetricPoint(timeStamp,jTokens[i].SelectToken(pointsPack.AttrName).Value<double>()));
                 }
             }
-            return parsedMetricPointsList;
+            return pointsPacks;
         }
     }
 }

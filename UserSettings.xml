@@ -4,17 +4,17 @@
     <FavoritesTests />
     <ExportSettings SpreadsheetLink="" ExportFormat="" Sprint="" />
   </User>
-  <TimelessMetrics>
-    <StandartMetricsInfo>
-      <TimelessMetricInfo Name="Requests/second" Unit="r/sec" MetricId="__li_requests_per_second" />
-      <TimelessMetricInfo Name="VU active" Unit="count" MetricId="__li_clients_active" />
-      <TimelessMetricInfo Name="VU load time" Unit="msec" MetricId="__li_user_load_time" />
-    </StandartMetricsInfo>
-    <ServerAgentMetricsInfo>
-      <TimelessMetricInfo Name="CPU" Unit="percent" MetricId="" />
-      <TimelessMetricInfo Name="Memusage" Unit="percent" MetricId="" />
-      <TimelessMetricInfo Name="Disk" Unit="percent" MetricId="" />
-      <TimelessMetricInfo Name="Network" Unit="bps" MetricId="" />
-    </ServerAgentMetricsInfo>
-  </TimelessMetrics>
+  <ConstMetrics>
+    <Standard>
+      <ConstMetricInfo Name="Requests/second" Unit="r/sec" MetricId="__li_requests_per_second" />
+      <ConstMetricInfo Name="VU active" Unit="count" MetricId="__li_clients_active" />
+      <ConstMetricInfo Name="VU load time" Unit="msec" MetricId="__li_user_load_time" />
+    </Standard>
+    <ServerAgent>
+      <ConstMetricInfo Name="CPU" Unit="percent" />
+      <ConstMetricInfo Name="Memusage" Unit="percent" />
+      <ConstMetricInfo Name="Disk" Unit="percent" />
+      <ConstMetricInfo Name="Network" Unit="bps" />
+    </ServerAgent>
+  </ConstMetrics>
 </LoadImpact>
