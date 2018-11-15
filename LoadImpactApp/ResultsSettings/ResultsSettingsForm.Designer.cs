@@ -52,7 +52,7 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(506, 576);
+            this.panel1.Size = new System.Drawing.Size(420, 576);
             this.panel1.TabIndex = 0;
             // 
             // metricSettingsPanel
@@ -134,13 +134,14 @@
             this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panel2.Location = new System.Drawing.Point(0, 576);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(506, 36);
+            this.panel2.Size = new System.Drawing.Size(420, 36);
             this.panel2.TabIndex = 1;
             // 
             // saveButton
             // 
+            this.saveButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.saveButton.Enabled = false;
-            this.saveButton.Location = new System.Drawing.Point(341, 4);
+            this.saveButton.Location = new System.Drawing.Point(254, 4);
             this.saveButton.Name = "saveButton";
             this.saveButton.Size = new System.Drawing.Size(75, 23);
             this.saveButton.TabIndex = 1;
@@ -150,8 +151,9 @@
             // 
             // finalGetResultsButton
             // 
+            this.finalGetResultsButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.finalGetResultsButton.BackColor = System.Drawing.Color.Transparent;
-            this.finalGetResultsButton.Location = new System.Drawing.Point(420, 4);
+            this.finalGetResultsButton.Location = new System.Drawing.Point(333, 4);
             this.finalGetResultsButton.Name = "finalGetResultsButton";
             this.finalGetResultsButton.Size = new System.Drawing.Size(75, 23);
             this.finalGetResultsButton.TabIndex = 0;
@@ -164,7 +166,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlDark;
-            this.ClientSize = new System.Drawing.Size(506, 612);
+            this.ClientSize = new System.Drawing.Size(420, 612);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;

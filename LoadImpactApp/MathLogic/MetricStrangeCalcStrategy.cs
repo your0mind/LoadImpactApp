@@ -35,8 +35,8 @@ namespace LoadImpactApp.MathLogic
             tempPoints.Sort((p1, p2) => p1.Value.CompareTo(p2.Value));
             int count = tempPoints.Count;
             return (count % 2 == 0)
-                ? tempPoints[count / 2].Value
-                : (tempPoints[count / 2].Value + tempPoints[count / 2 - 1].Value) / 2;
+                ? (tempPoints[count / 2].Value + tempPoints[count / 2 - 1].Value) / 2
+                : tempPoints[count / 2].Value;
         }
     }
 }

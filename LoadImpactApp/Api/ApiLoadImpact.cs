@@ -101,7 +101,6 @@ namespace LoadImpactApp.Api
                 testConfig.TestId = config.SelectToken("id").Value<int>();
                 testConfings.Add(testConfig);
             }
-
             return testConfings;
         }
 
@@ -110,7 +109,13 @@ namespace LoadImpactApp.Api
             string ids = UserSettings.LoadImpactService.ConstMetrics.Standard
                 .FirstOrDefault(metricInfo => metricInfo.Name == metricName).MetricId;
 
-            var response = await MakeRequestAsync($"/tests/{testRunId}/results?ids={ids}");
+            HttpResponseMessage response;
+            do
+            {
+                response = await MakeRequestAsync($"/tests/{testRunId}/results?ids={ids}");
+            }
+            while (!response.IsSuccessStatusCode);
+
             var jsonContent = await response.Content.ReadAsStringAsync();
             return ParseMetricPointsJson(jsonContent, ids);
         }
@@ -129,7 +134,13 @@ namespace LoadImpactApp.Api
                 }
             }
 
-            var response = await MakeRequestAsync($"/tests/{testRunId}/results?ids={ids}");
+            HttpResponseMessage response;
+            do
+            {
+                response = await MakeRequestAsync($"/tests/{testRunId}/results?ids={ids}");
+            }
+            while (!response.IsSuccessStatusCode);
+
             var jsonContent = await response.Content.ReadAsStringAsync();
             return ParseMetricPointsJson(jsonContent, ids);
         }
@@ -147,15 +158,30 @@ namespace LoadImpactApp.Api
                     ids += b.ToString("x2");
                 }
             }
-            
-            var response = await MakeRequestAsync($"/tests/{testRunId}/results?ids={ids += $":1:{scenarioId}"}");
+
+            HttpResponseMessage response;
+            do
+            {
+                response = await MakeRequestAsync($"/tests/{testRunId}/results?ids={ids += $":1:{scenarioId}"}");
+            }
+            while (!response.IsSuccessStatusCode);
+
             var jsonContent = await response.Content.ReadAsStringAsync();
             return ParseMetricPointsJson(jsonContent, ids);
         }
 
         private static List<MetricPointsPack> ParseMetricPointsJson(string jsonContent, string metricId)
         {
-            var jObject = JObject.Parse(jsonContent);
+            JObject jObject = null;
+            try
+            {
+                jObject = JObject.Parse(jsonContent);
+            }
+            catch
+            {
+                jObject = null;
+            }
+
             var jTokens = jObject.SelectToken(metricId).ToArray();
 
             if (jTokens.Length == 0)

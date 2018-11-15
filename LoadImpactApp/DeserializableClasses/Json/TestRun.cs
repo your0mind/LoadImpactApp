@@ -18,6 +18,10 @@ namespace LoadImpactApp.Api
                 {
                     var utcDate = DateTimeOffset.Parse(value);
                     var loadImpactDate = utcDate.ToOffset(TimeSpan.FromHours(-5));
+                    //var utsDate = DateTime.Parse(value);
+                    //utsDate.Date 
+                    //var dstZone = TimeZoneInfo.FindSystemTimeZoneById("Central Standard Time");
+                    //var loadImpactDate = TimeZoneInfo.ConvertTimeFromUtc(utsDate, dstZone);
                     m_Ended = loadImpactDate.ToString("MMM dd HH:mm (yyyy)", new CultureInfo("en-Us"));
                 }
             }
