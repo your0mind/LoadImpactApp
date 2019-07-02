@@ -11,7 +11,7 @@ namespace LoadImpactApp
         private MetricSettingsTableWithLabels m_StandardMetricsTable;
         private MetricSettingsTableWithLabels m_ServerAgentMetricsTable;
         private MetricSettingsTableWithTextBoxes m_PageMetricsTable;
-        private Test m_ReturnTestSettings;
+        private TestSettings m_ReturnTestSettings;
         private string m_TestName;
 
         public ResultsSettingsForm(string testName)
@@ -58,9 +58,9 @@ namespace LoadImpactApp
             Close();
         }
 
-        public Test ExtractTestSettings()
+        public TestSettings ExtractTestSettings()
         {
-            return new Test()
+            return new TestSettings()
             {
                 Name = m_TestName,
                 CheckVusActivity = vusNumberAnalisisCheckBox.Checked,
@@ -78,7 +78,7 @@ namespace LoadImpactApp
             UserSettings.LoadImpactService.User.FavoritesTests.Insert(indexToDelete, testSettingsToSave);
         }
 
-        public Test GetTestSettings()
+        public TestSettings GetTestSettings()
         {
             return m_ReturnTestSettings;
         }

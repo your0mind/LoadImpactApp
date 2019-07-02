@@ -39,7 +39,7 @@ namespace LoadImpactApp
 
                 if (!isPresent)
                 {
-                    LoadImpactService.User.FavoritesTests.Add(new Test() { Name = title });
+                    LoadImpactService.User.FavoritesTests.Add(new TestSettings() { Name = title });
                 }
             }
         }
@@ -58,7 +58,7 @@ namespace LoadImpactApp
             using (var writter = new StreamWriter(settingsFileName))
             {
                 var ns = new XmlSerializerNamespaces();
-                ns.Add(String.Empty, String.Empty);
+                ns.Add(string.Empty, string.Empty);
 
                 var serializer = new XmlSerializer(typeof(LoadImpact));
                 serializer.Serialize(writter, LoadImpactService, ns);

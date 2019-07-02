@@ -117,7 +117,8 @@ namespace LoadImpactApp.Api
             while (!response.IsSuccessStatusCode);
 
             var jsonContent = await response.Content.ReadAsStringAsync();
-            return ParseMetricPointsJson(jsonContent, ids);
+            List<string> attrList = UserSettings.LoadImpactService.ConstMetrics.Standard.Find(m => m.Name.Equals(metricName)).AttrList;
+            return ParseMetricPointsJson(jsonContent, ids, attrList);
         }
 
         public static async Task<List<MetricPointsPack>> GetServerAgentMetricPointsAsync(int testRunId, string serverAgentName, string serverLabelName)
@@ -142,7 +143,8 @@ namespace LoadImpactApp.Api
             while (!response.IsSuccessStatusCode);
 
             var jsonContent = await response.Content.ReadAsStringAsync();
-            return ParseMetricPointsJson(jsonContent, ids);
+            List<string> attrList = UserSettings.LoadImpactService.ConstMetrics.ServerAgent.Find(m => m.Name.Equals(serverLabelName)).AttrList;
+            return ParseMetricPointsJson(jsonContent, ids, attrList);
         }
 
         public static async Task<List<MetricPointsPack>> GetPageMetricPointsAsync(int testRunId, string metricName, int scenarioId)
@@ -159,6 +161,7 @@ namespace LoadImpactApp.Api
                 }
             }
 
+            // ))0
             HttpResponseMessage response;
             do
             {
@@ -167,10 +170,11 @@ namespace LoadImpactApp.Api
             while (!response.IsSuccessStatusCode);
 
             var jsonContent = await response.Content.ReadAsStringAsync();
-            return ParseMetricPointsJson(jsonContent, ids);
+            List<string> attrList = Consts.GlobalConsts.PAGE_METRIC_ATTR_LIST;
+            return ParseMetricPointsJson(jsonContent, ids, attrList);
         }
 
-        private static List<MetricPointsPack> ParseMetricPointsJson(string jsonContent, string metricId)
+        private static List<MetricPointsPack> ParseMetricPointsJson(string jsonContent, string metricId, List<string> attrList)
         {
             JObject jObject = null;
             try
@@ -189,7 +193,6 @@ namespace LoadImpactApp.Api
                 throw new InvalidOperationException("Metric not found.");
             }
 
-            var attrList = new List<string>() { "value", "min", "avg", "max" };
             var pointsPacks = new List<MetricPointsPack>();
             foreach (var attr in attrList)
             {
@@ -204,7 +207,7 @@ namespace LoadImpactApp.Api
                 long timeStamp = jTokens[i].SelectToken("timestamp").Value<long>();
                 foreach (var pointsPack in pointsPacks)
                 {
-                    pointsPack.Points.Add(new MetricPoint(timeStamp,jTokens[i].SelectToken(pointsPack.AttrName).Value<double>()));
+                    pointsPack.Points.Add(new MetricPoint(timeStamp, jTokens[i].SelectToken(pointsPack.AttrName).Value<double>()));
                 }
             }
             return pointsPacks;

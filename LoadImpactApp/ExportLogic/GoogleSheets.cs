@@ -44,10 +44,12 @@ namespace LoadImpactApp.ExportLogic
                         new FileDataStore(credPath, true));
                 }
 
-                return new SheetsService(new BaseClientService.Initializer()
+                m_Service = new SheetsService(new BaseClientService.Initializer()
                 {
                     HttpClientInitializer = credential
                 });
+
+                return m_Service;
             }
         }
     }

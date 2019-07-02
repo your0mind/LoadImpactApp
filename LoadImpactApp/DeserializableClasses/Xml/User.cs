@@ -7,12 +7,12 @@ namespace LoadImpactApp.DeserializableClasses.Xml
     {
         [XmlAttribute]
         public string Token { get; set; }
-        public List<Test> FavoritesTests { get; set; }
+        public List<TestSettings> FavoritesTests { get; set; }
         public ExportSettings ExportSettings { get; set; }
 
         public AppUser()
         {
-            FavoritesTests = new List<Test>();
+            FavoritesTests = new List<TestSettings>();
         }
     }
 }

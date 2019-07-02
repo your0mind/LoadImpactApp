@@ -514,15 +514,13 @@ namespace LoadImpactApp
                 batchRequests.Requests.Add(request);
             }
 
-            var batchRequestsTask = service.Spreadsheets.BatchUpdate(batchRequests, spreadSheetId).ExecuteAsync();
+            service.Spreadsheets.BatchUpdate(batchRequests, spreadSheetId).ExecuteAsync().Wait();
+
             // Sending our test's results
             var appendValuesRequest = service.Spreadsheets.Values.Update(valueRange, spreadSheetId,
                 $"{sheet.Properties.Title}!A{rowIndexToInsertData + 1}");
             appendValuesRequest.ValueInputOption = UpdateRequest.ValueInputOptionEnum.USERENTERED;
-            var appendValuesTask = appendValuesRequest.ExecuteAsync();
-
-            batchRequestsTask.Wait();
-            appendValuesTask.Wait();
+            appendValuesRequest.ExecuteAsync().Wait();
         }
     }
 }

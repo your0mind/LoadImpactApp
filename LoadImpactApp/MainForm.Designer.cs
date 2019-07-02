@@ -97,7 +97,7 @@
             this.disconnectButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.disconnectButton.BackColor = System.Drawing.Color.White;
             this.disconnectButton.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.disconnectButton.Location = new System.Drawing.Point(742, 9);
+            this.disconnectButton.Location = new System.Drawing.Point(942, 9);
             this.disconnectButton.Name = "disconnectButton";
             this.disconnectButton.Size = new System.Drawing.Size(35, 35);
             this.disconnectButton.TabIndex = 1;
@@ -109,7 +109,7 @@
             this.refreshButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.refreshButton.BackColor = System.Drawing.Color.White;
             this.refreshButton.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.refreshButton.Location = new System.Drawing.Point(699, 9);
+            this.refreshButton.Location = new System.Drawing.Point(899, 9);
             this.refreshButton.Name = "refreshButton";
             this.refreshButton.Size = new System.Drawing.Size(35, 35);
             this.refreshButton.TabIndex = 2;
@@ -319,7 +319,7 @@
             this.testsPage.Location = new System.Drawing.Point(4, 22);
             this.testsPage.Name = "testsPage";
             this.testsPage.Padding = new System.Windows.Forms.Padding(3);
-            this.testsPage.Size = new System.Drawing.Size(758, 496);
+            this.testsPage.Size = new System.Drawing.Size(858, 496);
             this.testsPage.TabIndex = 0;
             this.testsPage.Text = "Tests";
             // 
@@ -348,7 +348,7 @@
             this.resultsPage.Location = new System.Drawing.Point(4, 22);
             this.resultsPage.Name = "resultsPage";
             this.resultsPage.Padding = new System.Windows.Forms.Padding(3);
-            this.resultsPage.Size = new System.Drawing.Size(758, 496);
+            this.resultsPage.Size = new System.Drawing.Size(958, 496);
             this.resultsPage.TabIndex = 1;
             this.resultsPage.Text = "Results";
             // 
@@ -357,7 +357,7 @@
             this.exportResultsButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.exportResultsButton.Enabled = false;
             this.exportResultsButton.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.exportResultsButton.Location = new System.Drawing.Point(511, 447);
+            this.exportResultsButton.Location = new System.Drawing.Point(711, 447);
             this.exportResultsButton.Name = "exportResultsButton";
             this.exportResultsButton.Size = new System.Drawing.Size(232, 33);
             this.exportResultsButton.TabIndex = 6;
@@ -403,7 +403,7 @@
             this.testInfoDataGridView.RowTemplate.Height = 30;
             this.testInfoDataGridView.RowTemplate.ReadOnly = true;
             this.testInfoDataGridView.RowTemplate.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.testInfoDataGridView.Size = new System.Drawing.Size(477, 57);
+            this.testInfoDataGridView.Size = new System.Drawing.Size(677, 57);
             this.testInfoDataGridView.TabIndex = 5;
             // 
             // dataGridViewTextBoxColumn1
@@ -490,7 +490,7 @@
             this.testResultsDataGridView.RowTemplate.Height = 30;
             this.testResultsDataGridView.RowTemplate.ReadOnly = true;
             this.testResultsDataGridView.RowTemplate.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.testResultsDataGridView.Size = new System.Drawing.Size(477, 356);
+            this.testResultsDataGridView.Size = new System.Drawing.Size(677, 356);
             this.testResultsDataGridView.TabIndex = 4;
             // 
             // Column1
@@ -632,7 +632,7 @@
             this.tabControl1.Location = new System.Drawing.Point(10, 30);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(766, 522);
+            this.tabControl1.Size = new System.Drawing.Size(966, 522);
             this.tabControl1.TabIndex = 0;
             // 
             // MainForm
@@ -640,7 +640,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlDark;
-            this.ClientSize = new System.Drawing.Size(784, 562);
+            this.ClientSize = new System.Drawing.Size(984, 562);
             this.Controls.Add(this.refreshButton);
             this.Controls.Add(this.disconnectButton);
             this.Controls.Add(this.tabControl1);
@@ -670,7 +670,6 @@
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabControl tabControl2;
         private System.Windows.Forms.TabControl testsTabControl;
-        private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button disconnectButton;
         private System.Windows.Forms.Button refreshButton;
         private System.Windows.Forms.TabPage tabPage2;

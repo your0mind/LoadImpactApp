@@ -47,7 +47,7 @@ namespace LoadImpactApp
 
         private async void refreshButton_Click(object sender, EventArgs e)
         {
-                await RefreshContainersAsync();
+            await RefreshContainersAsync();
         }
 
         private void addToFavButton_Click(object sender, EventArgs e)
@@ -169,7 +169,7 @@ namespace LoadImpactApp
             }
         }
 
-        private async Task ShowTestResultsAsync(Test testSettingsToUse)
+        private async Task ShowTestResultsAsync(TestSettings testSettingsToUse)
         {
             Enabled = false;
 
@@ -195,20 +195,14 @@ namespace LoadImpactApp
             int vusMax = (int)vusActivePoints.Max(u => u.Value);
             double areaOfStableVusActive = Math.Round(100.0 * durationOfStablePart / allRunDuration, 2);
 
-            var areaCellColor = (areaOfStableVusActive > 50)
-                ? Color.Green
-                : (areaOfStableVusActive > 10)
-                    ? Color.Orange
-                    : Color.Red;
-
             testInfoDataGridView.Rows.Add(
                 testName,
                 testId,
                 runDate,
                 vusMax,
-                areaOfStableVusActive
+                areaOfStableVusActive.ToString() + "%"
             );
-            testInfoDataGridView.Rows[0].Cells[4].Style.ForeColor = areaCellColor;
+            testInfoDataGridView.Rows[0].Cells[4].Style.ForeColor = GetStableVusActiveTextColor(areaOfStableVusActive);
 
             var lostMetrics = new List<String>();
 
@@ -222,7 +216,7 @@ namespace LoadImpactApp
                         var stats = CalcMetricPointsStats(pointsPack, testSettingsToUse.CheckVusActivity,
                             standardMetric.Smoothed, borders);
 
-                        AddRowResultsToDataGridView(stats, standardMetric, pointsPack.AttrName, ColorConsts.STANDARD_METRIC, 
+                        AddRowResultsToDataGridView(stats, standardMetric, pointsPack.AttrName, ColorConsts.STANDARD_METRIC,
                             UserSettings.LoadImpactService.ConstMetrics.Standard
                                 .FirstOrDefault(info => info.Name == standardMetric.Name).Unit);
                     }
@@ -238,9 +232,9 @@ namespace LoadImpactApp
                 string serverAgentLabelName = serverAgentMetric.Name;
                 foreach (var serverAgent in CurrentContextData.TestConfigs[indexOfConfig].ServerMetricAgents)
                 {
-                    var pointsPacks = await ApiLoadImpact.GetServerAgentMetricPointsAsync(runId, serverAgent, serverAgentLabelName);
                     try
                     {
+                        var pointsPacks = await ApiLoadImpact.GetServerAgentMetricPointsAsync(runId, serverAgent, serverAgentLabelName);
                         serverAgentMetric.Name = serverAgentLabelName + " " + serverAgent;
                         foreach (var pointsPack in pointsPacks)
                         {
@@ -261,11 +255,10 @@ namespace LoadImpactApp
 
             foreach (var pageMetric in testSettingsToUse.PageMetrics)
             {
-                var pointsPacks = await ApiLoadImpact.GetPageMetricPointsAsync(runId, pageMetric.Name, 
-                    CurrentContextData.TestConfigs[indexOfConfig].UserScenarioId);
-
                 try
                 {
+                    var pointsPacks = await ApiLoadImpact.GetPageMetricPointsAsync(runId, pageMetric.Name, CurrentContextData.TestConfigs[indexOfConfig].UserScenarioId);
+
                     foreach (var pointsPack in pointsPacks)
                     {
                         var stats = CalcMetricPointsStats(pointsPack, testSettingsToUse.CheckVusActivity,
@@ -291,6 +284,15 @@ namespace LoadImpactApp
 
             exportResultsButton.Select();
             Enabled = true;
+        }
+
+        private Color GetStableVusActiveTextColor(double stableVusActiveArea)
+        {
+            return (stableVusActiveArea > 50)
+                ? Color.Green
+                : (stableVusActiveArea > 10)
+                    ? Color.Orange
+                    : Color.Red;
         }
 
         private MetricStats CalcMetricPointsStats(MetricPointsPack mpp, bool CheckVusActivity, bool Smoothed, Tuple<long, long> borders)
@@ -332,7 +334,7 @@ namespace LoadImpactApp
         {
             UserSettings.Update();
             UserSettings.SaveToFile("UserSettings.xml");
-            this.Visible = false;
+            Visible = false;
             m_ConnectionForm.Visible = true;
         }
 

@@ -3,7 +3,7 @@ using System.Xml.Serialization;
 
 namespace LoadImpactApp.DeserializableClasses.Xml
 {
-    public class Test
+    public class TestSettings
     {
         [XmlAttribute]
         public string Name { get; set; }
@@ -13,7 +13,7 @@ namespace LoadImpactApp.DeserializableClasses.Xml
         public List<MetricSettings> ServerAgentMetrics { get; set; }
         public List<MetricSettings> PageMetrics { get; set; }
 
-        public Test()
+        public TestSettings()
         {
             StandardMetrics = new List<MetricSettings>();
             ServerAgentMetrics = new List<MetricSettings>();
