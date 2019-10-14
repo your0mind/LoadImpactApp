@@ -59,6 +59,7 @@ namespace LoadImpactApp
                     CurrentContextData.FavoritesTitles.Add(item.ToString());
                 }
             }
+
             CurrentContextData.FavoritesTitles.Sort();
 
             favoritesTestsListBox.DataSource = null;
